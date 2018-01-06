@@ -59,7 +59,7 @@ None yet.
 * SHA2-256, 384, 512
 * `is_contiguous_range`
 * Support for endian-independent hashing
-* An std::hash-compatible adaptor
+* An `std::hash`-compatible adaptor
 * A type-erased `hash_function`
 * A `hash2sum` example
 
