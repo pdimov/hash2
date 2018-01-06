@@ -30,7 +30,7 @@ struct HashAlgorithm
     HashAlgorithm( HashAlgorithm const& r ); // copy-constructible
     HashAlgorithm& operator=( HashAlgorithm const& r ); // assignable
 
-    void update( byte_type const* seed, ptrdiff_t n ); // feed bytes
+    void update( byte_type const* data, ptrdiff_t n ); // feed bytes
 
     result_type result(); // obtain result; also advances state,
                           // and can be called multiple times
