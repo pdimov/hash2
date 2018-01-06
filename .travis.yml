@@ -25,6 +25,10 @@ matrix:
 
   include:
     - os: linux
+      compiler: g++
+      env: TOOLSET=gcc COMPILER=g++ CXXSTD=03,11
+
+    - os: linux
       compiler: g++-4.7
       env: TOOLSET=gcc COMPILER=g++-4.7 CXXSTD=03,11
       addons:
@@ -76,13 +80,27 @@ matrix:
 
     - os: linux
       compiler: g++-7
-      env: TOOLSET=gcc COMPILER=g++-7 CXXSTD=03,11,14,1z
+      env: TOOLSET=gcc COMPILER=g++-7 CXXSTD=03,11,14,17
       addons:
         apt:
           packages:
             - g++-7
           sources:
             - ubuntu-toolchain-r-test
+
+    - os: linux
+      compiler: g++-7
+      env: UBSAN=1 TOOLSET=gcc COMPILER=g++-7 CXXSTD=03,11,14,17
+      addons:
+        apt:
+          packages:
+            - g++-7
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      compiler: clang++
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11
 
     - os: linux
       compiler: clang++-3.5
@@ -161,9 +179,24 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-5.0
 
+    - os: linux
+      compiler: clang++-5.0
+      env: UBSAN=1 TOOLSET=clang COMPILER=clang++-5.0 CXXSTD=03,11,14,1z
+      addons:
+        apt:
+          packages:
+            - clang-5.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+
     - os: osx
       compiler: clang++
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z
+
+    - os: osx
+      compiler: clang++
+      env: UBSAN=1 TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z
 
 install:
   - BOOST_BRANCH=develop && [ "$TRAVIS_BRANCH" == "master" ] && BOOST_BRANCH=master || true
@@ -182,7 +215,7 @@ install:
 script:
   - |-
     echo "using $TOOLSET : : $COMPILER ;" > ~/user-config.jam
-  - ./b2 -j3 libs/hash2/test toolset=$TOOLSET cxxstd=$CXXSTD
+  - ./b2 -j3 libs/hash2/test toolset=$TOOLSET cxxstd=$CXXSTD ${UBSAN:+cxxflags=-fsanitize=undefined} ${UBSAN:+cxxflags=-fno-sanitize-recover=undefined} ${UBSAN:+linkflags=-fsanitize=undefined}
 
 notifications:
   email:
