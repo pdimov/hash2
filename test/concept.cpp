@@ -63,7 +63,7 @@ template<class H> void test_seed_constructible()
 
     {
         H h1;
-        H h2( 0, 0 );
+        H h2( static_cast<byte_type const*>( 0 ), 0 );
 
         BOOST_TEST( h1.result() == h2.result() );
     }
