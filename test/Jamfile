@@ -1,0 +1,57 @@
+# Copyright 2017, 2018 Peter Dimov
+# Distributed under the Boost Software License, Version 1.0.
+
+import testing ;
+
+# traits
+
+run is_contiguously_hashable.cpp ;
+run is_range.cpp ;
+run is_unordered_range.cpp ;
+run is_tuple_like.cpp ;
+run underlying_type.cpp ;
+
+# helpers
+
+run get_integral_result.cpp ;
+
+# hash_append
+
+run hash_append.cpp ;
+run hash_append_2.cpp ;
+run hash_append_3.cpp ;
+run hash_append_4.cpp ;
+run hash_append_range.cpp ;
+run hash_append_range_2.cpp ;
+run set.cpp ;
+run map.cpp ;
+
+# non-cryptographic
+
+run fnv1a.cpp ;
+run siphash32.cpp ;
+run siphash64.cpp ;
+run xxhash.cpp ;
+run spooky2.cpp ;
+run murmur3_32.cpp ;
+run murmur3_128.cpp ;
+
+# cryptographic
+
+run md5.cpp ;
+run hmac_md5.cpp ;
+run sha1.cpp ;
+run hmac_sha1.cpp ;
+
+# general requirements
+
+run concept.cpp ;
+run plaintext_leak.cpp ;
+run multiple_result.cpp ;
+run integral_result.cpp ;
+
+# compile benchmarks
+
+compile ../benchmark/buffer.cpp ;
+compile ../benchmark/unordered.cpp ;
+compile ../benchmark/average.cpp ;
