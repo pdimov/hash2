@@ -175,7 +175,7 @@ install:
   - git submodule update --init tools/boostdep
   - mkdir -p libs/hash2
   - cp -r $TRAVIS_BUILD_DIR/* libs/hash2
-  - python tools/boostdep/depinst/depinst.py hash2
+  - python tools/boostdep/depinst/depinst.py -I benchmark hash2
   - ./bootstrap.sh
   - ./b2 headers
 
