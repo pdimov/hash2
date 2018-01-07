@@ -1,5 +1,5 @@
 
-// Copyright 2017 Peter Dimov.
+// Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 
 #ifndef BOOST_HASH2_ENDIAN_HPP_INCLUDED
