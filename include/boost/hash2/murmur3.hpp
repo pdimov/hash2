@@ -73,7 +73,11 @@ public:
     {
         BOOST_ASSERT( n >= 0 );
 
-        if( n <= 4 )
+        if( n == 0 )
+        {
+            h_ = 0;
+        }
+        else if( n <= 4 )
         {
             byte_type q[ 4 ] = {};
             std::memcpy( q, p, n );
@@ -251,7 +255,11 @@ public:
     {
         BOOST_ASSERT( n >= 0 );
 
-        if( n <= 8 )
+        if( n == 0 )
+        {
+            h1_ = h2_ = 0;
+        }
+        else if( n <= 8 )
         {
             byte_type q[ 8 ] = {};
             std::memcpy( q, p, n );

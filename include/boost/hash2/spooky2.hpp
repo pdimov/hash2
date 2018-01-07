@@ -248,7 +248,11 @@ public:
     {
         BOOST_ASSERT( n >= 0 );
 
-        if( n <= 16 )
+        if( n == 0 )
+        {
+            init( 0, 0 );
+        }
+        else if( n <= 16 )
         {
             byte_type q[ 18 ] = {};
             std::memcpy( q, p, n );
