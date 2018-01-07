@@ -171,6 +171,49 @@ template<class H> void test_update()
     }
 }
 
+template<class H> void test_assignable()
+{
+    byte_type const seed[ 3 ] = { 0x01, 0x02, 0x03 };
+
+    {
+        H h1;
+        H h2( h1 );
+
+        typename H::result_type r1 = h1.result();
+
+        BOOST_TEST( h1.result() != r1 );
+
+        h1 = h2;
+        BOOST_TEST( h1.result() == r1 );
+    }
+
+    {
+        H h1( seed, 3 );
+        H h2( h1 );
+
+        typename H::result_type r1 = h1.result();
+
+        BOOST_TEST( h1.result() != r1 );
+
+        h1 = h2;
+        BOOST_TEST( h1.result() == r1 );
+    }
+
+    {
+        H h1;
+        h1.update( seed, 3 );
+
+        H h2( h1 );
+
+        typename H::result_type r1 = h1.result();
+
+        BOOST_TEST( h1.result() != r1 );
+
+        h1 = h2;
+        BOOST_TEST( h1.result() == r1 );
+    }
+}
+
 template<class H> void test()
 {
     test_result_type<H>();
@@ -179,6 +222,7 @@ template<class H> void test()
     test_seed_constructible<H>();
     test_copy_constructible<H>();
     test_update<H>();
+    test_assignable<H>();
 }
 
 int main()
