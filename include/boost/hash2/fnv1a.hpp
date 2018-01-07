@@ -9,6 +9,7 @@
 // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
 
 #include <boost/hash2/byte_type.hpp>
+#include <boost/hash2/detail/write.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
@@ -50,7 +51,17 @@ public:
     {
     }
 
-    explicit fnv1a( byte_type const * p, std::ptrdiff_t n ): st_( fnv1a_const<T>::basis )
+    explicit fnv1a( boost::uint64_t seed ): st_( fnv1a_const<T>::basis )
+    {
+        if( seed != 0 )
+        {
+            byte_type tmp[ 8 ];
+            detail::write64le( tmp, seed );
+            update( tmp, 8 );
+        }
+    }
+
+    fnv1a( byte_type const * p, std::ptrdiff_t n ): st_( fnv1a_const<T>::basis )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -99,7 +110,11 @@ public:
     {
     }
 
-    explicit fnv1a_32( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<boost::uint32_t>( p, n )
+    explicit fnv1a_32( boost::uint64_t seed ): detail::fnv1a<boost::uint32_t>( seed )
+    {
+    }
+
+    fnv1a_32( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<boost::uint32_t>( p, n )
     {
     }
 };
@@ -112,7 +127,11 @@ public:
     {
     }
 
-    explicit fnv1a_64( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<boost::uint64_t>( p, n )
+    explicit fnv1a_64( boost::uint64_t seed ): detail::fnv1a<boost::uint64_t>( seed )
+    {
+    }
+
+    fnv1a_64( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<boost::uint64_t>( p, n )
     {
     }
 };

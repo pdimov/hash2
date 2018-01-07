@@ -39,6 +39,17 @@ private:
 
 private:
 
+    static BOOST_FORCEINLINE void mix( boost::uint32_t & h, boost::uint32_t k )
+    {
+        k *= c1;
+        k = detail::rotl( k, 15 );
+        k *= c2;
+
+        h ^= k;
+        h = detail::rotl( h, 13 );
+        h = h * 5 + 0xe6546b64;
+    }
+
     void update_( byte_type const * p, std::ptrdiff_t m )
     {
         boost::uint32_t h = h_;
@@ -46,14 +57,7 @@ private:
         for( std::ptrdiff_t i = 0; i < m; ++i, p += 4 )
         {
             boost::uint32_t k = detail::read32le( p );
-
-            k *= c1;
-            k = detail::rotl( k, 15 );
-            k *= c2;
-
-            h ^= k;
-            h = detail::rotl( h, 13 );
-            h = h * 5 + 0xe6546b64;
+            mix( h, k );
         }
 
         h_ = h;
@@ -64,12 +68,19 @@ public:
     typedef boost::uint32_t result_type;
     typedef boost::uint32_t size_type;
 
-    explicit murmur3_32( boost::uint32_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit murmur3_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
-        h_ = seed;
+        h_ = static_cast<boost::uint32_t>( seed );
+
+        boost::uint32_t k = static_cast<boost::uint32_t>( seed >> 32 );
+
+        if( k != 0 )
+        {
+            mix( h_, k );
+        }
     }
 
-    explicit murmur3_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -245,13 +256,13 @@ public:
         h2_ = seed;
     }
 
-    explicit murmur3_128( boost::uint64_t seed1, boost::uint64_t seed2 ): m_( 0 ), n_( 0 )
+    murmur3_128( boost::uint64_t seed1, boost::uint64_t seed2 ): m_( 0 ), n_( 0 )
     {
         h1_ = seed1;
         h2_ = seed2;
     }
 
-    explicit murmur3_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 

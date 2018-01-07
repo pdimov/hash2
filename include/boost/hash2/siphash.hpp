@@ -84,7 +84,7 @@ public:
         init( k0, k1 );
     }
 
-    explicit siphash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -263,12 +263,20 @@ public:
     typedef boost::uint32_t result_type;
     typedef boost::uint32_t size_type;
 
-    explicit siphash_32( boost::uint32_t k0 = 0, boost::uint32_t k1 = 0 ): m_( 0 ), n_( 0 )
+    explicit siphash_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    {
+        boost::uint32_t k0 = static_cast<boost::uint32_t>( seed );
+        boost::uint32_t k1 = static_cast<boost::uint32_t>( seed >> 32 );
+
+        init( k0, k1 );
+    }
+
+    siphash_32( boost::uint32_t k0, boost::uint32_t k1 ): m_( 0 ), n_( 0 )
     {
         init( k0, k1 );
     }
 
-    explicit siphash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 

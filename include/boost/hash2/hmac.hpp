@@ -7,7 +7,7 @@
 // HMAC message authentication algorithm, https://tools.ietf.org/html/rfc2104
 
 #include <boost/hash2/byte_type.hpp>
-#include <boost/hash2/detail/read.hpp>
+#include <boost/hash2/detail/write.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <cstring>
@@ -80,7 +80,22 @@ public:
         init( 0, 0 );
     }
 
-    explicit hmac( byte_type const * p, std::ptrdiff_t n )
+    explicit hmac( boost::uint64_t seed )
+    {
+        if( seed == 0 )
+        {
+            init( 0, 0 );
+        }
+        else
+        {
+            byte_type tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            init( tmp, 8 );
+        }
+    }
+
+    hmac( byte_type const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
         init( p, n );

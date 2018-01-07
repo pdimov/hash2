@@ -82,12 +82,23 @@ public:
     typedef boost::uint32_t result_type;
     typedef boost::uint32_t size_type;
 
-    explicit xxhash_32( boost::uint32_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit xxhash_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
-        init( seed );
+        boost::uint32_t s0 = static_cast<boost::uint32_t>( seed );
+        boost::uint32_t s1 = static_cast<boost::uint32_t>( seed >> 32 );
+
+        init( s0 );
+
+        if( s1 != 0 )
+        {
+            v1_ = round( v1_, s1 );
+            v2_ = round( v2_, s1 );
+            v3_ = round( v3_, s1 );
+            v4_ = round( v4_, s1 );
+        }
     }
 
-    explicit xxhash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -302,7 +313,7 @@ public:
         init( seed );
     }
 
-    explicit xxhash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 

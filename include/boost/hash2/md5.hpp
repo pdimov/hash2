@@ -210,7 +210,21 @@ public:
         init();
     }
 
-    explicit md5_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    explicit md5_128( boost::uint64_t seed ): m_( 0 ), n_( 0 )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            byte_type tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    md5_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -316,7 +330,11 @@ public:
     {
     }
 
-    explicit hmac_md5_128( byte_type const * p, std::ptrdiff_t n ): hmac<md5_128>( p, n )
+    explicit hmac_md5_128( boost::uint64_t seed ): hmac<md5_128>( seed )
+    {
+    }
+
+    hmac_md5_128( byte_type const * p, std::ptrdiff_t n ): hmac<md5_128>( p, n )
     {
     }
 };

@@ -244,7 +244,7 @@ public:
         init( seed1, seed2 );
     }
 
-    explicit spooky2_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    spooky2_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 

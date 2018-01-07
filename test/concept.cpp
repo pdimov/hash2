@@ -57,7 +57,7 @@ template<class H> void test_default_constructible()
     BOOST_TEST( r1 == r2 );
 }
 
-template<class H> void test_seed_constructible()
+template<class H> void test_byte_seed_constructible()
 {
     byte_type const seed[ 3 ] = { 0x01, 0x02, 0x03 };
 
@@ -94,6 +94,125 @@ template<class H> void test_seed_constructible()
         H h2( seed, 3 );
 
         BOOST_TEST( h1.result() != h2.result() );
+    }
+}
+
+template<class H> void test_integral_seed_constructible()
+{
+    typename H::result_type r0, r1, r2, r3;
+
+    {
+        H h( 0 );
+        r0 = h.result();
+    }
+
+    {
+        H h( 1 );
+        r1 = h.result();
+    }
+
+    BOOST_TEST( r0 != r1 );
+
+    {
+        H h( 2 );
+        r2 = h.result();
+    }
+
+    BOOST_TEST( r0 != r2 );
+    BOOST_TEST( r1 != r2 );
+
+    {
+        H h( 1LL << 32 );
+        r3 = h.result();
+    }
+
+    BOOST_TEST( r0 != r3 );
+    BOOST_TEST( r1 != r3 );
+    BOOST_TEST( r2 != r3 );
+
+    {
+        H h;
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( 0L );
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( 1L );
+        BOOST_TEST( h.result() == r1 );
+    }
+
+    {
+        H h( 2L );
+        BOOST_TEST( h.result() == r2 );
+    }
+
+    {
+        H h( 0LL );
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( 1LL );
+        BOOST_TEST( h.result() == r1 );
+    }
+
+    {
+        H h( 2LL );
+        BOOST_TEST( h.result() == r2 );
+    }
+
+    {
+        H h( static_cast<boost::uint32_t>( 0 ) );
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( static_cast<boost::uint32_t>( 1 ) );
+        BOOST_TEST( h.result() == r1 );
+    }
+
+    {
+        H h( static_cast<boost::uint32_t>( 2 ) );
+        BOOST_TEST( h.result() == r2 );
+    }
+
+    {
+        H h( static_cast<std::size_t>( 0 ) );
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( static_cast<std::size_t>( 1 ) );
+        BOOST_TEST( h.result() == r1 );
+    }
+
+    {
+        H h( static_cast<std::size_t>( 2 ) );
+        BOOST_TEST( h.result() == r2 );
+    }
+
+    {
+        H h( static_cast<boost::uint64_t>( 0 ) );
+        BOOST_TEST( h.result() == r0 );
+    }
+
+    {
+        H h( static_cast<boost::uint64_t>( 1 ) );
+        BOOST_TEST( h.result() == r1 );
+    }
+
+    {
+        H h( static_cast<boost::uint64_t>( 2 ) );
+        BOOST_TEST( h.result() == r2 );
+    }
+
+    {
+        H h( static_cast<boost::uint64_t>( 1 ) << 32 );
+        BOOST_TEST( h.result() == r3 );
     }
 }
 
@@ -219,7 +338,8 @@ template<class H> void test()
     test_result_type<H>();
     test_size_type<H>();
     test_default_constructible<H>();
-    test_seed_constructible<H>();
+    test_byte_seed_constructible<H>();
+    test_integral_seed_constructible<H>();
     test_copy_constructible<H>();
     test_update<H>();
     test_assignable<H>();
