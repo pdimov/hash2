@@ -31,11 +31,21 @@ using std::unordered_set;
 
 #endif
 
-template<class H> struct hasher
+template<class H> class hasher
 {
+private:
+
+    std::size_t seed_;
+
+public:
+
+    explicit hasher( std::size_t seed ): seed_( seed )
+    {
+    }
+
     template<class T> std::size_t operator()( T const& v ) const
     {
-        H h;
+        H h( seed_ );
 
         using boost::hash2::hash_append;
         hash_append( h, v );
@@ -45,9 +55,9 @@ template<class H> struct hasher
     }
 };
 
-template<class K, class H> void test_( int N )
+template<class K, class H> void test3( int N, char const* seed_text, std::size_t seed )
 {
-    unordered_set< K, hasher<H> > s;
+    unordered_set< K, hasher<H> > s( 0, hasher<H>( seed ) );
 
     typedef boost::chrono::steady_clock clock_type;
 
@@ -87,32 +97,40 @@ template<class K, class H> void test_( int N )
 
 #if defined( _MSC_VER )
 
-    std::printf( "%s: n=%Iu, m=%Iu, q=%Iu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), n, m, q, ms );
+    std::printf( "%s(%s): n=%Iu, m=%Iu, q=%Iu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), seed_text, n, m, q, ms );
 
 #else
 
-    std::printf( "%s: n=%zu, m=%zu, q=%zu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), n, m, q, ms );
+    std::printf( "%s(%s): n=%zu, m=%zu, q=%zu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), seed_text, n, m, q, ms );
 
 #endif
+}
+
+template<class K, class H> void test2( int N )
+{
+    test3<K, H>( N, "0", 0 );
+    test3<K, H>( N, "1", 1 );
+    test3<K, H>( N, "~0", ~static_cast<std::size_t>( 0 ) );
+    std::puts( "" );
 }
 
 template<class K> void test( int N )
 {
     std::printf( "Key type `%s`:\n\n", boost::core::demangle( typeid(K).name() ).c_str() );
 
-    test_<K, boost::hash2::fnv1a_32>( N );
-    test_<K, boost::hash2::fnv1a_64>( N );
-    test_<K, boost::hash2::murmur3_32>( N );
-    test_<K, boost::hash2::murmur3_128>( N );
-    test_<K, boost::hash2::xxhash_32>( N );
-    test_<K, boost::hash2::xxhash_64>( N );
-    test_<K, boost::hash2::spooky2_128>( N );
-    test_<K, boost::hash2::siphash_32>( N );
-    test_<K, boost::hash2::siphash_64>( N );
-    test_<K, boost::hash2::md5_128>( N );
-    test_<K, boost::hash2::sha1_160>( N );
-    test_<K, boost::hash2::hmac_md5_128>( N );
-    test_<K, boost::hash2::hmac_sha1_160>( N );
+    test2<K, boost::hash2::fnv1a_32>( N );
+    test2<K, boost::hash2::fnv1a_64>( N );
+    test2<K, boost::hash2::murmur3_32>( N );
+    test2<K, boost::hash2::murmur3_128>( N );
+    test2<K, boost::hash2::xxhash_32>( N );
+    test2<K, boost::hash2::xxhash_64>( N );
+    test2<K, boost::hash2::spooky2_128>( N );
+    test2<K, boost::hash2::siphash_32>( N );
+    test2<K, boost::hash2::siphash_64>( N );
+    test2<K, boost::hash2::md5_128>( N );
+    test2<K, boost::hash2::sha1_160>( N );
+    test2<K, boost::hash2::hmac_md5_128>( N );
+    test2<K, boost::hash2::hmac_sha1_160>( N );
 
     std::puts( "" );
 }
