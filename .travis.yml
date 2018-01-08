@@ -123,6 +123,28 @@ matrix:
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11
 
     - os: linux
+      compiler: clang++-3.3
+      env: TOOLSET=clang COMPILER=clang++-3.3 CXXSTD=03,11,14,1z
+      addons:
+        apt:
+          packages:
+            - clang-3.3
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.3
+
+    - os: linux
+      compiler: clang++-3.4
+      env: TOOLSET=clang COMPILER=clang++-3.4 CXXSTD=03,11,14,1z
+      addons:
+        apt:
+          packages:
+            - clang-3.4
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.4
+
+    - os: linux
       compiler: clang++-3.5
       env: TOOLSET=clang COMPILER=clang++-3.5 CXXSTD=03,11,14,1z
       addons:
