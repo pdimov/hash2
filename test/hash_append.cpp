@@ -7,6 +7,10 @@
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/array.hpp>
+#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
+# include <array>
+#endif
 
 template<class H, class R> void test( R r )
 {
@@ -42,6 +46,30 @@ template<class H, class R> void test( R r )
 
         BOOST_TEST_EQ( h.result(), r );
     }
+
+    {
+        boost::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
+
+        H h;
+
+        hash_append( h, v );
+
+        BOOST_TEST_EQ( h.result(), r );
+    }
+
+#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
+
+    {
+        std::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
+
+        H h;
+
+        hash_append( h, v );
+
+        BOOST_TEST_EQ( h.result(), r );
+    }
+
+#endif
 }
 
 int main()

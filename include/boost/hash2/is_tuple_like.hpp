@@ -6,6 +6,7 @@
 
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/remove_cv.hpp>
+#include <boost/array.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <utility>
@@ -25,6 +26,10 @@ template<class T, class E = true_type> struct is_tuple_like_: false_type
 };
 
 template<class T> struct is_tuple_like_<T, integral_constant<bool, std::tuple_size<T>::value == std::tuple_size<T>::value> >: true_type
+{
+};
+
+template<class T, std::size_t N> struct is_tuple_like_< boost::array<T, N> >: true_type
 {
 };
 
@@ -61,6 +66,10 @@ template<class T> struct is_tuple_like<T const>: is_tuple_like<T>
 };
 
 template<class T1, class T2> struct is_tuple_like< std::pair<T1, T2> >: true_type
+{
+};
+
+template<class T, std::size_t N> struct is_tuple_like< boost::array<T, N> >: true_type
 {
 };
 

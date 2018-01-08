@@ -7,6 +7,7 @@
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/array.hpp>
 #include <utility>
 #if !defined(BOOST_NO_CXX11_HDR_ARRAY)
 # include <array>
@@ -50,6 +51,16 @@ template<class H, class R> void test( R r )
 
     {
         std::pair<unsigned char, unsigned char> v( 1, 2 );
+
+        H h;
+
+        hash_append( h, v );
+
+        BOOST_TEST_EQ( h.result(), r );
+    }
+
+    {
+        boost::array<unsigned char, 2> v = { { 1, 2 } };
 
         H h;
 
