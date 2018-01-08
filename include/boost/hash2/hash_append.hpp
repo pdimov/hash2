@@ -12,6 +12,7 @@
 
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/is_range.hpp>
+#include <boost/hash2/is_contiguous_range.hpp>
 #include <boost/hash2/is_unordered_range.hpp>
 #include <boost/hash2/is_tuple_like.hpp>
 #include <boost/hash2/byte_type.hpp>
@@ -19,6 +20,8 @@
 #include <boost/core/enable_if.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
 # include <boost/mp11/integer_sequence.hpp>
 #endif
@@ -128,10 +131,63 @@ template<class H, class T, std::size_t N> void hash_append( H & h, T const (&v)[
     hash_append_range( h, v + 0, v + N );
 }
 
+// contiguous containers and ranges, w/ size
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
+
+// std::vector has no data()
+
+namespace detail
+{
+
+template<class T> struct is_vector: false_type
+{
+};
+
+template<class T, class A> struct is_vector< std::vector<T, A> >: true_type
+{
+};
+
+template<class T, class A> struct is_vector< std::vector<T, A> const >: true_type
+{
+};
+
+} // namespace detail
+
+template<class H, class T>
+    typename boost::enable_if_c< is_contiguous_range<T>::value && !is_tuple_like<T>::value && !detail::is_vector<T>::value, void >::type
+    hash_append( H & h, T const & v )
+{
+    hash_append_range( h, v.data(), v.data() + v.size() );
+    hash_append_size( h, v.size() );
+}
+
+template<class H, class T>
+    typename boost::enable_if_c< detail::is_vector<T>::value, void >::type
+    hash_append( H & h, T const & v )
+{
+    typename T::value_type const * p = v.empty()? 0: &v[0];
+
+    hash_append_range( h, p, p + v.size() );
+    hash_append_size( h, v.size() );
+}
+
+#else
+
+template<class H, class T>
+    typename boost::enable_if_c< is_contiguous_range<T>::value && !is_tuple_like<T>::value, void >::type
+    hash_append( H & h, T const & v )
+{
+    hash_append_range( h, v.data(), v.data() + v.size() );
+    hash_append_size( h, v.size() );
+}
+
+#endif
+
 // containers and ranges, w/ size
 
 template<class H, class T>
-    typename boost::enable_if_c< is_range<T>::value && !is_tuple_like<T>::value && !is_unordered_range<T>::value, void >::type
+    typename boost::enable_if_c< is_range<T>::value && !is_tuple_like<T>::value && !is_contiguous_range<T>::value && !is_unordered_range<T>::value, void >::type
     hash_append( H & h, T const & v )
 {
     hash_append_sized_range( h, v.begin(), v.end() );
