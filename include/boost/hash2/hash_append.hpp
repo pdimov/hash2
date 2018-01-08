@@ -265,7 +265,22 @@ template<class H, class T>
 
 #else // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 
-template<class H, class T1, class T2> void hash_append( H & h, std::pair<T1, T2> const & v )
+namespace detail
+{
+
+template<class T> struct is_pair: false_type
+{
+};
+
+template<class T, class U> struct is_pair< std::pair<T, U> >: true_type
+{
+};
+
+} // namespace detail
+
+template<class H, class T>
+    typename boost::enable_if< detail::is_pair<T>, void >::type
+    hash_append( H & h, T const & v )
 {
     hash_append( h, v.first );
     hash_append( h, v.second );
