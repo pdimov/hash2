@@ -133,7 +133,7 @@ template<class H, class T, std::size_t N> void hash_append( H & h, T const (&v)[
 
 // contiguous containers and ranges, w/ size
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
 
 // std::vector has no data()
 
