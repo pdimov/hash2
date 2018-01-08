@@ -40,4 +40,4 @@ build: off
 
 test_script:
   - if not "%CXXSTD%" == "" set CXXSTD=cxxstd=%CXXSTD%
-  - b2 -j3 libs/hash2/test toolset=%TOOLSET%
+  - b2 -j3 libs/hash2/test toolset=%TOOLSET% %CXXSTD% address-model=32,64
