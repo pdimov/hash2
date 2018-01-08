@@ -53,11 +53,20 @@ public:
 
     explicit fnv1a( boost::uint64_t seed ): st_( fnv1a_const<T>::basis )
     {
-        if( seed != 0 )
+        if( seed )
         {
-            byte_type tmp[ 8 ];
-            detail::write64le( tmp, seed );
-            update( tmp, 8 );
+            if( seed >> 32 )
+            {
+                byte_type tmp[ 8 ];
+                detail::write64le( tmp, seed );
+                update( tmp, 8 );
+            }
+            else
+            {
+                byte_type tmp[ 4 ];
+                detail::write32le( tmp, static_cast<boost::uint32_t>( seed ) );
+                update( tmp, 4 );
+            }
         }
     }
 
