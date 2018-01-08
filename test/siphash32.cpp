@@ -3,6 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 
 #include <boost/hash2/siphash.hpp>
+#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/cstdint.hpp>
@@ -77,18 +78,27 @@ static const boost::uint32_t vectors_sip32[64] =
     0x744aea59,
 };
 
+using boost::hash2::byte_type;
+
 int main()
 {
+    byte_type k[ 8 ];
+
+    for( int i = 0; i < 8; ++i )
     {
-        unsigned char in[ 64 ];
+        k[ i ] = static_cast<byte_type>( i );
+    }
+
+    {
+        byte_type in[ 64 ];
 
         for( int i = 0; i < 64; ++i )
         {
-            in[ i ] = static_cast<unsigned char>( i );
+            in[ i ] = static_cast<byte_type>( i );
 
-            boost::hash2::siphash_32 h( 0x03020100, 0x07060504 );
+            boost::hash2::siphash_32 h( k, 8 );
 
-            h.update( reinterpret_cast<boost::hash2::byte_type const*>( in ), i );
+            h.update( in, i );
 
             BOOST_TEST_EQ( h.result(), vectors_sip32[ i ] );
         }
@@ -101,7 +111,7 @@ int main()
         {
             in[ i ] = static_cast<unsigned char>( i );
 
-            boost::hash2::siphash_32 h( 0x03020100, 0x07060504 );
+            boost::hash2::siphash_32 h( k, 8 );
 
             hash_append_range( h, in, in + i );
 
@@ -114,7 +124,7 @@ int main()
 
         for( int i = 0; i < 64; ++i )
         {
-            boost::hash2::siphash_32 h( 0x03020100, 0x07060504 );
+            boost::hash2::siphash_32 h( k, 8 );
 
             hash_append_range( h, in.begin(), in.end() );
 
@@ -129,7 +139,7 @@ int main()
 
         for( int i = 0; i < 64; ++i )
         {
-            boost::hash2::siphash_32 h( 0x03020100, 0x07060504 );
+            boost::hash2::siphash_32 h( k, 8 );
 
             hash_append_range( h, in.begin(), in.end() );
 
