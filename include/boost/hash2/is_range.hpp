@@ -11,6 +11,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/core/enable_if.hpp>
 #include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #include <iterator>
 
 namespace boost
@@ -18,7 +19,7 @@ namespace boost
 namespace hash2
 {
 
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR) && !BOOST_WORKAROUND(BOOST_GCC, < 40700)
 
 namespace detail
 {

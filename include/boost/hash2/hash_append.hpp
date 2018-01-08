@@ -22,7 +22,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 # include <boost/mp11/integer_sequence.hpp>
 #endif
 #include <iterator>
@@ -237,7 +237,7 @@ template<class H, class T>
 
 // tuple-likes
 
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 
 namespace detail
 {
@@ -263,7 +263,7 @@ template<class H, class T>
     detail::hash_append_tuple( h, v, seq() );
 }
 
-#else // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#else // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 
 template<class H, class T1, class T2> void hash_append( H & h, std::pair<T1, T2> const & v )
 {
@@ -277,6 +277,11 @@ template<class H, class T1, class T2> void hash_append( H & h, std::pair<T1, T2>
 } // namespace boost
 
 #include <tuple>
+
+namespace boost
+{
+namespace hash2
+{
 
 template<class H> void hash_append( H & /*h*/, std::tuple<> const & /*v*/ )
 {
@@ -327,14 +332,9 @@ template<class H, class T1, class T2, class T3, class T4, class T5, class T6> vo
     hash_append( h, std::get<5>(v) );
 }
 
-namespace boost
-{
-namespace hash2
-{
-
 #endif // !defined(BOOST_NO_CXX11_HDR_TUPLE)
 
-#endif // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#endif // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 
 } // namespace hash2
 } // namespace boost
