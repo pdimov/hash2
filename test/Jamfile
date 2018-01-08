@@ -7,6 +7,7 @@ import testing ;
 
 run is_contiguously_hashable.cpp ;
 run is_range.cpp ;
+run is_contiguous_range.cpp ;
 run is_unordered_range.cpp ;
 run is_tuple_like.cpp ;
 run underlying_type.cpp ;
