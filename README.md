@@ -25,6 +25,7 @@ struct HashAlgorithm
     typedef /*unsigned integral*/ size_type; // how is container.size() hashed
 
     HashAlgorithm(); // default-constructible
+    explicit HashAlgorithm( uint64_t seed ); // seed-constructible
     HashAlgorithm( byte_type const* seed, ptrdiff_t n ); // seed-constructible
 
     HashAlgorithm( HashAlgorithm const& r ); // copy-constructible
@@ -41,8 +42,8 @@ struct HashAlgorithm
 
 The library supports C++03 and does not require C++11. The following compilers:
 
-* g++ 4.7 or later
-* clang++ 3.5 or later
+* g++ 4.4 or later
+* clang++ 3.3 or later
 * Visual Studio 2008 and above
 
 are being tested on [Travis](https://travis-ci.org/pdimov/hash2/) and [Appveyor](https://ci.appveyor.com/project/pdimov/hash2/).
