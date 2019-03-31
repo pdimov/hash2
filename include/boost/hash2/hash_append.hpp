@@ -44,10 +44,7 @@ template<class H, class It> void hash_append_sized_range( H & h, It first, It la
 namespace detail
 {
 
-template<class H, class It>
-    typename boost::enable_if_c< 
-        !boost::is_same<It, byte_type const*>::value, void >::type
-    hash_append_range_( H & h, It first, It last )
+template<class H, class It> void hash_append_range_( H & h, It first, It last )
 {
     for( ; first != last; ++first )
     {
@@ -55,21 +52,25 @@ template<class H, class It>
     }
 }
 
-template<class H, class T>
-    typename boost::enable_if_c< 
-        boost::is_same<T, byte_type const>::value, void >::type
-    hash_append_range_( H & h, T * first, T * last )
+template<class H> void hash_append_range_( H & h, byte_type * first, byte_type * last )
+{
+    h.update( first, last - first );
+}
+
+template<class H> void hash_append_range_( H & h, byte_type const * first, byte_type const * last )
 {
     h.update( first, last - first );
 }
 
 template<class H, class T>
     typename boost::enable_if_c<
-        is_contiguously_hashable<T, H>::value &&
-        !boost::is_same<T, byte_type const>::value, void >::type
+        is_contiguously_hashable<T, H>::value, void >::type
     hash_append_range_( H & h, T * first, T * last )
 {
-    hash_append_range( h, reinterpret_cast<byte_type const*>( first ), reinterpret_cast<byte_type const*>( last ) );
+    byte_type const * f2 = reinterpret_cast<byte_type const*>( first );
+    byte_type const * l2 = reinterpret_cast<byte_type const*>( last );
+
+    h.update( f2, l2 - f2 );
 }
 
 } // namespace detail
