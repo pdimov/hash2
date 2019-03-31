@@ -164,7 +164,7 @@ inline bool operator==( X const & x1, X const & x2 )
     return x1.key() == x2.key() && x1.value() == x2.value();
 }
 
-template<class H> inline void hash_append( H & h, X const & x )
+template<class H> inline void do_hash_append( H & h, X const & x )
 {
     using boost::hash2::hash_append;
 
