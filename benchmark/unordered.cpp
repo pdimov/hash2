@@ -1,6 +1,8 @@
 
-// Copyright 2017, 2018 Peter Dimov.
+// Copyright 2017-2019 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
@@ -11,6 +13,8 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <boost/chrono.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/config.hpp>
@@ -18,18 +22,85 @@
 #include <cstddef>
 #include <cstdio>
 #include <string>
+#include <vector>
 
-#if defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
+class mul31_32
+{
+private:
 
-#include <boost/unordered_set.hpp>
-using boost::unordered_set;
+    boost::uint32_t st_;
 
-#else
+public:
 
-#include <unordered_set>
-using std::unordered_set;
+    typedef boost::uint32_t result_type;
+    typedef boost::uint32_t size_type;
 
-#endif
+    mul31_32(): st_( 0x811C9DC5ul )
+    {
+    }
+
+    explicit mul31_32( boost::uint64_t seed ): st_( 0x811C9DC5ul ^ ( seed & 0xFFFFFFFFu ) ^ ( seed >> 32 ) )
+    {
+    }
+
+    void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
+    {
+        boost::uint32_t h = st_;
+
+        for( std::ptrdiff_t i = 0; i < n; ++i )
+        {
+            h = h * 31 + static_cast<boost::uint32_t>( p[i] );
+        }
+
+        st_ = h;
+    }
+
+    boost::uint32_t result()
+    {
+        boost::uint32_t r = st_;
+        st_ = st_ * 31 + 0xFF;
+        return r;
+    }
+};
+
+class mul31_64
+{
+private:
+
+    boost::uint64_t st_;
+
+public:
+
+    typedef boost::uint64_t result_type;
+    typedef boost::uint64_t size_type;
+
+    mul31_64(): st_( 0xCBF29CE484222325ull )
+    {
+    }
+
+    explicit mul31_64( boost::uint64_t seed ): st_( 0xCBF29CE484222325ull ^ seed )
+    {
+    }
+
+    void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
+    {
+        boost::uint64_t h = st_;
+
+        for( std::ptrdiff_t i = 0; i < n; ++i )
+        {
+            h = h * 31 + static_cast<boost::uint64_t>( p[i] );
+        }
+
+        st_ = h;
+    }
+
+    boost::uint64_t result()
+    {
+        boost::uint64_t r = st_;
+        st_ = st_ * 31 + 0xFF;
+        return r;
+    }
+};
 
 template<class H> class hasher
 {
@@ -55,32 +126,30 @@ public:
     }
 };
 
-template<class K, class H> void test3( int N, char const* seed_text, std::size_t seed )
+template<class V, class S> void test4( int N, V const& v, char const * hash, char const* seed_text, S s )
 {
-    unordered_set< K, hasher<H> > s( 0, hasher<H>( seed ) );
-
     typedef boost::chrono::steady_clock clock_type;
 
     clock_type::time_point t1 = clock_type::now();
 
     for( int i = 0; i < N; ++i )
     {
-        s.insert( i );
-    }
-
-    std::size_t q = 0;
-
-    for( int j = 0; j < 16; ++j )
-    {
-        for( int i = N * 15 / 16; i < 4 * N; ++i )
-        {
-            q += s.count( i );
-        }
+        s.insert( v[ i * 16 ] );
     }
 
     clock_type::time_point t2 = clock_type::now();
 
-    long long ms = boost::chrono::duration_cast<boost::chrono::milliseconds>( t2 - t1 ).count();
+    std::size_t q = 0;
+
+    for( int i = 0; i < 16 * N; ++i )
+    {
+        q += s.count( v[ i ] );
+    }
+
+    clock_type::time_point t3 = clock_type::now();
+
+    long long ms1 = boost::chrono::duration_cast<boost::chrono::milliseconds>( t2 - t1 ).count();
+    long long ms2 = boost::chrono::duration_cast<boost::chrono::milliseconds>( t3 - t2 ).count();
 
     std::size_t n = s.bucket_count();
     std::size_t m = 0;
@@ -97,96 +166,72 @@ template<class K, class H> void test3( int N, char const* seed_text, std::size_t
 
 #if defined( _MSC_VER )
 
-    std::printf( "%s(%s): n=%Iu, m=%Iu, q=%Iu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), seed_text, n, m, q, ms );
+    std::printf( "%s(%s): n=%Iu, m=%Iu, q=%Iu, %lld + %lld ms\n", hash, seed_text, n, m, q, ms1, ms2 );
 
 #else
 
-    std::printf( "%s(%s): n=%zu, m=%zu, q=%zu, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), seed_text, n, m, q, ms );
+    std::printf( "%s(%s): n=%zu, m=%zu, q=%zu, %lld + %lld ms\n", hash, seed_text, n, m, q, ms1, ms2 );
 
 #endif
 }
 
-template<class K, class H> void test2( int N )
+template<class K, class H, class V> void test3( int N, V const& v, char const* seed_text, std::size_t seed )
 {
-    test3<K, H>( N, "0", 0 );
-    test3<K, H>( N, "1", 1 );
-    test3<K, H>( N, "~0", ~static_cast<std::size_t>( 0 ) );
+    boost::unordered_set< K, hasher<H> > s( 0, hasher<H>( seed ) );
+    test4( N, v, boost::core::demangle( typeid(H).name() ).c_str(), seed_text, s );
+}
+
+template<class K, class H, class V> void test2( int N, V const& v )
+{
+    test3<K, H>( N, v, "0", 0 );
+    test3<K, H>( N, v, "1", 1 );
+    test3<K, H>( N, v, "~0", ~static_cast<std::size_t>( 0 ) );
     std::puts( "" );
-}
-
-template<class K> void test( int N )
-{
-    std::printf( "Key type `%s`:\n\n", boost::core::demangle( typeid(K).name() ).c_str() );
-
-    test2<K, boost::hash2::fnv1a_32>( N );
-    test2<K, boost::hash2::fnv1a_64>( N );
-    test2<K, boost::hash2::murmur3_32>( N );
-    test2<K, boost::hash2::murmur3_128>( N );
-    test2<K, boost::hash2::xxhash_32>( N );
-    test2<K, boost::hash2::xxhash_64>( N );
-    test2<K, boost::hash2::spooky2_128>( N );
-    test2<K, boost::hash2::siphash_32>( N );
-    test2<K, boost::hash2::siphash_64>( N );
-    test2<K, boost::hash2::md5_128>( N );
-    test2<K, boost::hash2::sha1_160>( N );
-    test2<K, boost::hash2::hmac_md5_128>( N );
-    test2<K, boost::hash2::hmac_sha1_160>( N );
-
-    std::puts( "" );
-}
-
-class X
-{
-private:
-
-    int key_;
-    std::string value_;
-
-public:
-
-    X( int k ): key_( k ), value_( "0123456789ABCDE" )
-    {
-    }
-
-    int key() const
-    {
-        return key_;
-    }
-
-    std::string value() const
-    {
-        return value_;
-    }
-};
-
-inline bool operator==( X const & x1, X const & x2 )
-{
-    return x1.key() == x2.key() && x1.value() == x2.value();
-}
-
-template<class H> inline void hash_append( H & h, X const & x )
-{
-    using boost::hash2::hash_append;
-
-    hash_append( h, x.key() );
-    hash_append( h, x.value() );
 }
 
 int main()
 {
-#if defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
-
-    std::puts( "Using boost::unordered_set for lack of <unordered_set>:\n" );
-
-#else
-
-    std::puts( "Using std::unordered_set:\n" );
-
-#endif
-
     int const N = 1048576;
 
-    test<int>( N );
-    test<long long>( N );
-    test<X>( N );
+    std::vector<std::string> v;
+
+    {
+        v.reserve( N * 16 );
+
+        boost::mt19937_64 rnd;
+
+        for( int i = 0; i < 16 * N; ++i )
+        {
+            unsigned long long k = rnd();
+
+            char buffer[ 64 ];
+            sprintf( buffer, "prefix_%llu_suffix", k );
+
+            v.push_back( buffer );
+        }
+    }
+
+    typedef std::string K;
+
+    {
+        boost::unordered_set<K> s;
+        test4( N, v, "default", "0", s );
+        std::puts( "" );
+    }
+
+    test2<K, mul31_32>( N, v );
+    test2<K, mul31_64>( N, v );
+    test2<K, boost::hash2::fnv1a_32>( N, v );
+    test2<K, boost::hash2::fnv1a_64>( N, v );
+    test2<K, boost::hash2::murmur3_32>( N, v );
+    test2<K, boost::hash2::murmur3_128>( N, v );
+    test2<K, boost::hash2::xxhash_32>( N, v );
+    test2<K, boost::hash2::xxhash_64>( N, v );
+    test2<K, boost::hash2::spooky2_128>( N, v );
+    test2<K, boost::hash2::siphash_32>( N, v );
+    test2<K, boost::hash2::siphash_64>( N, v );
+    test2<K, boost::hash2::md5_128>( N, v );
+    test2<K, boost::hash2::sha1_160>( N, v );
+
+    std::puts( "" );
 }
