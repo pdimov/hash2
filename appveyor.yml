@@ -46,4 +46,4 @@ build: off
 test_script:
   - if not "%CXXSTD%" == "" set CXXSTD=cxxstd=%CXXSTD%
   - if not "%ADDRESS_MODEL%" == "" set ADDRESS_MODEL=address-model=%ADDRESS_MODEL%
-  - b2 -j3 libs/hash2/test toolset=%TOOLSET% %CXXSTD% %ADDRESS_MODEL%
+  - b2 -j3 libs/hash2/test toolset=%TOOLSET% %CXXSTD% %ADDRESS_MODEL% variant=debug,release
