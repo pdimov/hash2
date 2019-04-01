@@ -32,12 +32,19 @@ namespace boost
 namespace hash2
 {
 
+// forward declarations
+
+template<class H, class T> void hash_append( H & h, T const & v );
+template<class H, class It> void hash_append_range( H & h, It first, It last );
+template<class H, class T> void hash_append_size( H & h, T const & v );
+template<class H, class It> void hash_append_sized_range( H & h, It first, It last );
+
 // hash_append_range
 
-template<class H, class It>
-    typename boost::enable_if_c< 
-        !boost::is_same<It, byte_type const*>::value, void >::type
-    hash_append_range( H & h, It first, It last )
+namespace detail
+{
+
+template<class H, class It> void hash_append_range_( H & h, It first, It last )
 {
     for( ; first != last; ++first )
     {
@@ -45,21 +52,32 @@ template<class H, class It>
     }
 }
 
-template<class H, class T>
-    typename boost::enable_if_c< 
-        is_contiguously_hashable<T, H>::value &&
-        !boost::is_same<T, byte_type const>::value, void >::type
-    hash_append_range( H & h, T * first, T * last )
+template<class H> void hash_append_range_( H & h, byte_type * first, byte_type * last )
 {
-    hash_append_range( h, reinterpret_cast<byte_type const*>( first ), reinterpret_cast<byte_type const*>( last ) );
+    h.update( first, last - first );
+}
+
+template<class H> void hash_append_range_( H & h, byte_type const * first, byte_type const * last )
+{
+    h.update( first, last - first );
 }
 
 template<class H, class T>
-    typename boost::enable_if_c< 
-        boost::is_same<T, byte_type const>::value, void >::type
-    hash_append_range( H & h, T * first, T * last )
+    typename boost::enable_if_c<
+        is_contiguously_hashable<T, H>::value, void >::type
+    hash_append_range_( H & h, T * first, T * last )
 {
-    h.update( first, last - first );
+    byte_type const * f2 = reinterpret_cast<byte_type const*>( first );
+    byte_type const * l2 = reinterpret_cast<byte_type const*>( last );
+
+    h.update( f2, l2 - f2 );
+}
+
+} // namespace detail
+
+template<class H, class It> void hash_append_range( H & h, It first, It last )
+{
+    detail::hash_append_range_( h, first, last );
 }
 
 // hash_append_size
@@ -99,14 +117,14 @@ template<class H, class It> void hash_append_sized_range( H & h, It first, It la
     detail::hash_append_sized_range_( h, first, last, typename std::iterator_traits<It>::iterator_category() );
 }
 
-// hash_append
+// do_hash_append
 
 // contiguously hashable (this includes byte_type const&)
 
 template<class H, class T>
     typename boost::enable_if_c< 
         is_contiguously_hashable<T, H>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     byte_type const * p = reinterpret_cast<byte_type const*>( &v );
     hash_append_range( h, p, p + sizeof(T) );
@@ -116,7 +134,7 @@ template<class H, class T>
 
 template<class H, class T>
     typename boost::enable_if_c< is_floating_point<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     T w = v == 0? 0: v;
 
@@ -126,7 +144,7 @@ template<class H, class T>
 
 // C arrays
 
-template<class H, class T, std::size_t N> void hash_append( H & h, T const (&v)[ N ] )
+template<class H, class T, std::size_t N> void do_hash_append( H & h, T const (&v)[ N ] )
 {
     hash_append_range( h, v + 0, v + N );
 }
@@ -156,7 +174,7 @@ template<class T, class A> struct is_vector< std::vector<T, A> const >: true_typ
 
 template<class H, class T>
     typename boost::enable_if_c< is_contiguous_range<T>::value && !is_tuple_like<T>::value && !detail::is_vector<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     hash_append_range( h, v.data(), v.data() + v.size() );
     hash_append_size( h, v.size() );
@@ -164,7 +182,7 @@ template<class H, class T>
 
 template<class H, class T>
     typename boost::enable_if_c< detail::is_vector<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     typename T::value_type const * p = v.empty()? 0: &v[0];
 
@@ -176,7 +194,7 @@ template<class H, class T>
 
 template<class H, class T>
     typename boost::enable_if_c< is_contiguous_range<T>::value && !is_tuple_like<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     hash_append_range( h, v.data(), v.data() + v.size() );
     hash_append_size( h, v.size() );
@@ -188,7 +206,7 @@ template<class H, class T>
 
 template<class H, class T>
     typename boost::enable_if_c< is_range<T>::value && !is_tuple_like<T>::value && !is_contiguous_range<T>::value && !is_unordered_range<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     hash_append_sized_range( h, v.begin(), v.end() );
 }
@@ -197,7 +215,7 @@ template<class H, class T>
 
 template<class H, class T>
     typename boost::enable_if_c< is_range<T>::value && is_tuple_like<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     hash_append_range( h, v.begin(), v.end() );
 }
@@ -230,7 +248,7 @@ template<class H, class It> void hash_append_unordered_range_( H & h, It first, 
 
 template<class H, class T>
     typename boost::enable_if_c< is_unordered_range<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     detail::hash_append_unordered_range_( h, v.begin(), v.end() );
 }
@@ -257,7 +275,7 @@ template<class H, class T> void hash_append_tuple( H & /*h*/, T const& /*v*/, bo
 
 template<class H, class T>
     typename boost::enable_if_c< !is_range<T>::value && is_tuple_like<T>::value, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     typedef boost::mp11::make_index_sequence<std::tuple_size<T>::value> seq;
     detail::hash_append_tuple( h, v, seq() );
@@ -280,7 +298,7 @@ template<class T, class U> struct is_pair< std::pair<T, U> >: true_type
 
 template<class H, class T>
     typename boost::enable_if< detail::is_pair<T>, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     hash_append( h, v.first );
     hash_append( h, v.second );
@@ -386,7 +404,7 @@ template<class H, class T1, class T2, class T3, class T4, class T5, class T6> vo
 
 template<class H, class T>
     typename boost::enable_if< detail::is_tuple<T>, void >::type
-    hash_append( H & h, T const & v )
+    do_hash_append( H & h, T const & v )
 {
     detail::hash_append_tuple( h, v );
 }
@@ -394,6 +412,13 @@ template<class H, class T>
 #endif // !defined(BOOST_NO_CXX11_HDR_TUPLE)
 
 #endif // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
+
+// hash_append
+
+template<class H, class T> void hash_append( H & h, T const & v )
+{
+    do_hash_append( h, v );
+}
 
 } // namespace hash2
 } // namespace boost

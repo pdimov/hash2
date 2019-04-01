@@ -24,6 +24,7 @@ run hash_append.cpp ;
 run hash_append_2.cpp ;
 run hash_append_3.cpp ;
 run hash_append_4.cpp ;
+run hash_append_5.cpp ;
 run hash_append_range.cpp ;
 run hash_append_range_2.cpp ;
 run set.cpp ;
