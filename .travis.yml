@@ -4,6 +4,8 @@
 
 language: cpp
 
+dist: xenial
+
 branches:
   only:
     - master
@@ -125,6 +127,7 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
+      dist: bionic
       compiler: g++-10
       env: TOOLSET=gcc CXXSTD=03,11,14,17,2a
       addons:
@@ -135,12 +138,12 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      compiler: g++-8
+      compiler: g++-9
       env: UBSAN=1 TOOLSET=gcc CXXSTD=03,11,14,17,2a UBSAN_OPTIONS=print_stacktrace=1 LINKFLAGS=-fuse-ld=gold
       addons:
         apt:
           packages:
-            - g++-8
+            - g++-9
           sources:
             - ubuntu-toolchain-r-test
 
@@ -177,7 +180,6 @@ matrix:
             - libstdc++-4.9-dev
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.5
 
     - os: linux
       compiler: clang++-3.6
@@ -258,6 +260,7 @@ matrix:
             - clang-7
           sources:
             - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
 
     - os: linux
       compiler: clang++-8
@@ -270,12 +273,35 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      compiler: clang++-6.0
-      env: UBSAN=1 TOOLSET=clang CXXSTD=03,11,14,1z UBSAN_OPTIONS=print_stacktrace=1
+      dist: bionic
+      compiler: clang++-9
+      env: TOOLSET=clang COMPILER=clang++-9 CXXSTD=03,11,14,17,2a
       addons:
         apt:
           packages:
-            - clang-6.0
+            - clang-9
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: bionic
+      compiler: clang++-10
+      env: TOOLSET=clang COMPILER=clang++-10 CXXSTD=03,11,14,17,2a
+      addons:
+        apt:
+          packages:
+            - clang-10
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: bionic
+      compiler: clang++-10
+      env: UBSAN=1 TOOLSET=clang COMPILER=clang++-10 CXXSTD=03,11,14,17,2a UBSAN_OPTIONS=print_stacktrace=1
+      addons:
+        apt:
+          packages:
+            - clang-10
           sources:
             - ubuntu-toolchain-r-test
 
