@@ -8,6 +8,7 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <cstddef>
 
 namespace boost
 {

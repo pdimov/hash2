@@ -13,6 +13,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <cstddef>
 
 namespace boost
 {
