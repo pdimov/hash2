@@ -315,7 +315,7 @@ matrix:
             - libc++-dev
 
     - os: linux
-      dist: bionic
+      dist: focal
       compiler: clang++-libc++
       env: UBSAN=1 TOOLSET=clang CXXSTD=03,11,14,1z UBSAN_OPTIONS=print_stacktrace=1
       addons:
