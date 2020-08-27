@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <cstring>
+#include <cstddef>
 
 namespace boost
 {
