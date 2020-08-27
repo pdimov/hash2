@@ -6,3 +6,4 @@ project : default-build release <link>static ;
 exe buffer : buffer.cpp /boost//chrono ;
 exe unordered : unordered.cpp /boost//chrono ;
 exe average : average.cpp /boost//chrono ;
+exe keys : keys.cpp /boost//chrono ;
