@@ -126,7 +126,36 @@ public:
     }
 };
 
-template<class V, class S> void test4( int N, V const& v, char const * hash, char const* seed_text, S s )
+template<class H> class hasher2
+{
+private:
+
+    std::size_t seed_;
+
+public:
+
+    explicit hasher2( std::size_t seed ): seed_( seed )
+    {
+    }
+
+    template<class T> std::size_t operator()( T const& v ) const
+    {
+        H h( seed_ );
+
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+
+        typename T::value_type const * p = v.data();
+        typename T::size_type n = v.size();
+
+        h.update( reinterpret_cast<boost::hash2::byte_type const*>( p ), n );
+
+        using boost::hash2::get_integral_result;
+        return get_integral_result<std::size_t>( h.result() );
+    }
+};
+
+template<class V, class S> void test4( int N, V const& v, char const * hash, S s )
 {
     typedef boost::chrono::steady_clock clock_type;
 
@@ -166,26 +195,25 @@ template<class V, class S> void test4( int N, V const& v, char const * hash, cha
 
 #if defined( _MSC_VER )
 
-    std::printf( "%s(%s): n=%Iu, m=%Iu, q=%Iu, %lld + %lld ms\n", hash, seed_text, n, m, q, ms1, ms2 );
+    std::printf( "%s: n=%Iu, m=%Iu, q=%Iu, %lld + %lld ms\n", hash, n, m, q, ms1, ms2 );
 
 #else
 
-    std::printf( "%s(%s): n=%zu, m=%zu, q=%zu, %lld + %lld ms\n", hash, seed_text, n, m, q, ms1, ms2 );
+    std::printf( "%s: n=%zu, m=%zu, q=%zu, %lld + %lld ms\n", hash, n, m, q, ms1, ms2 );
 
 #endif
 }
 
-template<class K, class H, class V> void test3( int N, V const& v, char const* seed_text, std::size_t seed )
+template<class K, class H, class V> void test3( int N, V const& v, std::size_t seed )
 {
-    boost::unordered_set< K, hasher<H> > s( 0, hasher<H>( seed ) );
-    test4( N, v, boost::core::demangle( typeid(H).name() ).c_str(), seed_text, s );
+    boost::unordered_set<K, H> s( 0, H( seed ) );
+    test4( N, v, boost::core::demangle( typeid(H).name() ).c_str(), s );
 }
 
 template<class K, class H, class V> void test2( int N, V const& v )
 {
-    test3<K, H>( N, v, "0", 0 );
-    test3<K, H>( N, v, "1", 1 );
-    test3<K, H>( N, v, "~0", ~static_cast<std::size_t>( 0 ) );
+    test3< K, hasher<H> >( N, v, 0x9e3779b9 );
+    test3< K, hasher2<H> >( N, v, 0x9e3779b9 );
     std::puts( "" );
 }
 
@@ -202,10 +230,18 @@ int main()
 
         for( int i = 0; i < 16 * N; ++i )
         {
+            char buffer[ 64 ];
+
             unsigned long long k = rnd();
 
-            char buffer[ 64 ];
-            sprintf( buffer, "prefix_%llu_suffix", k );
+            if( k & 1 )
+            {
+                sprintf( buffer, "prefix_%llu_suffix", k );
+            }
+            else
+            {
+                sprintf( buffer, "{%u}", static_cast<unsigned>( k ) );
+            }
 
             v.push_back( buffer );
         }
@@ -215,7 +251,7 @@ int main()
 
     {
         boost::unordered_set<K> s;
-        test4( N, v, "default", "0", s );
+        test4( N, v, "default", s );
         std::puts( "" );
     }
 
