@@ -144,7 +144,7 @@ public:
     }
 };
 
-template<class H> class hasher
+template<class H> class hasher1
 {
 private:
 
@@ -152,7 +152,7 @@ private:
 
 public:
 
-    explicit hasher( std::size_t seed ): seed_( seed )
+    explicit hasher1( std::size_t seed ): seed_( seed )
     {
     }
 
@@ -172,17 +172,70 @@ template<class H> class hasher2
 {
 private:
 
+    H h_;
+
+public:
+
+    explicit hasher2( std::size_t seed ): h_( seed )
+    {
+    }
+
+    template<class T> std::size_t operator()( T const& v ) const
+    {
+        H h( h_ );
+
+        using boost::hash2::hash_append;
+        hash_append( h, v );
+
+        using boost::hash2::get_integral_result;
+        return get_integral_result<std::size_t>( h.result() );
+    }
+};
+
+template<class H> class hasher3
+{
+private:
+
     std::size_t seed_;
 
 public:
 
-    explicit hasher2( std::size_t seed ): seed_( seed )
+    explicit hasher3( std::size_t seed ): seed_( seed )
     {
     }
 
     template<class T> std::size_t operator()( T const& v ) const
     {
         H h( seed_ );
+
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+
+        typename T::value_type const * p = v.data();
+        typename T::size_type n = v.size();
+
+        h.update( reinterpret_cast<boost::hash2::byte_type const*>( p ), n );
+
+        using boost::hash2::get_integral_result;
+        return get_integral_result<std::size_t>( h.result() );
+    }
+};
+
+template<class H> class hasher4
+{
+private:
+
+    H h_;
+
+public:
+
+    explicit hasher4( std::size_t seed ): h_( seed )
+    {
+    }
+
+    template<class T> std::size_t operator()( T const& v ) const
+    {
+        H h( h_ );
 
         BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
         BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
@@ -229,8 +282,10 @@ template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 
 template<class H, class V> void test2( int N, V const& v )
 {
-    test3< hasher<H> >( N, v, 0x9e3779b9 );
+    test3< hasher1<H> >( N, v, 0x9e3779b9 );
     test3< hasher2<H> >( N, v, 0x9e3779b9 );
+    test3< hasher3<H> >( N, v, 0x9e3779b9 );
+    test3< hasher4<H> >( N, v, 0x9e3779b9 );
     std::puts( "" );
 }
 
