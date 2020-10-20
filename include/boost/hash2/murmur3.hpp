@@ -166,9 +166,28 @@ public:
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
 
-        std::memset( buffer_ + m_, 0, 4 - m_ );
+        // std::memset( buffer_ + m_, 0, 4 - m_ );
+        // boost::uint32_t k = detail::read32le( buffer_ );
 
-        boost::uint32_t k = detail::read32le( buffer_ );
+        boost::uint32_t k = 0;
+
+        switch( m_ )
+        {
+        case 1:
+
+            k = buffer_[0];
+            break;
+
+        case 2:
+
+            k = buffer_[0] + (buffer_[1] << 8);
+            break;
+
+        case 3:
+
+            k = buffer_[0] + (buffer_[1] << 8) + (buffer_[2] << 16);
+            break;
+        }
 
         k *= c1;
         k = detail::rotl( k, 15 );
