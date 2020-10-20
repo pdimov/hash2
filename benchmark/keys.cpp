@@ -46,11 +46,32 @@ public:
     {
         boost::uint32_t h = st_;
 
+#if 0
+
         for( std::ptrdiff_t i = 0; i < n; ++i )
         {
             h = h * 31 + static_cast<boost::uint32_t>( p[i] );
         }
 
+#else
+
+        while( n >= 4 )
+        {
+            h = h * (31u * 31u * 31u * 31u) + p[0] * (31u * 31u * 31u) + p[1] * (31u * 31u) + p[2] * 31u + p[3];
+
+            p += 4;
+            n -= 4;
+        }
+
+        while( n > 0 )
+        {
+            h = h * 31u + *p;
+
+            ++p;
+            --n;
+        }
+
+#endif
         st_ = h;
     }
 
@@ -85,10 +106,32 @@ public:
     {
         boost::uint64_t h = st_;
 
+#if 0
+
         for( std::ptrdiff_t i = 0; i < n; ++i )
         {
             h = h * 31 + static_cast<boost::uint64_t>( p[i] );
         }
+
+#else
+
+        while( n >= 4 )
+        {
+            h = h * (31u * 31u * 31u * 31u) + p[0] * (31u * 31u * 31u) + p[1] * (31u * 31u) + p[2] * 31u + p[3];
+
+            p += 4;
+            n -= 4;
+        }
+
+        while( n > 0 )
+        {
+            h = h * 31u + *p;
+
+            ++p;
+            --n;
+        }
+
+#endif
 
         st_ = h;
     }
@@ -125,10 +168,37 @@ public:
     }
 };
 
-template<class H, class V> void test3( int N, V const& v, char const* seed_text, std::size_t seed )
+template<class H> class hasher2
 {
-    // test4( N, v, boost::core::demangle( typeid(H).name() ).c_str(), seed_text );
+private:
 
+    std::size_t seed_;
+
+public:
+
+    explicit hasher2( std::size_t seed ): seed_( seed )
+    {
+    }
+
+    template<class T> std::size_t operator()( T const& v ) const
+    {
+        H h( seed_ );
+
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
+        BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+
+        typename T::value_type const * p = v.data();
+        typename T::size_type n = v.size();
+
+        h.update( reinterpret_cast<boost::hash2::byte_type const*>( p ), n );
+
+        using boost::hash2::get_integral_result;
+        return get_integral_result<std::size_t>( h.result() );
+    }
+};
+
+template<class H, class V> void test3( int N, V const& v, std::size_t seed )
+{
     typedef boost::chrono::steady_clock clock_type;
 
     clock_type::time_point t1 = clock_type::now();
@@ -137,7 +207,7 @@ template<class H, class V> void test3( int N, V const& v, char const* seed_text,
 
     for( int i = 0; i < N; ++i )
     {
-        q += hasher<H>( seed )( v[i] );
+        q += H( seed )( v[i] );
     }
 
     clock_type::time_point t2 = clock_type::now();
@@ -148,20 +218,19 @@ template<class H, class V> void test3( int N, V const& v, char const* seed_text,
 
 #if defined( _MSC_VER )
 
-    std::printf( "%s(%s): q=%Iu, %lld ms\n", hash.c_str(), seed_text, q, ms1 );
+    std::printf( "%s: q=%Iu, %lld ms\n", hash.c_str(), q, ms1 );
 
 #else
 
-    std::printf( "%s(%s): q=%zu, %lld ms\n", hash.c_str(), seed_text, q, ms1 );
+    std::printf( "%s: q=%zu, %lld ms\n", hash.c_str(), q, ms1 );
 
 #endif
 }
 
 template<class H, class V> void test2( int N, V const& v )
 {
-    test3<H>( N, v, "0", 0 );
-    test3<H>( N, v, "1", 1 );
-    test3<H>( N, v, "~0", ~static_cast<std::size_t>( 0 ) );
+    test3< hasher<H> >( N, v, 0x9e3779b9 );
+    test3< hasher2<H> >( N, v, 0x9e3779b9 );
     std::puts( "" );
 }
 
@@ -174,14 +243,22 @@ int main()
     {
         v.reserve( N );
 
-        boost::mt19937 rnd;
+        boost::mt19937_64 rnd;
 
         for( int i = 0; i < N; ++i )
         {
-            unsigned k = rnd();
-
             char buffer[ 64 ];
-            sprintf( buffer, "{%u}", k );
+
+            unsigned long long k = rnd();
+
+            if( k & 1 )
+            {
+                sprintf( buffer, "prefix_%llu_suffix", k );
+            }
+            else
+            {
+                sprintf( buffer, "{%u}", static_cast<unsigned>( k ) );
+            }
 
             v.push_back( buffer );
         }
