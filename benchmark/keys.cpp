@@ -258,9 +258,11 @@ template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 
     std::size_t q = 0;
 
+    H const h( seed );
+
     for( int i = 0; i < N; ++i )
     {
-        q += H( seed )( v[i] );
+        q += h( v[i] );
     }
 
     clock_type::time_point t2 = clock_type::now();
