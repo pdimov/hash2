@@ -1,6 +1,6 @@
-
 // Copyright 2017-2020 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -13,10 +13,10 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/chrono.hpp>
-#include <boost/core/demangle.hpp>
-#include <boost/config.hpp>
+#include <boost/core/type_name.hpp>
+#include <boost/cstdint.hpp>
+#include <chrono>
+#include <random>
 #include <typeinfo>
 #include <cstddef>
 #include <cstdio>
@@ -252,7 +252,7 @@ public:
 
 template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 {
-    typedef boost::chrono::steady_clock clock_type;
+    typedef std::chrono::steady_clock clock_type;
 
     clock_type::time_point t1 = clock_type::now();
 
@@ -267,9 +267,9 @@ template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 
     clock_type::time_point t2 = clock_type::now();
 
-    long long ms1 = boost::chrono::duration_cast<boost::chrono::milliseconds>( t2 - t1 ).count();
+    long long ms1 = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
 
-    std::string hash = boost::core::demangle( typeid(H).name() );
+    std::string hash = boost::core::type_name<H>();
 
 #if defined( _MSC_VER )
 
@@ -300,7 +300,7 @@ int main()
     {
         v.reserve( N );
 
-        boost::mt19937_64 rnd;
+        std::mt19937_64 rnd;
 
         for( int i = 0; i < N; ++i )
         {

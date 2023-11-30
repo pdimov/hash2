@@ -1,6 +1,6 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
@@ -11,8 +11,8 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/chrono.hpp>
-#include <boost/core/demangle.hpp>
+#include <boost/core/type_name.hpp>
+#include <chrono>
 #include <typeinfo>
 #include <cstddef>
 #include <cstdio>
@@ -22,7 +22,7 @@
 
 template<class R, class H> void test_( int N )
 {
-    typedef boost::chrono::steady_clock clock_type;
+    typedef std::chrono::steady_clock clock_type;
 
     clock_type::time_point t1 = clock_type::now();
 
@@ -39,7 +39,7 @@ template<class R, class H> void test_( int N )
 
     clock_type::time_point t2 = clock_type::now();
 
-    long long ms = boost::chrono::duration_cast<boost::chrono::milliseconds>( t2 - t1 ).count();
+    long long ms = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
 
     r /= N;
 
@@ -48,12 +48,12 @@ template<class R, class H> void test_( int N )
 
     r /= stddev;
 
-    printf( "%s: r=%e, %lld ms\n", boost::core::demangle( typeid(H).name() ).c_str(), r, ms );
+    printf( "%s: r=%e, %lld ms\n", boost::core::type_name<H>().c_str(), r, ms );
 }
 
 template<class R> void test( int N )
 {
-    printf( "Integral result type `%s`:\n\n", boost::core::demangle( typeid(R).name() ).c_str() );
+    printf( "Integral result type `%s`:\n\n", boost::core::type_name<R>().c_str() );
 
     test_<R, boost::hash2::fnv1a_32>( N );
     test_<R, boost::hash2::fnv1a_64>( N );

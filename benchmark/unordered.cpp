@@ -1,6 +1,6 @@
-
 // Copyright 2017-2019 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -13,11 +13,11 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/chrono.hpp>
-#include <boost/core/demangle.hpp>
-#include <boost/config.hpp>
+#include <boost/unordered/unordered_flat_set.hpp>
+#include <boost/core/type_name.hpp>
+#include <boost/cstdint.hpp>
+#include <random>
+#include <chrono>
 #include <typeinfo>
 #include <cstddef>
 #include <cstdio>
@@ -210,7 +210,7 @@ public:
 
 template<class V, class S> void test4( int N, V const& v, char const * hash, S s )
 {
-    typedef boost::chrono::steady_clock clock_type;
+    typedef std::chrono::steady_clock clock_type;
 
     clock_type::time_point t1 = clock_type::now();
 
@@ -230,37 +230,26 @@ template<class V, class S> void test4( int N, V const& v, char const * hash, S s
 
     clock_type::time_point t3 = clock_type::now();
 
-    long long ms1 = boost::chrono::duration_cast<boost::chrono::milliseconds>( t2 - t1 ).count();
-    long long ms2 = boost::chrono::duration_cast<boost::chrono::milliseconds>( t3 - t2 ).count();
+    long long ms1 = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+    long long ms2 = std::chrono::duration_cast<std::chrono::milliseconds>( t3 - t2 ).count();
 
     std::size_t n = s.bucket_count();
-    std::size_t m = 0;
-
-    for( std::size_t i = 0; i < n; ++i )
-    {
-        std::size_t k = s.bucket_size( i );
-
-        if( k > m )
-        {
-            m = k;
-        }
-    }
 
 #if defined( _MSC_VER )
 
-    std::printf( "%s: n=%Iu, m=%Iu, q=%Iu, %lld + %lld ms\n", hash, n, m, q, ms1, ms2 );
+    std::printf( "%s: n=%Iu, q=%Iu, %lld + %lld ms\n", hash, n, q, ms1, ms2 );
 
 #else
 
-    std::printf( "%s: n=%zu, m=%zu, q=%zu, %lld + %lld ms\n", hash, n, m, q, ms1, ms2 );
+    std::printf( "%s: n=%zu, q=%zu, %lld + %lld ms\n", hash, n, q, ms1, ms2 );
 
 #endif
 }
 
 template<class K, class H, class V> void test3( int N, V const& v, std::size_t seed )
 {
-    boost::unordered_set<K, H> s( 0, H( seed ) );
-    test4( N, v, boost::core::demangle( typeid(H).name() ).c_str(), s );
+    boost::unordered_flat_set<K, H> s( 0, H( seed ) );
+    test4( N, v, boost::core::type_name<H>().c_str(), s );
 }
 
 template<class K, class H, class V> void test2( int N, V const& v )
@@ -281,7 +270,7 @@ int main()
     {
         v.reserve( N * 16 );
 
-        boost::mt19937_64 rnd;
+        std::mt19937_64 rnd;
 
         for( int i = 0; i < 16 * N; ++i )
         {
@@ -305,7 +294,7 @@ int main()
     typedef std::string K;
 
     {
-        boost::unordered_set<K> s;
+        boost::unordered_flat_set<K> s;
         test4( N, v, "default", s );
         std::puts( "" );
     }

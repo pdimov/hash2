@@ -59,3 +59,4 @@ run integral_result.cpp ;
 compile ../benchmark/buffer.cpp ;
 compile ../benchmark/unordered.cpp ;
 compile ../benchmark/average.cpp ;
+compile ../benchmark/keys.cpp ;
