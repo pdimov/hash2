@@ -1,0 +1,17 @@
+[
+    {
+        "key": "hash2",
+        "name": "Hash2",
+        "authors": [
+            "Peter Dimov"
+        ],
+        "maintainers": [
+            "Peter Dimov <pdimov -at- gmail.com>"
+        ],
+        "description": "An extensible hashing framework.",
+        "category": [
+            "Function-objects"
+        ],
+        "cxxstd": "11"
+    }
+]
