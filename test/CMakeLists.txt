@@ -6,6 +6,7 @@ include(BoostTestJamfile OPTIONAL RESULT_VARIABLE HAVE_BOOST_TEST)
 
 if(HAVE_BOOST_TEST)
 
-boost_test_jamfile(FILE Jamfile LINK_LIBRARIES Boost::hash2 Boost::core)
+boost_test_jamfile(FILE Jamfile
+  LINK_LIBRARIES Boost::hash2 Boost::core Boost::chrono Boost::random Boost::unordered)
 
 endif()

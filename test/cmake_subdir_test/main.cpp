@@ -9,7 +9,7 @@ int main()
 {
     boost::hash2::fnv1a_32 hash;
 
-    char const str[ 6 ] = "foobar";
+    char const str[ 6 ] = { 'f', 'o', 'o', 'b', 'a', 'r' };
 
     boost::hash2::hash_append( hash, str );
 
