@@ -40,15 +40,13 @@ struct HashAlgorithm
 
 ## Supported compilers
 
-The library supports C++03 and does not require C++11. The following compilers:
+The requires C++11. The following compilers:
 
-* g++ 4.4 or later
-* clang++ 3.3 or later
-* Visual Studio 2008 and above
+* g++ 4.8 or later
+* clang++ 3.9 or later
+* Visual Studio 2015 and above
 
-are being tested on [Travis](https://travis-ci.org/pdimov/hash2/) and [Appveyor](https://ci.appveyor.com/project/pdimov/hash2/).
-
-In addition, Visual Studio 2005 is also supported.
+are being tested on [Github Actions](https://github.com/pdimov/hash2/actions/) and [Appveyor](https://ci.appveyor.com/project/pdimov/hash2/).
 
 ## Documentation
 
@@ -59,7 +57,7 @@ None yet.
 * Documentation (obv.)
 * SHA2-256, 384, 512
 * Support for endian-independent hashing
-* An `std::hash`-compatible adaptor
+* A `std::hash`-compatible adaptor
 * A type-erased `hash_function`
 * A `hash2sum` example
 
