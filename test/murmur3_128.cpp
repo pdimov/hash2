@@ -1,6 +1,6 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -14,7 +14,7 @@
 
 using boost::hash2::byte_type;
 
-template<std::size_t N> std::string to_string( boost::array<byte_type, N> const & v )
+template<std::size_t N> std::string to_string( std::array<byte_type, N> const & v )
 {
     std::string r;
 

@@ -1,6 +1,6 @@
-
 // Copyright 2017 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // Endian-independent test
 
@@ -9,12 +9,8 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/array.hpp>
 #include <utility>
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
-# include <array>
-#endif
-#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
-# include <tuple>
-#endif
+#include <array>
+#include <tuple>
 
 template<class H, class R> void test( R r )
 {
@@ -69,8 +65,6 @@ template<class H, class R> void test( R r )
         BOOST_TEST_EQ( h.result(), r );
     }
 
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
-
     {
         std::array<unsigned char, 2> v = { { 1, 2 } };
 
@@ -81,10 +75,6 @@ template<class H, class R> void test( R r )
         BOOST_TEST_EQ( h.result(), r );
     }
 
-#endif
-
-#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
-
     {
         std::tuple<unsigned char, unsigned char> v( 1, 2 );
 
@@ -94,8 +84,6 @@ template<class H, class R> void test( R r )
 
         BOOST_TEST_EQ( h.result(), r );
     }
-
-#endif
 }
 
 int main()

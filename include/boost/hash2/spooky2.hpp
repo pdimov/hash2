@@ -3,6 +3,7 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // SpookyHash V2, http://burtleburtle.net/bob/hash/spooky.html
 
@@ -10,9 +11,9 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/array.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <array>
 #include <utility>
 #include <cstring>
 
@@ -236,7 +237,7 @@ private:
 
 public:
 
-    typedef boost::array<byte_type, 16> result_type;
+    typedef std::array<byte_type, 16> result_type;
     typedef boost::uint64_t size_type;
 
     explicit spooky2_128( boost::uint64_t seed1 = 0, boost::uint64_t seed2 = 0 ): m_( 0 ), n_( 0 )

@@ -7,8 +7,8 @@
 
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
-#include <boost/array.hpp>
 #include <boost/static_assert.hpp>
+#include <array>
 #include <type_traits>
 #include <cstddef>
 
@@ -34,7 +34,7 @@ template<class T, class R>
 }
 
 template<class T, std::size_t N>
-    T get_integral_result( boost::array<byte_type, N> const & r )
+    T get_integral_result( std::array<byte_type, N> const & r )
 {
     BOOST_STATIC_ASSERT( N >= 8 );
     return static_cast<T>( detail::read64le( &r[0] ) );

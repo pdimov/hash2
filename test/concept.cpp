@@ -12,7 +12,7 @@
 #include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <type_traits>
 #include <limits>
 #include <cstddef>
@@ -26,7 +26,7 @@ template<class R> struct is_valid_result:
 {
 };
 
-template<std::size_t N> struct is_valid_result< boost::array<byte_type, N> >:
+template<std::size_t N> struct is_valid_result< std::array<byte_type, N> >:
     std::integral_constant<bool, N >= 8>
 {
 };

@@ -3,6 +3,7 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // SHA1 message digest algorithm, https://tools.ietf.org/html/rfc3174
 
@@ -11,10 +12,10 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/array.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <array>
 #include <cstring>
 #include <cstddef>
 
@@ -198,7 +199,7 @@ private:
 
 public:
 
-    typedef boost::array<byte_type, 20> result_type;
+    typedef std::array<byte_type, 20> result_type;
     typedef boost::uint64_t size_type;
 
     static const int block_size = 64;
