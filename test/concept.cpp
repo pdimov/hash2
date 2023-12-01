@@ -1,6 +1,6 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
@@ -12,24 +12,22 @@
 #include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_signed.hpp>
 #include <boost/array.hpp>
+#include <type_traits>
 #include <limits>
 #include <cstddef>
 
 using boost::hash2::byte_type;
 
 template<class R> struct is_valid_result:
-    boost::integral_constant<bool,
-        boost::is_integral<R>::value && !boost::is_signed<R>::value
+    std::integral_constant<bool,
+        std::is_integral<R>::value && !std::is_signed<R>::value
     >
 {
 };
 
 template<std::size_t N> struct is_valid_result< boost::array<byte_type, N> >:
-    boost::integral_constant<bool, N >= 8>
+    std::integral_constant<bool, N >= 8>
 {
 };
 
@@ -40,7 +38,7 @@ template<class H> void test_result_type()
 
 template<class H> void test_size_type()
 {
-    BOOST_TEST_TRAIT_TRUE((boost::is_integral<typename H::size_type>));
+    BOOST_TEST_TRAIT_TRUE((std::is_integral<typename H::size_type>));
 
     BOOST_TEST_EQ( std::numeric_limits<typename H::size_type>::min(), 0 );
     BOOST_TEST_GE( std::numeric_limits<typename H::size_type>::max(), 0xFFFFFFFFu );

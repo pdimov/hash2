@@ -1,13 +1,12 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/underlying_type.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_integral.hpp>
 #include <boost/config.hpp>
+#include <type_traits>
 #include <climits>
 
 enum E1
@@ -94,8 +93,8 @@ template<class E> void test( E e )
 {
     typedef typename boost::hash2::underlying_type<E>::type U;
 
-    BOOST_TEST_TRAIT_TRUE(( boost::is_enum<E> ));
-    BOOST_TEST_TRAIT_TRUE(( boost::is_integral<U> ));
+    BOOST_TEST_TRAIT_TRUE(( std::is_enum<E> ));
+    BOOST_TEST_TRAIT_TRUE(( std::is_integral<U> ));
 
     BOOST_TEST_EQ( sizeof(E), sizeof(U) );
 

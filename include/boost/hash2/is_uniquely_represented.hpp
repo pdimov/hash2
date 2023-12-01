@@ -3,11 +3,9 @@
 
 // Copyright 2017, 2019 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_pointer.hpp>
+#include <type_traits>
 #include <cstddef>
 
 namespace boost
@@ -16,7 +14,7 @@ namespace hash2
 {
 
 template<class T> struct is_uniquely_represented:
-    integral_constant< bool, is_integral<T>::value || is_enum<T>::value || is_pointer<T>::value >
+    std::integral_constant< bool, std::is_integral<T>::value || std::is_enum<T>::value || std::is_pointer<T>::value >
 {
 };
 
