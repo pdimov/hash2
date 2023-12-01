@@ -8,15 +8,9 @@ project(cmake_subdir_test LANGUAGES CXX)
 
 add_subdirectory(../.. boostorg/hash2)
 
-add_subdirectory(../../../array boostorg/array)
 add_subdirectory(../../../assert boostorg/assert)
 add_subdirectory(../../../config boostorg/config)
-add_subdirectory(../../../core boostorg/core)
 add_subdirectory(../../../mp11 boostorg/mp11)
-add_subdirectory(../../../predef boostorg/predef)
-add_subdirectory(../../../static_assert boostorg/static_assert)
-add_subdirectory(../../../type_traits boostorg/type_traits)
-add_subdirectory(../../../throw_exception boostorg/throw_exception)
 
 add_executable(main main.cpp)
 target_link_libraries(main Boost::hash2)
