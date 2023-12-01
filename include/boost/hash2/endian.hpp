@@ -1,56 +1,36 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #ifndef BOOST_HASH2_ENDIAN_HPP_INCLUDED
 #define BOOST_HASH2_ENDIAN_HPP_INCLUDED
-
-#include <boost/config.hpp>
-#include <boost/predef/other/endian.h>
 
 namespace boost
 {
 namespace hash2
 {
 
-#if !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
+#if defined(_MSC_VER)
 
 enum class endian
 {
     little,
     big,
-    native
-#if BOOST_ENDIAN_LITTLE_BYTE
-        = little
-#elif BOOST_ENDIAN_BIG_BYTE
-        = big
-#endif
+    native = little
 };
-
-typedef endian endian_type;
 
 #else
 
-struct endian
-{
+// GCC 4.6+, Clang 3.2+
 
-enum endian_type
+enum class endian
 {
-    little,
-    big,
-    native
-#if BOOST_ENDIAN_LITTLE_BYTE
-        = little
-#elif BOOST_ENDIAN_BIG_BYTE
-        = big
+    little = __ORDER_LITTLE_ENDIAN__,
+    big = __ORDER_BIG_ENDIAN__,
+    native = __BYTE_ORDER__
+};
+
 #endif
-};
-
-};
-
-typedef endian::endian_type endian_type;
-
-#endif // !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
 
 } // namespace hash2
 } // namespace boost
