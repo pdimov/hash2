@@ -40,7 +40,7 @@ struct HashAlgorithm
 
 ## Supported compilers
 
-The requires C++11. The following compilers:
+The library requires C++11. The following compilers:
 
 * g++ 4.8 or later
 * clang++ 3.9 or later
