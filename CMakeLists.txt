@@ -14,14 +14,9 @@ target_include_directories(boost_hash2 INTERFACE include)
 
 target_link_libraries(boost_hash2
   INTERFACE
-    Boost::array
     Boost::assert
     Boost::config
-    Boost::core
     Boost::mp11
-    Boost::predef
-    Boost::static_assert
-    Boost::type_traits
 )
 
 target_compile_features(boost_hash2 INTERFACE cxx_std_11)
