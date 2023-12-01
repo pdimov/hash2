@@ -12,7 +12,6 @@
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/assert.hpp>
-#include <boost/config.hpp>
 #include <cstdint>
 #include <cstddef>
 
@@ -28,14 +27,14 @@ template<class T> struct fnv1a_const;
 
 template<> struct fnv1a_const<std::uint32_t>
 {
-    BOOST_STATIC_CONSTEXPR std::uint32_t basis = 0x811C9DC5ul;
-    BOOST_STATIC_CONSTEXPR std::uint32_t prime = 0x01000193ul;
+    static constexpr std::uint32_t basis = 0x811C9DC5ul;
+    static constexpr std::uint32_t prime = 0x01000193ul;
 };
 
 template<> struct fnv1a_const<std::uint64_t>
 {
-    BOOST_STATIC_CONSTEXPR std::uint64_t basis = 0xCBF29CE484222325ull;
-    BOOST_STATIC_CONSTEXPR std::uint64_t prime = 0x00000100000001B3ull;
+    static constexpr std::uint64_t basis = 0xCBF29CE484222325ull;
+    static constexpr std::uint64_t prime = 0x00000100000001B3ull;
 };
 
 template<class T> class fnv1a

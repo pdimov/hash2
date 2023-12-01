@@ -5,7 +5,6 @@
 #include <boost/hash2/is_tuple_like.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <boost/array.hpp>
-#include <boost/config.hpp>
 #include <utility>
 #include <array>
 #include <tuple>

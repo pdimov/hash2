@@ -1,20 +1,17 @@
-
 // Copyright 2017 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // Endian-dependent test
 
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/config.hpp>
 #include <vector>
 #include <list>
 #include <deque>
 #include <set>
-#if !defined(BOOST_NO_CXX11_HDR_FORWARD_LIST)
-# include <forward_list>
-#endif
+#include <forward_list>
 
 template<class H, class T, class R> void test_unsized_range( R r )
 {
@@ -35,9 +32,7 @@ template<class H, class R> void test( R r )
     test_unsized_range< H, std::deque<int> >( r );
     test_unsized_range< H, std::set<int> >( r );
     test_unsized_range< H, std::multiset<int> >( r );
-#if !defined(BOOST_NO_CXX11_HDR_FORWARD_LIST)
     test_unsized_range< H, std::forward_list<int> >( r );
-#endif
 
     {
         int v[2][2] = { { 1, 2 }, { 3, 4 } };

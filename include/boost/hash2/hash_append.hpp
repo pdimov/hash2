@@ -19,7 +19,6 @@
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/mp11/integer_sequence.hpp>
-#include <boost/config.hpp>
 #include <cstdint>
 #include <type_traits>
 #include <iterator>
@@ -209,20 +208,14 @@ template<class H, class T>
 
 // tuple-likes
 
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-
 namespace detail
 {
 
 template<class H, class T, std::size_t... J> void hash_append_tuple( H & h, T const& v, boost::mp11::integer_sequence<std::size_t, J...> )
 {
     using std::get;
-    int a[] = { ((void)hash_append( h, get<J>(v) ), 0)... };
+    int a[] = { 0, ((void)hash_append( h, get<J>(v) ), 0)... };
     (void)a;
-}
-
-template<class H, class T> void hash_append_tuple( H & /*h*/, T const& /*v*/, boost::mp11::integer_sequence<std::size_t> )
-{
 }
 
 } // namespace detail
@@ -235,138 +228,6 @@ template<class H, class T>
     detail::hash_append_tuple( h, v, seq() );
 }
 
-#else // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-
-namespace detail
-{
-
-template<class T> struct is_pair: false_type
-{
-};
-
-template<class T, class U> struct is_pair< std::pair<T, U> >: true_type
-{
-};
-
-} // namespace detail
-
-template<class H, class T>
-    typename boost::enable_if< detail::is_pair<T>, void >::type
-    do_hash_append( H & h, T const & v )
-{
-    hash_append( h, v.first );
-    hash_append( h, v.second );
-}
-
-#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
-
-} // namespace hash2
-} // namespace boost
-
-#include <tuple>
-
-namespace boost
-{
-namespace hash2
-{
-
-namespace detail
-{
-
-template<class T> struct is_tuple: false_type
-{
-};
-
-template<> struct is_tuple< std::tuple<> >: true_type
-{
-};
-
-template<class T1> struct is_tuple< std::tuple<T1> >: true_type
-{
-};
-
-template<class T1, class T2> struct is_tuple< std::tuple<T1, T2> >: true_type
-{
-};
-
-template<class T1, class T2, class T3> struct is_tuple< std::tuple<T1, T2, T3> >: true_type
-{
-};
-
-template<class T1, class T2, class T3, class T4> struct is_tuple< std::tuple<T1, T2, T3, T4> >: true_type
-{
-};
-
-template<class T1, class T2, class T3, class T4, class T5> struct is_tuple< std::tuple<T1, T2, T3, T4, T5> >: true_type
-{
-};
-
-template<class T1, class T2, class T3, class T4, class T5, class T6> struct is_tuple< std::tuple<T1, T2, T3, T4, T5, T6> >: true_type
-{
-};
-
-template<class H> void hash_append_tuple( H & /*h*/, std::tuple<> const & /*v*/ )
-{
-}
-
-template<class H, class T1> void hash_append_tuple( H & h, std::tuple<T1> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-}
-
-template<class H, class T1, class T2> void hash_append_tuple( H & h, std::tuple<T1, T2> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-    hash_append( h, std::get<1>(v) );
-}
-
-template<class H, class T1, class T2, class T3> void hash_append_tuple( H & h, std::tuple<T1, T2, T3> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-    hash_append( h, std::get<1>(v) );
-    hash_append( h, std::get<2>(v) );
-}
-
-template<class H, class T1, class T2, class T3, class T4> void hash_append_tuple( H & h, std::tuple<T1, T2, T3, T4> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-    hash_append( h, std::get<1>(v) );
-    hash_append( h, std::get<2>(v) );
-    hash_append( h, std::get<3>(v) );
-}
-
-template<class H, class T1, class T2, class T3, class T4, class T5> void hash_append_tuple( H & h, std::tuple<T1, T2, T3, T4, T5> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-    hash_append( h, std::get<1>(v) );
-    hash_append( h, std::get<2>(v) );
-    hash_append( h, std::get<3>(v) );
-    hash_append( h, std::get<4>(v) );
-}
-
-template<class H, class T1, class T2, class T3, class T4, class T5, class T6> void hash_append_tuple( H & h, std::tuple<T1, T2, T3, T4, T5, T6> const & v )
-{
-    hash_append( h, std::get<0>(v) );
-    hash_append( h, std::get<1>(v) );
-    hash_append( h, std::get<2>(v) );
-    hash_append( h, std::get<3>(v) );
-    hash_append( h, std::get<4>(v) );
-    hash_append( h, std::get<5>(v) );
-}
-
-} // namespace detail
-
-template<class H, class T>
-    typename boost::enable_if< detail::is_tuple<T>, void >::type
-    do_hash_append( H & h, T const & v )
-{
-    detail::hash_append_tuple( h, v );
-}
-
-#endif // !defined(BOOST_NO_CXX11_HDR_TUPLE)
-
-#endif // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-
 // hash_append
 
 template<class H, class T> void hash_append( H & h, T const & v )
@@ -377,4 +238,4 @@ template<class H, class T> void hash_append( H & h, T const & v )
 } // namespace hash2
 } // namespace boost
 
-#endif
+#endif // #ifndef BOOST_HASH2_HASH_APPEND_HPP_INCLUDED

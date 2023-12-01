@@ -1,11 +1,10 @@
-
 // Copyright 2017 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/config.hpp>
 #include <cstddef>
 
 struct H
@@ -67,14 +66,8 @@ int main()
     test_true_<signed char>();
     test_true_<unsigned char>();
     test_true_<wchar_t>();
-
-#if !defined(BOOST_NO_CXX11_CHAR16_T)
     test_true_<char16_t>();
-#endif
-
-#if !defined(BOOST_NO_CXX11_CHAR32_T)
     test_true_<char32_t>();
-#endif
 
     test_true_<short>();
     test_true_<unsigned short>();
@@ -88,9 +81,7 @@ int main()
     test_false_<double>();
     test_false_<long double>();
 
-#if !defined(BOOST_NO_CXX11_NULLPTR)
     test_false_<std::nullptr_t>();
-#endif
 
     test_true_<void*>();
     test_true_<void const*>();

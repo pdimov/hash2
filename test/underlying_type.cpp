@@ -5,7 +5,6 @@
 #include <boost/hash2/underlying_type.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/config.hpp>
 #include <type_traits>
 #include <climits>
 
