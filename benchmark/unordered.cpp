@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
+
 class mul31_32
 {
 private:
@@ -166,8 +168,8 @@ public:
     {
         H h( seed_ );
 
-        BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
-        BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
 
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();
@@ -195,8 +197,8 @@ public:
     {
         H h( h_ );
 
-        BOOST_STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
-        BOOST_STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
 
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();

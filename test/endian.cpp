@@ -9,6 +9,8 @@
 #include <boost/cstdint.hpp>
 #include <cstring>
 
+#define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
+
 int main()
 {
     using namespace boost::hash2;
@@ -19,7 +21,7 @@ int main()
 
     boost::uint32_t w;
 
-    BOOST_STATIC_ASSERT( sizeof( w ) == 4 );
+    STATIC_ASSERT( sizeof( w ) == 4 );
 
     std::memcpy( &w, v, 4 );
 
