@@ -7,7 +7,7 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <string>
 #include <cstdio>
 #include <cstddef>

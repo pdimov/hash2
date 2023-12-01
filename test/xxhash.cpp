@@ -1,10 +1,9 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/xxhash.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/cstdint.hpp>
 #include <cstring>
 
 template<class H, class S> typename H::result_type hash( char const * s, S seed )

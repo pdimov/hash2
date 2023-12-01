@@ -3,13 +3,14 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // HMAC message authentication algorithm, https://tools.ietf.org/html/rfc2104
 
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/write.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <cstdint>
 #include <cstring>
 #include <cstddef>
 
@@ -81,7 +82,7 @@ public:
         init( 0, 0 );
     }
 
-    explicit hmac( boost::uint64_t seed )
+    explicit hmac( std::uint64_t seed )
     {
         if( seed == 0 )
         {

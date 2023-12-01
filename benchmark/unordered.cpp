@@ -15,7 +15,7 @@
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/unordered/unordered_flat_set.hpp>
 #include <boost/core/type_name.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <random>
 #include <chrono>
 #include <typeinfo>
@@ -30,36 +30,36 @@ class mul31_32
 {
 private:
 
-    boost::uint32_t st_;
+    std::uint32_t st_;
 
 public:
 
-    typedef boost::uint32_t result_type;
-    typedef boost::uint32_t size_type;
+    typedef std::uint32_t result_type;
+    typedef std::uint32_t size_type;
 
     mul31_32(): st_( 0x811C9DC5ul )
     {
     }
 
-    explicit mul31_32( boost::uint64_t seed ): st_( 0x811C9DC5ul ^ ( seed & 0xFFFFFFFFu ) ^ ( seed >> 32 ) )
+    explicit mul31_32( std::uint64_t seed ): st_( 0x811C9DC5ul ^ ( seed & 0xFFFFFFFFu ) ^ ( seed >> 32 ) )
     {
     }
 
     void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
     {
-        boost::uint32_t h = st_;
+        std::uint32_t h = st_;
 
         for( std::ptrdiff_t i = 0; i < n; ++i )
         {
-            h = h * 31 + static_cast<boost::uint32_t>( p[i] );
+            h = h * 31 + static_cast<std::uint32_t>( p[i] );
         }
 
         st_ = h;
     }
 
-    boost::uint32_t result()
+    std::uint32_t result()
     {
-        boost::uint32_t r = st_;
+        std::uint32_t r = st_;
         st_ = st_ * 31 + 0xFF;
         return r;
     }
@@ -69,36 +69,36 @@ class mul31_64
 {
 private:
 
-    boost::uint64_t st_;
+    std::uint64_t st_;
 
 public:
 
-    typedef boost::uint64_t result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t result_type;
+    typedef std::uint64_t size_type;
 
     mul31_64(): st_( 0xCBF29CE484222325ull )
     {
     }
 
-    explicit mul31_64( boost::uint64_t seed ): st_( 0xCBF29CE484222325ull ^ seed )
+    explicit mul31_64( std::uint64_t seed ): st_( 0xCBF29CE484222325ull ^ seed )
     {
     }
 
     void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
     {
-        boost::uint64_t h = st_;
+        std::uint64_t h = st_;
 
         for( std::ptrdiff_t i = 0; i < n; ++i )
         {
-            h = h * 31 + static_cast<boost::uint64_t>( p[i] );
+            h = h * 31 + static_cast<std::uint64_t>( p[i] );
         }
 
         st_ = h;
     }
 
-    boost::uint64_t result()
+    std::uint64_t result()
     {
-        boost::uint64_t r = st_;
+        std::uint64_t r = st_;
         st_ = st_ * 31 + 0xFF;
         return r;
     }

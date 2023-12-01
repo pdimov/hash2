@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <limits>
 #include <cstddef>
+#include <cstdint>
 
 using boost::hash2::byte_type;
 
@@ -164,17 +165,17 @@ template<class H> void test_integral_seed_constructible()
     }
 
     {
-        H h( static_cast<boost::uint32_t>( 0 ) );
+        H h( static_cast<std::uint32_t>( 0 ) );
         BOOST_TEST( h.result() == r0 );
     }
 
     {
-        H h( static_cast<boost::uint32_t>( 1 ) );
+        H h( static_cast<std::uint32_t>( 1 ) );
         BOOST_TEST( h.result() == r1 );
     }
 
     {
-        H h( static_cast<boost::uint32_t>( 2 ) );
+        H h( static_cast<std::uint32_t>( 2 ) );
         BOOST_TEST( h.result() == r2 );
     }
 
@@ -194,22 +195,22 @@ template<class H> void test_integral_seed_constructible()
     }
 
     {
-        H h( static_cast<boost::uint64_t>( 0 ) );
+        H h( static_cast<std::uint64_t>( 0 ) );
         BOOST_TEST( h.result() == r0 );
     }
 
     {
-        H h( static_cast<boost::uint64_t>( 1 ) );
+        H h( static_cast<std::uint64_t>( 1 ) );
         BOOST_TEST( h.result() == r1 );
     }
 
     {
-        H h( static_cast<boost::uint64_t>( 2 ) );
+        H h( static_cast<std::uint64_t>( 2 ) );
         BOOST_TEST( h.result() == r2 );
     }
 
     {
-        H h( static_cast<boost::uint64_t>( 1 ) << 32 );
+        H h( static_cast<std::uint64_t>( 1 ) << 32 );
         BOOST_TEST( h.result() == r3 );
     }
 }

@@ -11,8 +11,8 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <cstdint>
 #include <array>
 #include <utility>
 #include <cstring>
@@ -26,12 +26,12 @@ class spooky2_128
 {
 private:
 
-    static const boost::uint64_t sc_const = 0xdeadbeefdeadbeefULL;
+    static const std::uint64_t sc_const = 0xdeadbeefdeadbeefULL;
 
 private:
 
     static const int M = 12;
-    boost::uint64_t v_[ M ];
+    std::uint64_t v_[ M ];
 
     static const int N = 192;
     byte_type buffer_[ N ];
@@ -42,7 +42,7 @@ private:
 
 private:
 
-    static inline void short_mix( boost::uint64_t & h0, boost::uint64_t & h1, boost::uint64_t & h2, boost::uint64_t & h3 )
+    static inline void short_mix( std::uint64_t & h0, std::uint64_t & h1, std::uint64_t & h2, std::uint64_t & h3 )
     {
         h2 = detail::rotl( h2, 50 ); h2 += h3; h0 ^= h2;
         h3 = detail::rotl( h3, 52 ); h3 += h0; h1 ^= h3;
@@ -58,7 +58,7 @@ private:
         h1 = detail::rotl( h1, 36 ); h1 += h2; h3 ^= h1;
     }
 
-    static inline void short_end( boost::uint64_t & h0, boost::uint64_t & h1, boost::uint64_t & h2, boost::uint64_t & h3 )
+    static inline void short_end( std::uint64_t & h0, std::uint64_t & h1, std::uint64_t & h2, std::uint64_t & h3 )
     {
         h3 ^= h2; h2 = detail::rotl( h2, 15 ); h3 += h2;
         h0 ^= h3; h3 = detail::rotl( h3, 52 ); h0 += h3;
@@ -73,12 +73,12 @@ private:
         h1 ^= h0; h0 = detail::rotl( h0, 63 ); h1 += h0;
     }
 
-    static void short_hash( byte_type const * p, std::size_t n, boost::uint64_t & hash1, boost::uint64_t & hash2 )
+    static void short_hash( byte_type const * p, std::size_t n, std::uint64_t & hash1, std::uint64_t & hash2 )
     {
-        boost::uint64_t a = hash1;
-        boost::uint64_t b = hash2;
-        boost::uint64_t c = sc_const;
-        boost::uint64_t d = sc_const;
+        std::uint64_t a = hash1;
+        std::uint64_t b = hash2;
+        std::uint64_t c = sc_const;
+        std::uint64_t d = sc_const;
 
         std::size_t m = n;
 
@@ -123,7 +123,7 @@ private:
             d += detail::read64le( tmp + 8 );
         }
 
-        d += static_cast<boost::uint64_t>( n ) << 56;
+        d += static_cast<std::uint64_t>( n ) << 56;
 
         short_end( a, b, c, d );
 
@@ -134,9 +134,9 @@ private:
 private:
 
     static inline void mix( byte_type const * p,
-        boost::uint64_t & s0, boost::uint64_t & s1, boost::uint64_t &  s2, boost::uint64_t &  s3,
-        boost::uint64_t & s4, boost::uint64_t & s5, boost::uint64_t &  s6, boost::uint64_t &  s7,
-        boost::uint64_t & s8, boost::uint64_t & s9, boost::uint64_t & s10, boost::uint64_t & s11 )
+        std::uint64_t & s0, std::uint64_t & s1, std::uint64_t &  s2, std::uint64_t &  s3,
+        std::uint64_t & s4, std::uint64_t & s5, std::uint64_t &  s6, std::uint64_t &  s7,
+        std::uint64_t & s8, std::uint64_t & s9, std::uint64_t & s10, std::uint64_t & s11 )
     {
         s0  += detail::read64le( p +  0 ); s2  ^= s10; s11 ^= s0;  s0  = detail::rotl( s0,  11 ); s11 += s1;
         s1  += detail::read64le( p +  8 ); s3  ^= s11; s0  ^= s1;  s1  = detail::rotl( s1,  32 ); s0  += s2;
@@ -154,18 +154,18 @@ private:
 
     void update_( byte_type const * p, std::ptrdiff_t k )
     {
-        boost::uint64_t h0  = v_[ 0];
-        boost::uint64_t h1  = v_[ 1];
-        boost::uint64_t h2  = v_[ 2];
-        boost::uint64_t h3  = v_[ 3];
-        boost::uint64_t h4  = v_[ 4];
-        boost::uint64_t h5  = v_[ 5];
-        boost::uint64_t h6  = v_[ 6];
-        boost::uint64_t h7  = v_[ 7];
-        boost::uint64_t h8  = v_[ 8];
-        boost::uint64_t h9  = v_[ 9];
-        boost::uint64_t h10 = v_[10];
-        boost::uint64_t h11 = v_[11];
+        std::uint64_t h0  = v_[ 0];
+        std::uint64_t h1  = v_[ 1];
+        std::uint64_t h2  = v_[ 2];
+        std::uint64_t h3  = v_[ 3];
+        std::uint64_t h4  = v_[ 4];
+        std::uint64_t h5  = v_[ 5];
+        std::uint64_t h6  = v_[ 6];
+        std::uint64_t h7  = v_[ 7];
+        std::uint64_t h8  = v_[ 8];
+        std::uint64_t h9  = v_[ 9];
+        std::uint64_t h10 = v_[10];
+        std::uint64_t h11 = v_[11];
 
         for( std::ptrdiff_t i = 0; i < k; ++i, p += 96 )
         {
@@ -187,9 +187,9 @@ private:
     }
 
     static inline void end_partial(
-        boost::uint64_t & h0, boost::uint64_t & h1, boost::uint64_t &  h2, boost::uint64_t &  h3,
-        boost::uint64_t & h4, boost::uint64_t & h5, boost::uint64_t &  h6, boost::uint64_t &  h7, 
-        boost::uint64_t & h8, boost::uint64_t & h9, boost::uint64_t & h10, boost::uint64_t & h11 )
+        std::uint64_t & h0, std::uint64_t & h1, std::uint64_t &  h2, std::uint64_t &  h3,
+        std::uint64_t & h4, std::uint64_t & h5, std::uint64_t &  h6, std::uint64_t &  h7, 
+        std::uint64_t & h8, std::uint64_t & h9, std::uint64_t & h10, std::uint64_t & h11 )
     {
         h11 += h1;    h2  ^= h11;   h1  = detail::rotl( h1,  44 );
         h0  += h2;    h3  ^= h0;    h2  = detail::rotl( h2,  15 );
@@ -206,9 +206,9 @@ private:
     }
 
     static inline void end( byte_type const * p,
-        boost::uint64_t & h0, boost::uint64_t & h1, boost::uint64_t &  h2, boost::uint64_t &  h3,
-        boost::uint64_t & h4, boost::uint64_t & h5, boost::uint64_t &  h6, boost::uint64_t &  h7, 
-        boost::uint64_t & h8, boost::uint64_t & h9, boost::uint64_t & h10, boost::uint64_t & h11 )
+        std::uint64_t & h0, std::uint64_t & h1, std::uint64_t &  h2, std::uint64_t &  h3,
+        std::uint64_t & h4, std::uint64_t & h5, std::uint64_t &  h6, std::uint64_t &  h7, 
+        std::uint64_t & h8, std::uint64_t & h9, std::uint64_t & h10, std::uint64_t & h11 )
     {
         h0  += detail::read64le( p +  0 );
         h1  += detail::read64le( p +  8 );
@@ -228,7 +228,7 @@ private:
         end_partial( h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11 );
     }
 
-    void init( boost::uint64_t seed1, boost::uint64_t seed2 )
+    void init( std::uint64_t seed1, std::uint64_t seed2 )
     {
         v_[ 0 ] = v_[ 3 ] = v_[ 6 ] = v_[  9 ] = seed1;
         v_[ 1 ] = v_[ 4 ] = v_[ 7 ] = v_[ 10 ] = seed2;
@@ -238,9 +238,9 @@ private:
 public:
 
     typedef std::array<byte_type, 16> result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t size_type;
 
-    explicit spooky2_128( boost::uint64_t seed1 = 0, boost::uint64_t seed2 = 0 ): m_( 0 ), n_( 0 )
+    explicit spooky2_128( std::uint64_t seed1 = 0, std::uint64_t seed2 = 0 ): m_( 0 ), n_( 0 )
     {
         init( seed1, seed2 );
     }
@@ -258,15 +258,15 @@ public:
             byte_type q[ 18 ] = {};
             std::memcpy( q, p, n );
 
-            boost::uint64_t seed1 = detail::read64le( q + 0 );
-            boost::uint64_t seed2 = detail::read64le( q + 8 );
+            std::uint64_t seed1 = detail::read64le( q + 0 );
+            std::uint64_t seed2 = detail::read64le( q + 8 );
 
             init( seed1, seed2 );
         }
         else
         {
-            boost::uint64_t seed1 = detail::read64le( p + 0 );
-            boost::uint64_t seed2 = detail::read64le( p + 8 );
+            std::uint64_t seed1 = detail::read64le( p + 0 );
+            std::uint64_t seed2 = detail::read64le( p + 8 );
 
             init( seed1, seed2 );
 
@@ -337,8 +337,8 @@ public:
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ % N ) );
 
-        boost::uint64_t h0 = v_[ 0 ];
-        boost::uint64_t h1 = v_[ 1 ];
+        std::uint64_t h0 = v_[ 0 ];
+        std::uint64_t h1 = v_[ 1 ];
 
         if( n_ < N )
         {
@@ -346,16 +346,16 @@ public:
         }
         else
         {
-            boost::uint64_t h2  = v_[  2 ];
-            boost::uint64_t h3  = v_[  3 ];
-            boost::uint64_t h4  = v_[  4 ];
-            boost::uint64_t h5  = v_[  5 ];
-            boost::uint64_t h6  = v_[  6 ];
-            boost::uint64_t h7  = v_[  7 ];
-            boost::uint64_t h8  = v_[  8 ];
-            boost::uint64_t h9  = v_[  9 ];
-            boost::uint64_t h10 = v_[ 10 ];
-            boost::uint64_t h11 = v_[ 11 ];
+            std::uint64_t h2  = v_[  2 ];
+            std::uint64_t h3  = v_[  3 ];
+            std::uint64_t h4  = v_[  4 ];
+            std::uint64_t h5  = v_[  5 ];
+            std::uint64_t h6  = v_[  6 ];
+            std::uint64_t h7  = v_[  7 ];
+            std::uint64_t h8  = v_[  8 ];
+            std::uint64_t h9  = v_[  9 ];
+            std::uint64_t h10 = v_[ 10 ];
+            std::uint64_t h11 = v_[ 11 ];
 
             byte_type * p = buffer_;
             int m = m_;

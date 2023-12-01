@@ -12,9 +12,9 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <cstdint>
 #include <array>
 #include <cstring>
 #include <cstddef>
@@ -28,59 +28,59 @@ class md5_128
 {
 private:
 
-    boost::uint32_t state_[ 4 ];
+    std::uint32_t state_[ 4 ];
 
     static const int N = 64;
 
     byte_type buffer_[ N ];
     int m_;
 
-    boost::uint64_t n_;
+    std::uint64_t n_;
 
 private:
 
-    static BOOST_FORCEINLINE boost::uint32_t F( boost::uint32_t x, boost::uint32_t y, boost::uint32_t z )
+    static BOOST_FORCEINLINE std::uint32_t F( std::uint32_t x, std::uint32_t y, std::uint32_t z )
     {
         return (x & y) | (~x & z);
     }
 
-    static BOOST_FORCEINLINE boost::uint32_t G( boost::uint32_t x, boost::uint32_t y, boost::uint32_t z )
+    static BOOST_FORCEINLINE std::uint32_t G( std::uint32_t x, std::uint32_t y, std::uint32_t z )
     {
         return (x & z) | (y & ~z);
     }
 
-    static BOOST_FORCEINLINE boost::uint32_t H( boost::uint32_t x, boost::uint32_t y, boost::uint32_t z )
+    static BOOST_FORCEINLINE std::uint32_t H( std::uint32_t x, std::uint32_t y, std::uint32_t z )
     {
         return x ^ y ^ z;
     }
 
-    static BOOST_FORCEINLINE boost::uint32_t I( boost::uint32_t x, boost::uint32_t y, boost::uint32_t z )
+    static BOOST_FORCEINLINE std::uint32_t I( std::uint32_t x, std::uint32_t y, std::uint32_t z )
     {
         return y ^ (x | ~z);
     }
 
-    static BOOST_FORCEINLINE void FF( boost::uint32_t & a, boost::uint32_t b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t x, int s, boost::uint32_t ac )
+    static BOOST_FORCEINLINE void FF( std::uint32_t & a, std::uint32_t b, std::uint32_t c, std::uint32_t d, std::uint32_t x, int s, std::uint32_t ac )
     {
         a += F( b, c, d ) + x + ac;
         a = detail::rotl( a, s );
         a += b;
     }
 
-    static BOOST_FORCEINLINE void GG( boost::uint32_t & a, boost::uint32_t b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t x, int s, boost::uint32_t ac )
+    static BOOST_FORCEINLINE void GG( std::uint32_t & a, std::uint32_t b, std::uint32_t c, std::uint32_t d, std::uint32_t x, int s, std::uint32_t ac )
     {
         a += G( b, c, d ) + x + ac;
         a = detail::rotl( a, s );
         a += b;
     }
 
-    static BOOST_FORCEINLINE void HH( boost::uint32_t & a, boost::uint32_t b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t x, int s, boost::uint32_t ac )
+    static BOOST_FORCEINLINE void HH( std::uint32_t & a, std::uint32_t b, std::uint32_t c, std::uint32_t d, std::uint32_t x, int s, std::uint32_t ac )
     {
         a += H( b, c, d ) + x + ac;
         a = detail::rotl( a, s );
         a += b;
     }
 
-    static BOOST_FORCEINLINE void II( boost::uint32_t & a, boost::uint32_t b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t x, int s, boost::uint32_t ac )
+    static BOOST_FORCEINLINE void II( std::uint32_t & a, std::uint32_t b, std::uint32_t c, std::uint32_t d, std::uint32_t x, int s, std::uint32_t ac )
     {
         a += I( b, c, d ) + x + ac;
         a = detail::rotl( a, s );
@@ -114,12 +114,12 @@ private:
 
     void transform( byte_type const block[ 64 ] )
     {
-        boost::uint32_t a = state_[ 0 ];
-        boost::uint32_t b = state_[ 1 ];
-        boost::uint32_t c = state_[ 2 ];
-        boost::uint32_t d = state_[ 3 ];
+        std::uint32_t a = state_[ 0 ];
+        std::uint32_t b = state_[ 1 ];
+        std::uint32_t c = state_[ 2 ];
+        std::uint32_t d = state_[ 3 ];
 
-        boost::uint32_t x[ 16 ];
+        std::uint32_t x[ 16 ];
 
         for( int i = 0; i < 16; ++i )
         {
@@ -203,7 +203,7 @@ private:
 public:
 
     typedef std::array<byte_type, 16> result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t size_type;
 
     static const int block_size = 64;
 
@@ -212,7 +212,7 @@ public:
         init();
     }
 
-    explicit md5_128( boost::uint64_t seed ): m_( 0 ), n_( 0 )
+    explicit md5_128( std::uint64_t seed ): m_( 0 ), n_( 0 )
     {
         init();
 
@@ -332,7 +332,7 @@ public:
     {
     }
 
-    explicit hmac_md5_128( boost::uint64_t seed ): hmac<md5_128>( seed )
+    explicit hmac_md5_128( std::uint64_t seed ): hmac<md5_128>( seed )
     {
     }
 

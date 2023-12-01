@@ -6,7 +6,7 @@
 
 #include <boost/hash2/sha1.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <string>
 #include <cstddef>
 #include <cstdio>

@@ -1,15 +1,15 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/spooky2.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 
 int const N = 512;
 
-static const boost::uint32_t expected[ N ] =
+static const std::uint32_t expected[ N ] =
 {
     0x6bf50919,0x70de1d26,0xa2b37298,0x35bc5fbf,0x8223b279,0x5bcb315e,0x53fe88a1,0xf9f1a233,
     0xee193982,0x54f86f29,0xc8772d36,0x9ed60886,0x5f23d1da,0x1ed9f474,0xf2ef0c89,0x83ec01f9,
@@ -99,7 +99,7 @@ int main()
 
         h.update( buf, i );
 
-        boost::uint32_t r = get_integral_result<boost::uint32_t>( h.result() );
+        std::uint32_t r = get_integral_result<std::uint32_t>( h.result() );
 
         BOOST_TEST_EQ( r, expected[ i ] );
     }

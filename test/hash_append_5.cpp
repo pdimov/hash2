@@ -1,6 +1,6 @@
-
 // Copyright 2017 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // Endian-dependent test
 
@@ -52,7 +52,7 @@ public:
 // lib2.hpp
 
 #include <boost/hash2/byte_type.hpp>
-#include <boost/cstdint.hpp> // boost::uint32_t
+#include <cstdint>
 #include <cstddef>
 
 namespace lib2
@@ -62,12 +62,12 @@ class fnv1a
 {
 private:
 
-    boost::uint32_t st_;
+    std::uint32_t st_;
 
 public:
 
-    typedef boost::uint32_t result_type;
-    typedef boost::uint32_t size_type;
+    typedef std::uint32_t result_type;
+    typedef std::uint32_t size_type;
 
     fnv1a(): st_( 0x811C9DC5ul )
     {
@@ -75,20 +75,20 @@ public:
 
     void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
     {
-        boost::uint32_t h = st_;
+        std::uint32_t h = st_;
 
         for( std::ptrdiff_t i = 0; i < n; ++i )
         {
-            h ^= static_cast<boost::uint32_t>( p[i] );
+            h ^= static_cast<std::uint32_t>( p[i] );
             h *= 0x01000193ul;
         }
 
         st_ = h;
     }
 
-    boost::uint32_t result()
+    std::uint32_t result()
     {
-        boost::uint32_t r = st_;
+        std::uint32_t r = st_;
 
         st_ = ( st_ ^ 0xFF ) * 0x01000193ul;
 

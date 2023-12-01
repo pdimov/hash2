@@ -3,14 +3,15 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // SipHash, https://131002.net/siphash/
 
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <cstdint>
 #include <cstring>
 #include <cstddef>
 
@@ -23,12 +24,12 @@ class siphash_64
 {
 private:
 
-    boost::uint64_t v0, v1, v2, v3;
+    std::uint64_t v0, v1, v2, v3;
 
     byte_type buffer_[ 8 ];
     int m_;
 
-    boost::uint64_t n_;
+    std::uint64_t n_;
 
 private:
 
@@ -52,7 +53,7 @@ private:
 
     void update_( byte_type const * p )
     {
-        boost::uint64_t m = detail::read64le( p );
+        std::uint64_t m = detail::read64le( p );
 
         v3 ^= m;
 
@@ -62,7 +63,7 @@ private:
         v0 ^= m;
     }
 
-    void init( boost::uint64_t k0, boost::uint64_t k1 )
+    void init( std::uint64_t k0, std::uint64_t k1 )
     {
         v0 = 0x736f6d6570736575ULL;
         v1 = 0x646f72616e646f6dULL;
@@ -77,10 +78,10 @@ private:
 
 public:
 
-    typedef boost::uint64_t result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t result_type;
+    typedef std::uint64_t size_type;
 
-    explicit siphash_64( boost::uint64_t k0 = 0, boost::uint64_t k1 = 0 ): m_( 0 ), n_( 0 )
+    explicit siphash_64( std::uint64_t k0 = 0, std::uint64_t k1 = 0 ): m_( 0 ), n_( 0 )
     {
         init( k0, k1 );
     }
@@ -98,15 +99,15 @@ public:
             byte_type q[ 16 ] = { 0 };
             std::memcpy( q, p, n );
 
-            boost::uint64_t k0 = detail::read64le( q + 0 );
-            boost::uint64_t k1 = detail::read64le( q + 8 );
+            std::uint64_t k0 = detail::read64le( q + 0 );
+            std::uint64_t k1 = detail::read64le( q + 8 );
 
             init( k0, k1 );
         }
         else
         {
-            boost::uint64_t k0 = detail::read64le( p + 0 );
-            boost::uint64_t k1 = detail::read64le( p + 8 );
+            std::uint64_t k0 = detail::read64le( p + 0 );
+            std::uint64_t k1 = detail::read64le( p + 8 );
 
             init( k0, k1 );
 
@@ -176,7 +177,7 @@ public:
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 7 ) );
     }
 
-    boost::uint64_t result()
+    std::uint64_t result()
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 7 ) );
 
@@ -207,12 +208,12 @@ class siphash_32
 {
 private:
 
-    boost::uint32_t v0, v1, v2, v3;
+    std::uint32_t v0, v1, v2, v3;
 
     byte_type buffer_[ 4 ];
     int m_;
 
-    boost::uint32_t n_;
+    std::uint32_t n_;
 
 private:
 
@@ -236,7 +237,7 @@ private:
 
     void update_( byte_type const * p )
     {
-        boost::uint32_t m = detail::read32le( p );
+        std::uint32_t m = detail::read32le( p );
 
         v3 ^= m;
 
@@ -246,7 +247,7 @@ private:
         v0 ^= m;
     }
 
-    void init( boost::uint32_t k0, boost::uint32_t k1 )
+    void init( std::uint32_t k0, std::uint32_t k1 )
     {
         v0 = 0;
         v1 = 0;
@@ -261,18 +262,18 @@ private:
 
 public:
 
-    typedef boost::uint32_t result_type;
-    typedef boost::uint32_t size_type;
+    typedef std::uint32_t result_type;
+    typedef std::uint32_t size_type;
 
-    explicit siphash_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit siphash_32( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
-        boost::uint32_t k0 = static_cast<boost::uint32_t>( seed );
-        boost::uint32_t k1 = static_cast<boost::uint32_t>( seed >> 32 );
+        std::uint32_t k0 = static_cast<std::uint32_t>( seed );
+        std::uint32_t k1 = static_cast<std::uint32_t>( seed >> 32 );
 
         init( k0, k1 );
     }
 
-    siphash_32( boost::uint32_t k0, boost::uint32_t k1 ): m_( 0 ), n_( 0 )
+    siphash_32( std::uint32_t k0, std::uint32_t k1 ): m_( 0 ), n_( 0 )
     {
         init( k0, k1 );
     }
@@ -290,15 +291,15 @@ public:
             byte_type q[ 8 ] = { 0 };
             std::memcpy( q, p, n );
 
-            boost::uint32_t k0 = detail::read32le( q + 0 );
-            boost::uint32_t k1 = detail::read32le( q + 4 );
+            std::uint32_t k0 = detail::read32le( q + 0 );
+            std::uint32_t k1 = detail::read32le( q + 4 );
 
             init( k0, k1 );
         }
         else
         {
-            boost::uint32_t k0 = detail::read32le( p + 0 );
-            boost::uint32_t k1 = detail::read32le( p + 4 );
+            std::uint32_t k0 = detail::read32le( p + 0 );
+            std::uint32_t k1 = detail::read32le( p + 4 );
 
             init( k0, k1 );
 
@@ -319,7 +320,7 @@ public:
 
         if( n == 0 ) return;
 
-        n_ += static_cast<boost::uint32_t>( n );
+        n_ += static_cast<std::uint32_t>( n );
 
         if( m_ > 0 )
         {
@@ -368,7 +369,7 @@ public:
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
     }
 
-    boost::uint32_t result()
+    std::uint32_t result()
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
 

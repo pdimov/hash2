@@ -3,14 +3,15 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 //
 // xxHash, https://cyan4973.github.io/xxHash/
 
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <cstdint>
 #include <cstring>
 #include <cstddef>
 
@@ -23,7 +24,7 @@ class xxhash_32
 {
 private:
 
-    boost::uint32_t v1_, v2_, v3_, v4_;
+    std::uint32_t v1_, v2_, v3_, v4_;
 
     byte_type buffer_[ 16 ];
     int m_;
@@ -32,15 +33,15 @@ private:
 
 private:
 
-    static const boost::uint32_t P1 = 2654435761U;
-    static const boost::uint32_t P2 = 2246822519U;
-    static const boost::uint32_t P3 = 3266489917U;
-    static const boost::uint32_t P4 =  668265263U;
-    static const boost::uint32_t P5 =  374761393U;
+    static const std::uint32_t P1 = 2654435761U;
+    static const std::uint32_t P2 = 2246822519U;
+    static const std::uint32_t P3 = 3266489917U;
+    static const std::uint32_t P4 =  668265263U;
+    static const std::uint32_t P5 =  374761393U;
 
 private:
 
-    static boost::uint32_t round( boost::uint32_t seed, boost::uint32_t input )
+    static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 13 );
@@ -50,10 +51,10 @@ private:
 
     void update_( byte_type const * p, std::ptrdiff_t k )
     {
-        boost::uint32_t v1 = v1_;
-        boost::uint32_t v2 = v2_;
-        boost::uint32_t v3 = v3_;
-        boost::uint32_t v4 = v4_;
+        std::uint32_t v1 = v1_;
+        std::uint32_t v2 = v2_;
+        std::uint32_t v3 = v3_;
+        std::uint32_t v4 = v4_;
 
         for( std::ptrdiff_t i = 0; i < k; ++i, p += 16 )
         {
@@ -69,7 +70,7 @@ private:
         v4_ = v4; 
     }
 
-    void init( boost::uint32_t seed )
+    void init( std::uint32_t seed )
     {
         v1_ = seed + P1 + P2;
         v2_ = seed + P2;
@@ -79,13 +80,13 @@ private:
 
 public:
 
-    typedef boost::uint32_t result_type;
-    typedef boost::uint32_t size_type;
+    typedef std::uint32_t result_type;
+    typedef std::uint32_t size_type;
 
-    explicit xxhash_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit xxhash_32( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
-        boost::uint32_t s0 = static_cast<boost::uint32_t>( seed );
-        boost::uint32_t s1 = static_cast<boost::uint32_t>( seed >> 32 );
+        std::uint32_t s0 = static_cast<std::uint32_t>( seed );
+        std::uint32_t s1 = static_cast<std::uint32_t>( seed >> 32 );
 
         init( s0 );
 
@@ -111,12 +112,12 @@ public:
             byte_type q[ 4 ] = {};
             std::memcpy( q, p, n );
 
-            boost::uint32_t seed = detail::read32le( q );
+            std::uint32_t seed = detail::read32le( q );
             init( seed );
         }
         else
         {
-            boost::uint32_t seed = detail::read32le( p );
+            std::uint32_t seed = detail::read32le( p );
             init( seed );
 
             p += 4;
@@ -182,11 +183,11 @@ public:
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
     }
 
-    boost::uint32_t result()
+    std::uint32_t result()
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
 
-        boost::uint32_t h;
+        std::uint32_t h;
 
         if( n_ >= 16 )
         {
@@ -197,7 +198,7 @@ public:
             h = v3_ + P5;
         }
 
-        h += static_cast<boost::uint32_t>( n_ );
+        h += static_cast<std::uint32_t>( n_ );
 
         byte_type const * p = buffer_;
 
@@ -241,24 +242,24 @@ class xxhash_64
 {
 private:
 
-    boost::uint64_t v1_, v2_, v3_, v4_;
+    std::uint64_t v1_, v2_, v3_, v4_;
 
     byte_type buffer_[ 32 ];
     int m_;
 
-    boost::uint64_t n_;
+    std::uint64_t n_;
 
 private:
 
-    static const boost::uint64_t P1 = 11400714785074694791ULL;
-    static const boost::uint64_t P2 = 14029467366897019727ULL;
-    static const boost::uint64_t P3 =  1609587929392839161ULL;
-    static const boost::uint64_t P4 =  9650029242287828579ULL;
-    static const boost::uint64_t P5 =  2870177450012600261ULL;
+    static const std::uint64_t P1 = 11400714785074694791ULL;
+    static const std::uint64_t P2 = 14029467366897019727ULL;
+    static const std::uint64_t P3 =  1609587929392839161ULL;
+    static const std::uint64_t P4 =  9650029242287828579ULL;
+    static const std::uint64_t P5 =  2870177450012600261ULL;
 
 private:
 
-    static boost::uint64_t round( boost::uint64_t seed, boost::uint64_t input )
+    static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 31 );
@@ -266,7 +267,7 @@ private:
         return seed;
     }
 
-    static boost::uint64_t merge_round( boost::uint64_t acc, boost::uint64_t val )
+    static std::uint64_t merge_round( std::uint64_t acc, std::uint64_t val )
     {
         val = round( 0, val );
         acc ^= val;
@@ -276,10 +277,10 @@ private:
 
     void update_( byte_type const * p, std::ptrdiff_t k )
     {
-        boost::uint64_t v1 = v1_;
-        boost::uint64_t v2 = v2_;
-        boost::uint64_t v3 = v3_;
-        boost::uint64_t v4 = v4_;
+        std::uint64_t v1 = v1_;
+        std::uint64_t v2 = v2_;
+        std::uint64_t v3 = v3_;
+        std::uint64_t v4 = v4_;
 
         for( int i = 0; i < k; ++i, p += 32 )
         {
@@ -295,7 +296,7 @@ private:
         v4_ = v4; 
     }
 
-    void init( boost::uint64_t seed )
+    void init( std::uint64_t seed )
     {
         v1_ = seed + P1 + P2;
         v2_ = seed + P2;
@@ -305,10 +306,10 @@ private:
 
 public:
 
-    typedef boost::uint64_t result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t result_type;
+    typedef std::uint64_t size_type;
 
-    explicit xxhash_64( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit xxhash_64( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
         init( seed );
     }
@@ -326,12 +327,12 @@ public:
             byte_type q[ 8 ] = {};
             std::memcpy( q, p, n );
 
-            boost::uint64_t seed = detail::read64le( q );
+            std::uint64_t seed = detail::read64le( q );
             init( seed );
         }
         else
         {
-            boost::uint64_t seed = detail::read64le( p );
+            std::uint64_t seed = detail::read64le( p );
             init( seed );
 
             p += 8;
@@ -397,11 +398,11 @@ public:
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 31 ) );
     }
 
-    boost::uint64_t result()
+    std::uint64_t result()
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 31 ) );
 
-        boost::uint64_t h;
+        std::uint64_t h;
 
         if( n_ >= 32 )
         {
@@ -425,7 +426,7 @@ public:
 
         while( m >= 8 )
         {
-            boost::uint64_t k1 = round( 0, detail::read64le( p ) );
+            std::uint64_t k1 = round( 0, detail::read64le( p ) );
 
             h ^= k1;
             h = detail::rotl( h, 27 ) * P1 + P4;
@@ -436,7 +437,7 @@ public:
 
         while( m >= 4 )
         {
-            h ^= static_cast<boost::uint64_t>( detail::read32le( p ) ) * P1;
+            h ^= static_cast<std::uint64_t>( detail::read32le( p ) ) * P1;
             h = detail::rotl( h, 23 ) * P2 + P3;
 
             p += 4;

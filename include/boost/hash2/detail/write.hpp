@@ -3,10 +3,11 @@
 
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/byte_type.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/config.hpp>
+#include <cstdint>
 #include <cstring>
 
 namespace boost
@@ -16,7 +17,7 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE void write32le( byte_type * p, boost::uint32_t v )
+BOOST_FORCEINLINE void write32le( byte_type * p, std::uint32_t v )
 {
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
 
@@ -32,7 +33,7 @@ BOOST_FORCEINLINE void write32le( byte_type * p, boost::uint32_t v )
 #endif
 }
 
-BOOST_FORCEINLINE void write64le( byte_type * p, boost::uint64_t v )
+BOOST_FORCEINLINE void write64le( byte_type * p, std::uint64_t v )
 {
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
 
@@ -52,7 +53,7 @@ BOOST_FORCEINLINE void write64le( byte_type * p, boost::uint64_t v )
 #endif
 }
 
-BOOST_FORCEINLINE void write32be( byte_type * p, boost::uint32_t v )
+BOOST_FORCEINLINE void write32be( byte_type * p, std::uint32_t v )
 {
     p[0] = static_cast<byte_type>( ( v >> 24 ) & 0xFF );
     p[1] = static_cast<byte_type>( ( v >> 16 ) & 0xFF );
@@ -60,7 +61,7 @@ BOOST_FORCEINLINE void write32be( byte_type * p, boost::uint32_t v )
     p[3] = static_cast<byte_type>( v & 0xFF );
 }
 
-BOOST_FORCEINLINE void write64be( byte_type * p, boost::uint64_t v )
+BOOST_FORCEINLINE void write64be( byte_type * p, std::uint64_t v )
 {
     p[0] = static_cast<byte_type>( ( v >> 56 ) & 0xFF );
     p[1] = static_cast<byte_type>( ( v >> 48 ) & 0xFF );

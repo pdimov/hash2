@@ -11,8 +11,8 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
+#include <cstdint>
 #include <array>
 #include <cstring>
 #include <cstddef>
@@ -26,7 +26,7 @@ class murmur3_32
 {
 private:
 
-    boost::uint32_t h_;
+    std::uint32_t h_;
 
     byte_type buffer_[ 4 ];
     int m_;
@@ -35,12 +35,12 @@ private:
 
 private:
 
-    static const boost::uint32_t c1 = 0xcc9e2d51u;
-    static const boost::uint32_t c2 = 0x1b873593u;
+    static const std::uint32_t c1 = 0xcc9e2d51u;
+    static const std::uint32_t c2 = 0x1b873593u;
 
 private:
 
-    static BOOST_FORCEINLINE void mix( boost::uint32_t & h, boost::uint32_t k )
+    static BOOST_FORCEINLINE void mix( std::uint32_t & h, std::uint32_t k )
     {
         k *= c1;
         k = detail::rotl( k, 15 );
@@ -53,11 +53,11 @@ private:
 
     void update_( byte_type const * p, std::ptrdiff_t m )
     {
-        boost::uint32_t h = h_;
+        std::uint32_t h = h_;
 
         for( std::ptrdiff_t i = 0; i < m; ++i, p += 4 )
         {
-            boost::uint32_t k = detail::read32le( p );
+            std::uint32_t k = detail::read32le( p );
             mix( h, k );
         }
 
@@ -66,14 +66,14 @@ private:
 
 public:
 
-    typedef boost::uint32_t result_type;
-    typedef boost::uint32_t size_type;
+    typedef std::uint32_t result_type;
+    typedef std::uint32_t size_type;
 
-    explicit murmur3_32( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit murmur3_32( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
-        h_ = static_cast<boost::uint32_t>( seed );
+        h_ = static_cast<std::uint32_t>( seed );
 
-        boost::uint32_t k = static_cast<boost::uint32_t>( seed >> 32 );
+        std::uint32_t k = static_cast<std::uint32_t>( seed >> 32 );
 
         if( k != 0 )
         {
@@ -163,14 +163,14 @@ public:
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
     }
 
-    boost::uint32_t result()
+    std::uint32_t result()
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
 
         // std::memset( buffer_ + m_, 0, 4 - m_ );
-        // boost::uint32_t k = detail::read32le( buffer_ );
+        // std::uint32_t k = detail::read32le( buffer_ );
 
-        boost::uint32_t k = 0;
+        std::uint32_t k = 0;
 
         switch( m_ )
         {
@@ -194,10 +194,10 @@ public:
         k = detail::rotl( k, 15 );
         k *= c2;
 
-        boost::uint32_t h = h_;
+        std::uint32_t h = h_;
 
         h ^= k;
-        h ^= static_cast<boost::uint32_t>( n_ );
+        h ^= static_cast<std::uint32_t>( n_ );
 
         h ^= h >> 16; 
         h *= 0x85ebca6b; 
@@ -219,7 +219,7 @@ class murmur3_128
 {
 private:
 
-    boost::uint64_t h1_, h2_;
+    std::uint64_t h1_, h2_;
 
     byte_type buffer_[ 16 ];
     int m_;
@@ -228,19 +228,19 @@ private:
 
 private:
 
-    static const boost::uint64_t c1 = 0x87c37b91114253d5ull;
-    static const boost::uint64_t c2 = 0x4cf5ad432745937full;
+    static const std::uint64_t c1 = 0x87c37b91114253d5ull;
+    static const std::uint64_t c2 = 0x4cf5ad432745937full;
 
 private:
 
     void update_( byte_type const * p, std::ptrdiff_t k )
     {
-        boost::uint64_t h1 = h1_, h2 = h2_;
+        std::uint64_t h1 = h1_, h2 = h2_;
 
         for( std::ptrdiff_t i = 0; i < k; ++i, p += 16 )
         {
-            boost::uint64_t k1 = detail::read64le( p + 0 );
-            boost::uint64_t k2 = detail::read64le( p + 8 );
+            std::uint64_t k1 = detail::read64le( p + 0 );
+            std::uint64_t k2 = detail::read64le( p + 8 );
 
             k1 *= c1; k1 = detail::rotl( k1, 31 ); k1 *= c2; h1 ^= k1;
 
@@ -254,7 +254,7 @@ private:
         h1_ = h1; h2_ = h2;
     }
 
-    static boost::uint64_t fmix( boost::uint64_t k )
+    static std::uint64_t fmix( std::uint64_t k )
     { 
         k ^= k >> 33; 
         k *= 0xff51afd7ed558ccdull;
@@ -268,15 +268,15 @@ private:
 public:
 
     typedef std::array<byte_type, 16> result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t size_type;
 
-    explicit murmur3_128( boost::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    explicit murmur3_128( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
     {
         h1_ = seed;
         h2_ = seed;
     }
 
-    murmur3_128( boost::uint64_t seed1, boost::uint64_t seed2 ): m_( 0 ), n_( 0 )
+    murmur3_128( std::uint64_t seed1, std::uint64_t seed2 ): m_( 0 ), n_( 0 )
     {
         h1_ = seed1;
         h2_ = seed2;
@@ -379,10 +379,10 @@ public:
 
         std::memset( buffer_ + m_, 0, 16 - m_ );
 
-        boost::uint64_t h1 = h1_, h2 = h2_;
+        std::uint64_t h1 = h1_, h2 = h2_;
 
-        boost::uint64_t k1 = detail::read64le( buffer_ + 0 );
-        boost::uint64_t k2 = detail::read64le( buffer_ + 8 );
+        std::uint64_t k1 = detail::read64le( buffer_ + 0 );
+        std::uint64_t k2 = detail::read64le( buffer_ + 8 );
 
         k1 *= c1; k1 = detail::rotl( k1, 31 ); k1 *= c2; h1 ^= k1;
         k2 *= c2; k2 = detail::rotl( k2, 33 ); k2 *= c1; h2 ^= k2;

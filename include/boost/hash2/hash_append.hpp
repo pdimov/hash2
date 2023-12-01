@@ -18,12 +18,9 @@
 #include <boost/hash2/is_tuple_like.hpp>
 #include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/cstdint.hpp>
+#include <boost/mp11/integer_sequence.hpp>
 #include <boost/config.hpp>
-#include <boost/config/workaround.hpp>
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_HDR_TUPLE) && !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-# include <boost/mp11/integer_sequence.hpp>
-#endif
+#include <cstdint>
 #include <type_traits>
 #include <iterator>
 
@@ -186,7 +183,7 @@ template<class H, class It> void hash_append_unordered_range_( H & h, It first, 
 {
     typename std::iterator_traits<It>::difference_type m = 0;
 
-    boost::uint64_t w = 0;
+    std::uint64_t w = 0;
 
     for( ; first != last; ++first, ++m )
     {
@@ -194,7 +191,7 @@ template<class H, class It> void hash_append_unordered_range_( H & h, It first, 
 
         hash_append( h2, *first );
 
-        w += get_integral_result<boost::uint64_t>( h2.result() );
+        w += get_integral_result<std::uint64_t>( h2.result() );
     }
 
     hash_append( h, w );

@@ -6,7 +6,7 @@
 #include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <cstring>
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
@@ -19,7 +19,7 @@ int main()
 
     byte_type const v[ 4 ] = { 0x01, 0x02, 0x03, 0x04 };
 
-    boost::uint32_t w;
+    std::uint32_t w;
 
     STATIC_ASSERT( sizeof( w ) == 4 );
 

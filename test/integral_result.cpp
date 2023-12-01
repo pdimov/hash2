@@ -1,6 +1,6 @@
-
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
+// https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
@@ -11,7 +11,7 @@
 #include <boost/hash2/sha1.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 #include <algorithm>
 #include <cstddef>
 
@@ -22,8 +22,8 @@ template<class H> void test()
     H h;
 
     get_integral_result<int>( h.result() );
-    get_integral_result<boost::uint32_t>( h.result() );
-    get_integral_result<boost::uint64_t>( h.result() );
+    get_integral_result<std::uint32_t>( h.result() );
+    get_integral_result<std::uint64_t>( h.result() );
 }
 
 int main()

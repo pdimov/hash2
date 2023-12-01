@@ -12,9 +12,9 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <cstdint>
 #include <array>
 #include <cstring>
 #include <cstddef>
@@ -28,14 +28,14 @@ class sha1_160
 {
 private:
 
-    boost::uint32_t state_[ 5 ];
+    std::uint32_t state_[ 5 ];
 
     static const int N = 64;
 
     byte_type buffer_[ N ];
     int m_;
 
-    boost::uint64_t n_;
+    std::uint64_t n_;
 
 private:
 
@@ -48,48 +48,48 @@ private:
         state_[ 4 ] = 0xc3d2e1f0u;
     }
 
-    static BOOST_FORCEINLINE void R1( boost::uint32_t a, boost::uint32_t & b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t & e, boost::uint32_t w[], byte_type const block[ 64 ], int i )
+    static BOOST_FORCEINLINE void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], byte_type const block[ 64 ], int i )
     {
         w[ i ] = detail::read32be( block + i * 4 );
 
-        boost::uint32_t f = (b & c) | (~b & d);
+        std::uint32_t f = (b & c) | (~b & d);
 
         e += detail::rotl( a, 5 ) + f + 0x5A827999 + w[ i ];
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE boost::uint32_t W( boost::uint32_t w[], int i )
+    static BOOST_FORCEINLINE std::uint32_t W( std::uint32_t w[], int i )
     {
         return w[ i ] = detail::rotl( w[ i - 3 ] ^ w[ i - 8 ] ^ w[ i - 14 ] ^ w[ i - 16 ], 1 );
     }
 
-    static BOOST_FORCEINLINE void R2( boost::uint32_t a, boost::uint32_t & b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t & e, boost::uint32_t w[], int i )
+    static BOOST_FORCEINLINE void R2( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
-        boost::uint32_t f = (b & c) | (~b & d);
+        std::uint32_t f = (b & c) | (~b & d);
 
         e += detail::rotl( a, 5 ) + f + 0x5A827999 + W( w, i );
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R3( boost::uint32_t a, boost::uint32_t & b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t & e, boost::uint32_t w[], int i )
+    static BOOST_FORCEINLINE void R3( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
-        boost::uint32_t f = b ^ c ^ d;
+        std::uint32_t f = b ^ c ^ d;
 
         e += detail::rotl( a, 5 ) + f + 0x6ED9EBA1 + W( w, i );
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R4( boost::uint32_t a, boost::uint32_t & b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t & e, boost::uint32_t w[], int i )
+    static BOOST_FORCEINLINE void R4( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
-        boost::uint32_t f = (b & c) | (b & d) | (c & d);
+        std::uint32_t f = (b & c) | (b & d) | (c & d);
 
         e += detail::rotl( a, 5 ) + f + 0x8F1BBCDC + W( w, i );
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R5( boost::uint32_t a, boost::uint32_t & b, boost::uint32_t c, boost::uint32_t d, boost::uint32_t & e, boost::uint32_t w[], int i )
+    static BOOST_FORCEINLINE void R5( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
-        boost::uint32_t f = b ^ c ^ d;
+        std::uint32_t f = b ^ c ^ d;
 
         e += detail::rotl( a, 5 ) + f + 0xCA62C1D6 + W( w, i );
         b = detail::rotl( b, 30 );
@@ -97,13 +97,13 @@ private:
 
     void transform( byte_type const block[ 64 ] )
     {
-        boost::uint32_t a = state_[ 0 ];
-        boost::uint32_t b = state_[ 1 ];
-        boost::uint32_t c = state_[ 2 ];
-        boost::uint32_t d = state_[ 3 ];
-        boost::uint32_t e = state_[ 4 ];
+        std::uint32_t a = state_[ 0 ];
+        std::uint32_t b = state_[ 1 ];
+        std::uint32_t c = state_[ 2 ];
+        std::uint32_t d = state_[ 3 ];
+        std::uint32_t e = state_[ 4 ];
 
-        boost::uint32_t w[ 80 ];
+        std::uint32_t w[ 80 ];
 
         R1( a, b, c, d, e, w, block,  0 );
         R1( e, a, b, c, d, w, block,  1 );
@@ -200,7 +200,7 @@ private:
 public:
 
     typedef std::array<byte_type, 20> result_type;
-    typedef boost::uint64_t size_type;
+    typedef std::uint64_t size_type;
 
     static const int block_size = 64;
 
@@ -209,7 +209,7 @@ public:
         init();
     }
 
-    explicit sha1_160( boost::uint64_t seed ): m_( 0 ), n_( 0 )
+    explicit sha1_160( std::uint64_t seed ): m_( 0 ), n_( 0 )
     {
         init();
 
@@ -329,7 +329,7 @@ public:
     {
     }
 
-    explicit hmac_sha1_160( boost::uint64_t seed ): hmac<sha1_160>( seed )
+    explicit hmac_sha1_160( std::uint64_t seed ): hmac<sha1_160>( seed )
     {
     }
 
