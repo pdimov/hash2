@@ -8,9 +8,7 @@
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <set>
-#if !defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
-# include <unordered_set>
-#endif
+#include <unordered_set>
 
 template<class H, class S, class R> void test( R r )
 {
@@ -68,15 +66,11 @@ int main()
     test< boost::hash2::fnv1a_32, std::multiset<int> >( 2078558933ul );
     test< boost::hash2::fnv1a_64, std::multiset<int> >( 17046016161958689285ull );
 
-#if !defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
-
     test< boost::hash2::fnv1a_32, std::unordered_set<int> >( 2270492092ul );
     test< boost::hash2::fnv1a_64, std::unordered_set<int> >( 3232503781718511241ull );
 
     test< boost::hash2::fnv1a_32, std::unordered_multiset<int> >( 2270492092ul );
     test< boost::hash2::fnv1a_64, std::unordered_multiset<int> >( 3232503781718511241ull );
-
-#endif
 
     return boost::report_errors();
 }

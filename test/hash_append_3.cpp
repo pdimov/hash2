@@ -11,9 +11,7 @@
 #include <list>
 #include <deque>
 #include <set>
-#if !defined(BOOST_NO_CXX11_HDR_FORWARD_LIST)
-# include <forward_list>
-#endif
+#include <forward_list>
 
 template<class H, class T, class R> void test_sized_range( R r )
 {
@@ -34,9 +32,7 @@ template<class H, class R> void test( R r )
     test_sized_range< H, std::deque<int> >( r );
     test_sized_range< H, std::set<int> >( r );
     test_sized_range< H, std::multiset<int> >( r );
-#if !defined(BOOST_NO_CXX11_HDR_FORWARD_LIST)
     test_sized_range< H, std::forward_list<int> >( r );
-#endif
 }
 
 int main()

@@ -8,9 +8,7 @@
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <map>
-#if !defined(BOOST_NO_CXX11_HDR_UNORDERED_MAP)
-# include <unordered_map>
-#endif
+#include <unordered_map>
 
 template<class H, class M, class R> void test( R r )
 {
@@ -70,15 +68,11 @@ int main()
     test< boost::hash2::fnv1a_32, std::multimap<int, int> >( 3152726101ul );
     test< boost::hash2::fnv1a_64, std::multimap<int, int> >( 12051529320333828229ull );
 
-#if !defined(BOOST_NO_CXX11_HDR_UNORDERED_MAP)
-
     test< boost::hash2::fnv1a_32, std::unordered_map<int, int> >( 2742410178ul );
     test< boost::hash2::fnv1a_64, std::unordered_map<int, int> >( 2617313294186790738ull );
 
     test< boost::hash2::fnv1a_32, std::unordered_multimap<int, int> >( 2742410178ul );
     test< boost::hash2::fnv1a_64, std::unordered_multimap<int, int> >( 2617313294186790738ull );
-
-#endif
 
     return boost::report_errors();
 }
