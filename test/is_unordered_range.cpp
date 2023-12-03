@@ -68,13 +68,13 @@ int main()
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_set<int> >));
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_set<int> const >));
 
-	BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multiset<int> >));
+    BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multiset<int> >));
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multiset<int> const >));
 
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_map<int, X> >));
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_map<int, X> const >));
 
-	BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multimap<int, X> >));
+    BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multimap<int, X> >));
     BOOST_TEST_TRAIT_TRUE((is_unordered_range< std::unordered_multimap<int, X> const >));
 
     return boost::report_errors();
