@@ -5,7 +5,6 @@
 #include <boost/hash2/endian.hpp>
 #include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/static_assert.hpp>
 #include <cstdint>
 #include <cstring>
 
