@@ -2,9 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/is_tuple_like.hpp>
+#include <boost/container_hash/is_tuple_like.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/array.hpp>
 #include <utility>
 #include <array>
 #include <tuple>
@@ -15,7 +14,7 @@ struct X
 
 int main()
 {
-    using boost::hash2::is_tuple_like;
+    using boost::container_hash::is_tuple_like;
 
     BOOST_TEST_TRAIT_FALSE((is_tuple_like<void>));
     BOOST_TEST_TRAIT_FALSE((is_tuple_like<void const>));
@@ -55,18 +54,6 @@ int main()
 
     BOOST_TEST_TRAIT_TRUE((is_tuple_like< std::tuple<X, X, X> >));
     BOOST_TEST_TRAIT_TRUE((is_tuple_like< std::tuple<X, X, X> const >));
-
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 0> >));
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 0> const >));
-
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 1> >));
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 1> const >));
-
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 2> >));
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 2> const >));
-
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 3> >));
-    BOOST_TEST_TRAIT_TRUE((is_tuple_like< boost::array<X, 3> const >));
 
     return boost::report_errors();
 }

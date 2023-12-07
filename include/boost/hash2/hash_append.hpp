@@ -13,10 +13,10 @@
 
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/hash2/is_tuple_like.hpp>
 #include <boost/container_hash/is_range.hpp>
 #include <boost/container_hash/is_contiguous_range.hpp>
 #include <boost/container_hash/is_unordered_range.hpp>
+#include <boost/container_hash/is_tuple_like.hpp>
 #include <boost/mp11/integer_sequence.hpp>
 #include <cstdint>
 #include <type_traits>
@@ -147,7 +147,7 @@ template<class H, class T, std::size_t N> void do_hash_append( H & h, T const (&
 // contiguous containers and ranges, w/ size
 
 template<class H, class T>
-    typename std::enable_if< container_hash::is_contiguous_range<T>::value && !is_tuple_like<T>::value, void >::type
+    typename std::enable_if< container_hash::is_contiguous_range<T>::value && !container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     hash_append_range( h, v.data(), v.data() + v.size() );
@@ -157,7 +157,7 @@ template<class H, class T>
 // containers and ranges, w/ size
 
 template<class H, class T>
-	typename std::enable_if< container_hash::is_range<T>::value && !is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
+	typename std::enable_if< container_hash::is_range<T>::value && !container_hash::is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     hash_append_sized_range( h, v.begin(), v.end() );
@@ -166,7 +166,7 @@ template<class H, class T>
 // std::array (both range and tuple-like)
 
 template<class H, class T>
-    typename std::enable_if< container_hash::is_range<T>::value && is_tuple_like<T>::value, void >::type
+    typename std::enable_if< container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     hash_append_range( h, v.begin(), v.end() );
@@ -220,7 +220,7 @@ template<class H, class T, std::size_t... J> void hash_append_tuple( H & h, T co
 } // namespace detail
 
 template<class H, class T>
-    typename std::enable_if< !container_hash::is_range<T>::value && is_tuple_like<T>::value, void >::type
+    typename std::enable_if< !container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     typedef boost::mp11::make_index_sequence<std::tuple_size<T>::value> seq;
