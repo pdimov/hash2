@@ -1,7 +1,7 @@
 #ifndef BOOST_HASH2_HASH_APPEND_HPP_INCLUDED
 #define BOOST_HASH2_HASH_APPEND_HPP_INCLUDED
 
-// Copyright 2017, 2018 Peter Dimov.
+// Copyright 2017, 2018, 2023 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 //
@@ -59,7 +59,7 @@ template<class H> void hash_append_range_( H & h, unsigned char const * first, u
 
 template<class H, class T>
     typename std::enable_if<
-        is_contiguously_hashable<T, H>::value, void >::type
+        is_contiguously_hashable<T, endian::native>::value, void >::type
     hash_append_range_( H & h, T * first, T * last )
 {
     unsigned char const * f2 = reinterpret_cast<unsigned char const*>( first );
@@ -118,7 +118,7 @@ template<class H, class It> void hash_append_sized_range( H & h, It first, It la
 
 template<class H, class T>
     typename std::enable_if<
-        is_contiguously_hashable<T, H>::value, void >::type
+        is_contiguously_hashable<T, endian::native>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     unsigned char const * p = reinterpret_cast<unsigned char const*>( &v );

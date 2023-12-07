@@ -5,7 +5,6 @@ import testing ;
 
 # type traits
 
-run is_uniquely_represented.cpp ;
 run is_contiguously_hashable.cpp ;
 run is_range.cpp ;
 run is_contiguous_range.cpp ;

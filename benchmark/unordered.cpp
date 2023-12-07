@@ -169,7 +169,7 @@ public:
         H h( seed_ );
 
         STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
 
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();
@@ -198,7 +198,7 @@ public:
         H h( h_ );
 
         STATIC_ASSERT( boost::hash2::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, H>::value );
+        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
 
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();
