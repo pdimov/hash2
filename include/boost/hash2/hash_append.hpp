@@ -24,6 +24,9 @@
 
 namespace boost
 {
+
+template<class T, std::size_t N> class array;
+
 namespace hash2
 {
 
@@ -157,7 +160,7 @@ template<class H, class T>
 // containers and ranges, w/ size
 
 template<class H, class T>
-	typename std::enable_if< container_hash::is_range<T>::value && !container_hash::is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
+    typename std::enable_if< container_hash::is_range<T>::value && !container_hash::is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
     hash_append_sized_range( h, v.begin(), v.end() );
@@ -168,6 +171,13 @@ template<class H, class T>
 template<class H, class T>
     typename std::enable_if< container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( H & h, T const & v )
+{
+    hash_append_range( h, v.begin(), v.end() );
+}
+
+// boost::array (constant size, but not tuple-like)
+
+template<class H, class T, std::size_t N> void do_hash_append( H & h, boost::array<T, N> const & v )
 {
     hash_append_range( h, v.begin(), v.end() );
 }
