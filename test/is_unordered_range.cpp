@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/is_unordered_range.hpp>
+#include <boost/container_hash/is_unordered_range.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <string>
 #include <vector>
@@ -21,7 +21,7 @@ struct X
 
 int main()
 {
-    using boost::hash2::is_unordered_range;
+    using boost::container_hash::is_unordered_range;
 
     BOOST_TEST_TRAIT_FALSE((is_unordered_range<void>));
     BOOST_TEST_TRAIT_FALSE((is_unordered_range<void const>));
