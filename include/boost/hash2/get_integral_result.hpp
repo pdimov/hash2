@@ -5,7 +5,6 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <array>
 #include <type_traits>
@@ -33,7 +32,7 @@ template<class T, class R>
 }
 
 template<class T, std::size_t N>
-    T get_integral_result( std::array<byte_type, N> const & r )
+    T get_integral_result( std::array<unsigned char, N> const & r )
 {
     static_assert( N >= 8, "Array result type is too short" );
     return static_cast<T>( detail::read64le( &r[0] ) );

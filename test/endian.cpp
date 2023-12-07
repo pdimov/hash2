@@ -3,7 +3,6 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/endian.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>
 #include <cstring>
@@ -16,7 +15,7 @@ int main()
 
     BOOST_TEST_NE( static_cast<int>( endian::little ), static_cast<int>( endian::big ) );
 
-    byte_type const v[ 4 ] = { 0x01, 0x02, 0x03, 0x04 };
+    unsigned char const v[ 4 ] = { 0x01, 0x02, 0x03, 0x04 };
 
     std::uint32_t w;
 

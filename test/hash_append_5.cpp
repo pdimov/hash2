@@ -51,7 +51,6 @@ public:
 
 // lib2.hpp
 
-#include <boost/hash2/byte_type.hpp>
 #include <cstdint>
 #include <cstddef>
 
@@ -73,7 +72,7 @@ public:
     {
     }
 
-    void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         std::uint32_t h = st_;
 

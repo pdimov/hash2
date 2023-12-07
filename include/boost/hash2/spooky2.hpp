@@ -7,7 +7,6 @@
 //
 // SpookyHash V2, http://burtleburtle.net/bob/hash/spooky.html
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
@@ -34,7 +33,7 @@ private:
     std::uint64_t v_[ M ];
 
     static const int N = 192;
-    byte_type buffer_[ N ];
+    unsigned char buffer_[ N ];
 
     int m_;
 
@@ -73,7 +72,7 @@ private:
         h1 ^= h0; h0 = detail::rotl( h0, 63 ); h1 += h0;
     }
 
-    static void short_hash( byte_type const * p, std::size_t n, std::uint64_t & hash1, std::uint64_t & hash2 )
+    static void short_hash( unsigned char const * p, std::size_t n, std::uint64_t & hash1, std::uint64_t & hash2 )
     {
         std::uint64_t a = hash1;
         std::uint64_t b = hash2;
@@ -116,7 +115,7 @@ private:
         {
             BOOST_ASSERT( m < 16 );
 
-            byte_type tmp[ 16 ] = { 0 };
+            unsigned char tmp[ 16 ] = { 0 };
             std::memcpy( tmp, p, m );
 
             c += detail::read64le( tmp + 0 );
@@ -133,7 +132,7 @@ private:
 
 private:
 
-    static inline void mix( byte_type const * p,
+    static inline void mix( unsigned char const * p,
         std::uint64_t & s0, std::uint64_t & s1, std::uint64_t &  s2, std::uint64_t &  s3,
         std::uint64_t & s4, std::uint64_t & s5, std::uint64_t &  s6, std::uint64_t &  s7,
         std::uint64_t & s8, std::uint64_t & s9, std::uint64_t & s10, std::uint64_t & s11 )
@@ -152,7 +151,7 @@ private:
         s11 += detail::read64le( p + 88 ); s1  ^= s9;  s10 ^= s11; s11 = detail::rotl( s11, 46 ); s10 += s0;
     }
 
-    void update_( byte_type const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::ptrdiff_t k )
     {
         std::uint64_t h0  = v_[ 0];
         std::uint64_t h1  = v_[ 1];
@@ -205,7 +204,7 @@ private:
         h10 += h0;    h1  ^= h10;   h0  = detail::rotl( h0,  54);
     }
 
-    static inline void end( byte_type const * p,
+    static inline void end( unsigned char const * p,
         std::uint64_t & h0, std::uint64_t & h1, std::uint64_t &  h2, std::uint64_t &  h3,
         std::uint64_t & h4, std::uint64_t & h5, std::uint64_t &  h6, std::uint64_t &  h7, 
         std::uint64_t & h8, std::uint64_t & h9, std::uint64_t & h10, std::uint64_t & h11 )
@@ -237,7 +236,7 @@ private:
 
 public:
 
-    typedef std::array<byte_type, 16> result_type;
+    typedef std::array<unsigned char, 16> result_type;
     typedef std::uint64_t size_type;
 
     explicit spooky2_128( std::uint64_t seed1 = 0, std::uint64_t seed2 = 0 ): m_( 0 ), n_( 0 )
@@ -245,7 +244,7 @@ public:
         init( seed1, seed2 );
     }
 
-    spooky2_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    spooky2_128( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -255,7 +254,7 @@ public:
         }
         else if( n <= 16 )
         {
-            byte_type q[ 18 ] = {};
+            unsigned char q[ 18 ] = {};
             std::memcpy( q, p, n );
 
             std::uint64_t seed1 = detail::read64le( q + 0 );
@@ -278,7 +277,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -357,7 +356,7 @@ public:
             std::uint64_t h10 = v_[ 10 ];
             std::uint64_t h11 = v_[ 11 ];
 
-            byte_type * p = buffer_;
+            unsigned char * p = buffer_;
             int m = m_;
 
             if( m >= 96 )
@@ -369,7 +368,7 @@ public:
             }
 
             std::memset( p + m, 0, 96 - m );
-            p[ 95 ] = static_cast<byte_type>( m & 0xFF );
+            p[ 95 ] = static_cast<unsigned char>( m & 0xFF );
 
             end( p, h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11 );
 

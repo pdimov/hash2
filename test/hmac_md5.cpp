@@ -11,9 +11,7 @@
 #include <cstddef>
 #include <cstdio>
 
-using boost::hash2::byte_type;
-
-template<std::size_t N> std::string to_string( std::array<byte_type, N> const & v )
+template<std::size_t N> std::string to_string( std::array<unsigned char, N> const & v )
 {
     std::string r;
 
@@ -31,9 +29,9 @@ template<std::size_t N> std::string to_string( std::array<byte_type, N> const & 
 
 template<class H> std::string digest( std::string const k, std::string const & s )
 {
-    H h( reinterpret_cast<byte_type const*>( k.data() ), k.size() );
+    H h( reinterpret_cast<unsigned char const*>( k.data() ), k.size() );
 
-    h.update( reinterpret_cast<byte_type const*>( s.data() ), s.size() );
+    h.update( reinterpret_cast<unsigned char const*>( s.data() ), s.size() );
 
     return to_string( h.result() );
 }

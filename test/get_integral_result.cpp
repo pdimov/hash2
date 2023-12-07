@@ -3,7 +3,6 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>
 #include <array>
@@ -65,10 +64,8 @@ int main()
         BOOST_TEST_EQ( get_integral_result<std::int64_t>( s64 ), -1 );
     }
 
-    using boost::hash2::byte_type;
-
     {
-        std::array<byte_type, 8> a64 = {{ 0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x01 }};
+        std::array<unsigned char, 8> a64 = {{ 0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x01 }};
 
         BOOST_TEST_EQ( get_integral_result<std::uint8_t>( a64 ), 0xEF );
         BOOST_TEST_EQ( get_integral_result<std::int8_t>( a64 ), -0x11 );
@@ -81,7 +78,7 @@ int main()
     }
 
     {
-        std::array<byte_type, 8> b64 = {{ 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }};
+        std::array<unsigned char, 8> b64 = {{ 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }};
 
         BOOST_TEST_EQ( get_integral_result<std::uint8_t>( b64 ), 0xFF );
         BOOST_TEST_EQ( get_integral_result<std::int8_t>( b64 ), -1 );

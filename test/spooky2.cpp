@@ -86,14 +86,13 @@ static const std::uint32_t expected[ N ] =
 
 int main()
 {
-    using boost::hash2::byte_type;
     using boost::hash2::get_integral_result;
 
-    byte_type buf[ N ];
+    unsigned char buf[ N ];
 
     for( int i = 0; i < N; ++i )
     {
-        buf[ i ] = static_cast<byte_type>( i + 128 );
+        buf[ i ] = static_cast<unsigned char>( i + 128 );
 
         boost::hash2::spooky2_128 h;
 

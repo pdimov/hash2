@@ -5,7 +5,6 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/config.hpp>
 #include <cstdint>
 #include <cstring>
@@ -17,7 +16,7 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE std::uint32_t read32le( byte_type const * p )
+BOOST_FORCEINLINE std::uint32_t read32le( unsigned char const * p )
 {
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
 
@@ -36,7 +35,7 @@ BOOST_FORCEINLINE std::uint32_t read32le( byte_type const * p )
 #endif
 }
 
-BOOST_FORCEINLINE std::uint64_t read64le( byte_type const * p )
+BOOST_FORCEINLINE std::uint64_t read64le( unsigned char const * p )
 {
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
 
@@ -59,7 +58,7 @@ BOOST_FORCEINLINE std::uint64_t read64le( byte_type const * p )
 #endif
 }
 
-BOOST_FORCEINLINE std::uint32_t read32be( byte_type const * p )
+BOOST_FORCEINLINE std::uint32_t read32be( unsigned char const * p )
 {
     return
         static_cast<std::uint32_t>( p[3] ) +
@@ -68,7 +67,7 @@ BOOST_FORCEINLINE std::uint32_t read32be( byte_type const * p )
         ( static_cast<std::uint32_t>( p[0] ) << 24 );
 }
 
-BOOST_FORCEINLINE std::uint64_t read64be( byte_type const * p )
+BOOST_FORCEINLINE std::uint64_t read64be( unsigned char const * p )
 {
     return
         static_cast<std::uint64_t>( p[7] ) +

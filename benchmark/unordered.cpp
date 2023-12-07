@@ -45,7 +45,7 @@ public:
     {
     }
 
-    void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         std::uint32_t h = st_;
 
@@ -84,7 +84,7 @@ public:
     {
     }
 
-    void update( boost::hash2::byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         std::uint64_t h = st_;
 
@@ -174,7 +174,7 @@ public:
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();
 
-        h.update( reinterpret_cast<boost::hash2::byte_type const*>( p ), n );
+        h.update( reinterpret_cast<unsigned char const*>( p ), n );
 
         using boost::hash2::get_integral_result;
         return get_integral_result<std::size_t>( h.result() );
@@ -203,7 +203,7 @@ public:
         typename T::value_type const * p = v.data();
         typename T::size_type n = v.size();
 
-        h.update( reinterpret_cast<boost::hash2::byte_type const*>( p ), n );
+        h.update( reinterpret_cast<unsigned char const*>( p ), n );
 
         using boost::hash2::get_integral_result;
         return get_integral_result<std::size_t>( h.result() );

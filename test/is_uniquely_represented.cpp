@@ -3,7 +3,6 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/is_uniquely_represented.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <cstddef>
 
@@ -88,8 +87,6 @@ int main()
 
     test_false_<X>();
     test_false_<Y>();
-
-    test_true_<boost::hash2::byte_type>();
 
     return boost::report_errors();
 }

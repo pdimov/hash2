@@ -10,7 +10,7 @@ template<class H, class S> typename H::result_type hash( char const * s, S seed 
 {
     H h( seed );
 
-    h.update( reinterpret_cast<boost::hash2::byte_type const*>( s ), std::strlen( s ) );
+    h.update( reinterpret_cast<unsigned char const*>( s ), std::strlen( s ) );
 
     return h.result();
 }

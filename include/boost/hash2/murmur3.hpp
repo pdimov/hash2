@@ -7,7 +7,6 @@
 //
 // MurmurHash3, https://github.com/aappleby/smhasher/wiki/MurmurHash3
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
@@ -28,7 +27,7 @@ private:
 
     std::uint32_t h_;
 
-    byte_type buffer_[ 4 ];
+    unsigned char buffer_[ 4 ];
     int m_;
 
     std::size_t n_;
@@ -51,7 +50,7 @@ private:
         h = h * 5 + 0xe6546b64;
     }
 
-    void update_( byte_type const * p, std::ptrdiff_t m )
+    void update_( unsigned char const * p, std::ptrdiff_t m )
     {
         std::uint32_t h = h_;
 
@@ -81,7 +80,7 @@ public:
         }
     }
 
-    murmur3_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -91,7 +90,7 @@ public:
         }
         else if( n <= 4 )
         {
-            byte_type q[ 4 ] = {};
+            unsigned char q[ 4 ] = {};
             std::memcpy( q, p, n );
 
             h_ = detail::read32le( q );
@@ -108,7 +107,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -221,7 +220,7 @@ private:
 
     std::uint64_t h1_, h2_;
 
-    byte_type buffer_[ 16 ];
+    unsigned char buffer_[ 16 ];
     int m_;
 
     std::size_t n_;
@@ -233,7 +232,7 @@ private:
 
 private:
 
-    void update_( byte_type const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::ptrdiff_t k )
     {
         std::uint64_t h1 = h1_, h2 = h2_;
 
@@ -267,7 +266,7 @@ private:
 
 public:
 
-    typedef std::array<byte_type, 16> result_type;
+    typedef std::array<unsigned char, 16> result_type;
     typedef std::uint64_t size_type;
 
     explicit murmur3_128( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
@@ -282,7 +281,7 @@ public:
         h2_ = seed2;
     }
 
-    murmur3_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_128( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -292,14 +291,14 @@ public:
         }
         else if( n <= 8 )
         {
-            byte_type q[ 8 ] = {};
+            unsigned char q[ 8 ] = {};
             std::memcpy( q, p, n );
 
             h1_ = h2_ = detail::read64le( q );
         }
         else if( n <= 16 )
         {
-            byte_type q[ 18 ] = {};
+            unsigned char q[ 18 ] = {};
             std::memcpy( q, p, n );
 
             h1_ = detail::read64le( q + 0 );
@@ -318,7 +317,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 

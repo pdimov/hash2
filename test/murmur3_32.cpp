@@ -11,7 +11,7 @@ template<class H, class S, std::size_t N> typename H::result_type hash( char con
 {
     H h( seed );
 
-    h.update( reinterpret_cast<boost::hash2::byte_type const*>( s ), N-1 );
+    h.update( reinterpret_cast<unsigned char const*>( s ), N-1 );
 
     return h.result();
 }

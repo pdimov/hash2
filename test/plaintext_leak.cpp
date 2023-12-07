@@ -2,7 +2,6 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
 #include <boost/hash2/xxhash.hpp>
@@ -14,8 +13,6 @@
 #include <algorithm>
 #include <cstddef>
 
-using boost::hash2::byte_type;
-
 template<class H> void test()
 {
     char const * s = "xxxx";
@@ -23,7 +20,7 @@ template<class H> void test()
     {
         H h;
 
-        h.update( reinterpret_cast<byte_type const*>( s ), 4 );
+        h.update( reinterpret_cast<unsigned char const*>( s ), 4 );
 
         h.result();
 
@@ -36,10 +33,10 @@ template<class H> void test()
     {
         H h;
 
-        byte_type buffer[ 1024 ] = {};
+        unsigned char buffer[ 1024 ] = {};
         h.update( buffer, 1024 );
 
-        h.update( reinterpret_cast<byte_type const*>( s ), 4 );
+        h.update( reinterpret_cast<unsigned char const*>( s ), 4 );
 
         h.result();
 

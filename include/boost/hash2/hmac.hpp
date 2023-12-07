@@ -7,7 +7,6 @@
 //
 // HMAC message authentication algorithm, https://tools.ietf.org/html/rfc2104
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/assert.hpp>
 #include <cstdint>
@@ -35,11 +34,11 @@ private:
 
 private:
 
-    void init( byte_type const * p, std::ptrdiff_t n )
+    void init( unsigned char const * p, std::ptrdiff_t n )
     {
         int const m = block_size;
 
-        byte_type key[ m ] = {};
+        unsigned char key[ m ] = {};
 
         if( n == 0 )
         {
@@ -62,14 +61,14 @@ private:
 
         for( int i = 0; i < m; ++i )
         {
-            key[ i ] = static_cast<byte_type>( key[ i ] ^ 0x36 );
+            key[ i ] = static_cast<unsigned char>( key[ i ] ^ 0x36 );
         }
 
         inner_.update( key, m );
 
         for( int i = 0; i < m; ++i )
         {
-            key[ i ] = static_cast<byte_type>( key[ i ] ^ 0x36 ^ 0x5C );
+            key[ i ] = static_cast<unsigned char>( key[ i ] ^ 0x36 ^ 0x5C );
         }
 
         outer_.update( key, m );
@@ -90,20 +89,20 @@ public:
         }
         else
         {
-            byte_type tmp[ 8 ];
+            unsigned char tmp[ 8 ];
             detail::write64le( tmp, seed );
 
             init( tmp, 8 );
         }
     }
 
-    hmac( byte_type const * p, std::ptrdiff_t n )
+    hmac( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
         init( p, n );
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
         inner_.update( p, n );

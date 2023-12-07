@@ -12,9 +12,7 @@
 #include <cstdio>
 #include <cstddef>
 
-using boost::hash2::byte_type;
-
-template<std::size_t N> std::string to_string( std::array<byte_type, N> const & v )
+template<std::size_t N> std::string to_string( std::array<unsigned char, N> const & v )
 {
     std::string r;
 
@@ -34,7 +32,7 @@ template<class H, class S, std::size_t N> std::string hash( char const (&s)[ N ]
 {
     H h( seed );
 
-    h.update( reinterpret_cast<boost::hash2::byte_type const*>( s ), N-1 );
+    h.update( reinterpret_cast<unsigned char const*>( s ), N-1 );
 
     return to_string( h.result() );
 }

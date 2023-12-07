@@ -7,7 +7,6 @@
 //
 // MD5 message digest algorithm, https://tools.ietf.org/html/rfc1321
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/hmac.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
@@ -32,7 +31,7 @@ private:
 
     static const int N = 64;
 
-    byte_type buffer_[ N ];
+    unsigned char buffer_[ N ];
     int m_;
 
     std::uint64_t n_;
@@ -112,7 +111,7 @@ private:
     static const int S43 = 15;
     static const int S44 = 21;
 
-    void transform( byte_type const block[ 64 ] )
+    void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t a = state_[ 0 ];
         std::uint32_t b = state_[ 1 ];
@@ -202,7 +201,7 @@ private:
 
 public:
 
-    typedef std::array<byte_type, 16> result_type;
+    typedef std::array<unsigned char, 16> result_type;
     typedef std::uint64_t size_type;
 
     static const int block_size = 64;
@@ -218,7 +217,7 @@ public:
 
         if( seed != 0 )
         {
-            byte_type tmp[ 8 ];
+            unsigned char tmp[ 8 ];
             detail::write64le( tmp, seed );
 
             update( tmp, 8 );
@@ -226,7 +225,7 @@ public:
         }
     }
 
-    md5_128( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    md5_128( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -239,7 +238,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -299,13 +298,13 @@ public:
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & (N-1) ) );
 
-        byte_type bits[ 8 ];
+        unsigned char bits[ 8 ];
 
         detail::write64le( bits, n_ * 8 );
 
         int k = m_ < 56? 56 - m_: 120 - m_;
 
-        byte_type padding[ 64 ] = { 0x80 };
+        unsigned char padding[ 64 ] = { 0x80 };
 
         update( padding, k );
 
@@ -336,7 +335,7 @@ public:
     {
     }
 
-    hmac_md5_128( byte_type const * p, std::ptrdiff_t n ): hmac<md5_128>( p, n )
+    hmac_md5_128( unsigned char const * p, std::ptrdiff_t n ): hmac<md5_128>( p, n )
     {
     }
 };

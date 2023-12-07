@@ -9,7 +9,6 @@
 #include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/md5.hpp>
 #include <boost/hash2/sha1.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <array>
@@ -18,8 +17,6 @@
 #include <cstddef>
 #include <cstdint>
 
-using boost::hash2::byte_type;
-
 template<class R> struct is_valid_result:
     std::integral_constant<bool,
         std::is_integral<R>::value && !std::is_signed<R>::value
@@ -27,7 +24,7 @@ template<class R> struct is_valid_result:
 {
 };
 
-template<std::size_t N> struct is_valid_result< std::array<byte_type, N> >:
+template<std::size_t N> struct is_valid_result< std::array<unsigned char, N> >:
     std::integral_constant<bool, N >= 8>
 {
 };
@@ -58,11 +55,11 @@ template<class H> void test_default_constructible()
 
 template<class H> void test_byte_seed_constructible()
 {
-    byte_type const seed[ 3 ] = { 0x01, 0x02, 0x03 };
+    unsigned char const seed[ 3 ] = { 0x01, 0x02, 0x03 };
 
     {
         H h1;
-        H h2( static_cast<byte_type const*>( 0 ), 0 );
+        H h2( nullptr, 0 );
 
         BOOST_TEST( h1.result() == h2.result() );
     }
@@ -217,7 +214,7 @@ template<class H> void test_integral_seed_constructible()
 
 template<class H> void test_copy_constructible()
 {
-    byte_type const seed[ 3 ] = { 0x01, 0x02, 0x03 };
+    unsigned char const seed[ 3 ] = { 0x01, 0x02, 0x03 };
 
     {
         H h1;
@@ -245,7 +242,7 @@ template<class H> void test_copy_constructible()
 
 template<class H> void test_update()
 {
-    byte_type const data[ 3 ] = {};
+    unsigned char const data[ 3 ] = {};
 
     {
         H h1;
@@ -291,7 +288,7 @@ template<class H> void test_update()
 
 template<class H> void test_assignable()
 {
-    byte_type const seed[ 3 ] = { 0x01, 0x02, 0x03 };
+    unsigned char const seed[ 3 ] = { 0x01, 0x02, 0x03 };
 
     {
         H h1;

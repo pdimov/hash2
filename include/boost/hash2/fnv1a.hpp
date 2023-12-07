@@ -9,7 +9,6 @@
 //
 // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/assert.hpp>
 #include <cstdint>
@@ -58,20 +57,20 @@ public:
         {
             if( seed >> 32 )
             {
-                byte_type tmp[ 8 ];
+                unsigned char tmp[ 8 ];
                 detail::write64le( tmp, seed );
                 update( tmp, 8 );
             }
             else
             {
-                byte_type tmp[ 4 ];
+                unsigned char tmp[ 4 ];
                 detail::write32le( tmp, static_cast<std::uint32_t>( seed ) );
                 update( tmp, 4 );
             }
         }
     }
 
-    fnv1a( byte_type const * p, std::ptrdiff_t n ): st_( fnv1a_const<T>::basis )
+    fnv1a( unsigned char const * p, std::ptrdiff_t n ): st_( fnv1a_const<T>::basis )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -81,7 +80,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -124,7 +123,7 @@ public:
     {
     }
 
-    fnv1a_32( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint32_t>( p, n )
+    fnv1a_32( unsigned char const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint32_t>( p, n )
     {
     }
 };
@@ -141,7 +140,7 @@ public:
     {
     }
 
-    fnv1a_64( byte_type const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint64_t>( p, n )
+    fnv1a_64( unsigned char const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint64_t>( p, n )
     {
     }
 };

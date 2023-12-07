@@ -10,7 +10,7 @@ template<class H, class R> void test( char const * s, R r )
 {
     H h;
 
-    h.update( reinterpret_cast<boost::hash2::byte_type const*>( s ), std::strlen( s ) );
+    h.update( reinterpret_cast<unsigned char const*>( s ), std::strlen( s ) );
 
     BOOST_TEST_EQ( h.result(), r );
 }

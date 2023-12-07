@@ -16,7 +16,6 @@
 #include <boost/hash2/is_contiguous_range.hpp>
 #include <boost/hash2/is_unordered_range.hpp>
 #include <boost/hash2/is_tuple_like.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/mp11/integer_sequence.hpp>
 #include <cstdint>
@@ -48,12 +47,12 @@ template<class H, class It> void hash_append_range_( H & h, It first, It last )
     }
 }
 
-template<class H> void hash_append_range_( H & h, byte_type * first, byte_type * last )
+template<class H> void hash_append_range_( H & h, unsigned char * first, unsigned char * last )
 {
     h.update( first, last - first );
 }
 
-template<class H> void hash_append_range_( H & h, byte_type const * first, byte_type const * last )
+template<class H> void hash_append_range_( H & h, unsigned char const * first, unsigned char const * last )
 {
     h.update( first, last - first );
 }
@@ -63,8 +62,8 @@ template<class H, class T>
         is_contiguously_hashable<T, H>::value, void >::type
     hash_append_range_( H & h, T * first, T * last )
 {
-    byte_type const * f2 = reinterpret_cast<byte_type const*>( first );
-    byte_type const * l2 = reinterpret_cast<byte_type const*>( last );
+    unsigned char const * f2 = reinterpret_cast<unsigned char const*>( first );
+    unsigned char const * l2 = reinterpret_cast<unsigned char const*>( last );
 
     h.update( f2, l2 - f2 );
 }
@@ -115,14 +114,14 @@ template<class H, class It> void hash_append_sized_range( H & h, It first, It la
 
 // do_hash_append
 
-// contiguously hashable (this includes byte_type const&)
+// contiguously hashable (this includes unsigned char const&)
 
 template<class H, class T>
     typename std::enable_if<
         is_contiguously_hashable<T, H>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
-    byte_type const * p = reinterpret_cast<byte_type const*>( &v );
+    unsigned char const * p = reinterpret_cast<unsigned char const*>( &v );
     hash_append_range( h, p, p + sizeof(T) );
 }
 
@@ -134,7 +133,7 @@ template<class H, class T>
 {
     T w = v == 0? 0: v;
 
-    byte_type const * p = reinterpret_cast<byte_type const*>( &w );
+    unsigned char const * p = reinterpret_cast<unsigned char const*>( &w );
     hash_append_range( h, p, p + sizeof(T) );
 }
 

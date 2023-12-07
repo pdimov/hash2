@@ -3,7 +3,6 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/siphash.hpp>
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>
@@ -78,23 +77,21 @@ static const std::uint32_t vectors_sip32[64] =
     0x744aea59,
 };
 
-using boost::hash2::byte_type;
-
 int main()
 {
-    byte_type k[ 8 ];
+    unsigned char k[ 8 ];
 
     for( int i = 0; i < 8; ++i )
     {
-        k[ i ] = static_cast<byte_type>( i );
+        k[ i ] = static_cast<unsigned char>( i );
     }
 
     {
-        byte_type in[ 64 ];
+        unsigned char in[ 64 ];
 
         for( int i = 0; i < 64; ++i )
         {
-            in[ i ] = static_cast<byte_type>( i );
+            in[ i ] = static_cast<unsigned char>( i );
 
             boost::hash2::siphash_32 h( k, 8 );
 

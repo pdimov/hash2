@@ -7,7 +7,6 @@
 //
 // SipHash, https://131002.net/siphash/
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/assert.hpp>
@@ -26,7 +25,7 @@ private:
 
     std::uint64_t v0, v1, v2, v3;
 
-    byte_type buffer_[ 8 ];
+    unsigned char buffer_[ 8 ];
     int m_;
 
     std::uint64_t n_;
@@ -51,7 +50,7 @@ private:
         v2 = detail::rotl(v2, 32);
     }
 
-    void update_( byte_type const * p )
+    void update_( unsigned char const * p )
     {
         std::uint64_t m = detail::read64le( p );
 
@@ -86,7 +85,7 @@ public:
         init( k0, k1 );
     }
 
-    siphash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_64( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -96,7 +95,7 @@ public:
         }
         else if( n <= 16 )
         {
-            byte_type q[ 16 ] = { 0 };
+            unsigned char q[ 16 ] = { 0 };
             std::memcpy( q, p, n );
 
             std::uint64_t k0 = detail::read64le( q + 0 );
@@ -120,7 +119,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -210,7 +209,7 @@ private:
 
     std::uint32_t v0, v1, v2, v3;
 
-    byte_type buffer_[ 4 ];
+    unsigned char buffer_[ 4 ];
     int m_;
 
     std::uint32_t n_;
@@ -235,7 +234,7 @@ private:
         v2 = detail::rotl(v2, 16);
     }
 
-    void update_( byte_type const * p )
+    void update_( unsigned char const * p )
     {
         std::uint32_t m = detail::read32le( p );
 
@@ -278,7 +277,7 @@ public:
         init( k0, k1 );
     }
 
-    siphash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -288,7 +287,7 @@ public:
         }
         else if( n <= 8 )
         {
-            byte_type q[ 8 ] = { 0 };
+            unsigned char q[ 8 ] = { 0 };
             std::memcpy( q, p, n );
 
             std::uint32_t k0 = detail::read32le( q + 0 );
@@ -312,7 +311,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 

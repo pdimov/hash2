@@ -7,7 +7,6 @@
 //
 // SHA1 message digest algorithm, https://tools.ietf.org/html/rfc3174
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/hmac.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
@@ -32,7 +31,7 @@ private:
 
     static const int N = 64;
 
-    byte_type buffer_[ N ];
+    unsigned char buffer_[ N ];
     int m_;
 
     std::uint64_t n_;
@@ -48,7 +47,7 @@ private:
         state_[ 4 ] = 0xc3d2e1f0u;
     }
 
-    static BOOST_FORCEINLINE void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], byte_type const block[ 64 ], int i )
+    static BOOST_FORCEINLINE void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], unsigned char const block[ 64 ], int i )
     {
         w[ i ] = detail::read32be( block + i * 4 );
 
@@ -95,7 +94,7 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    void transform( byte_type const block[ 64 ] )
+    void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t a = state_[ 0 ];
         std::uint32_t b = state_[ 1 ];
@@ -199,7 +198,7 @@ private:
 
 public:
 
-    typedef std::array<byte_type, 20> result_type;
+    typedef std::array<unsigned char, 20> result_type;
     typedef std::uint64_t size_type;
 
     static const int block_size = 64;
@@ -215,7 +214,7 @@ public:
 
         if( seed != 0 )
         {
-            byte_type tmp[ 8 ];
+            unsigned char tmp[ 8 ];
             detail::write64le( tmp, seed );
 
             update( tmp, 8 );
@@ -223,7 +222,7 @@ public:
         }
     }
 
-    sha1_160( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    sha1_160( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -236,7 +235,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -296,13 +295,13 @@ public:
     {
         BOOST_ASSERT( m_ == static_cast<int>( n_ & (N-1) ) );
 
-        byte_type bits[ 8 ];
+        unsigned char bits[ 8 ];
 
         detail::write64be( bits, n_ * 8 );
 
         int k = m_ < 56? 56 - m_: 120 - m_;
 
-        byte_type padding[ 64 ] = { 0x80 };
+        unsigned char padding[ 64 ] = { 0x80 };
 
         update( padding, k );
 
@@ -333,7 +332,7 @@ public:
     {
     }
 
-    hmac_sha1_160( byte_type const * p, std::ptrdiff_t n ): hmac<sha1_160>( p, n )
+    hmac_sha1_160( unsigned char const * p, std::ptrdiff_t n ): hmac<sha1_160>( p, n )
     {
     }
 };

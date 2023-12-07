@@ -7,7 +7,6 @@
 //
 // xxHash, https://cyan4973.github.io/xxHash/
 
-#include <boost/hash2/byte_type.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/assert.hpp>
@@ -26,7 +25,7 @@ private:
 
     std::uint32_t v1_, v2_, v3_, v4_;
 
-    byte_type buffer_[ 16 ];
+    unsigned char buffer_[ 16 ];
     int m_;
 
     std::size_t n_;
@@ -49,7 +48,7 @@ private:
         return seed;
     }
 
-    void update_( byte_type const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::ptrdiff_t k )
     {
         std::uint32_t v1 = v1_;
         std::uint32_t v2 = v2_;
@@ -99,7 +98,7 @@ public:
         }
     }
 
-    xxhash_32( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -109,7 +108,7 @@ public:
         }
         else if( n <= 4 )
         {
-            byte_type q[ 4 ] = {};
+            unsigned char q[ 4 ] = {};
             std::memcpy( q, p, n );
 
             std::uint32_t seed = detail::read32le( q );
@@ -128,7 +127,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -200,7 +199,7 @@ public:
 
         h += static_cast<std::uint32_t>( n_ );
 
-        byte_type const * p = buffer_;
+        unsigned char const * p = buffer_;
 
         int m = m_;
 
@@ -244,7 +243,7 @@ private:
 
     std::uint64_t v1_, v2_, v3_, v4_;
 
-    byte_type buffer_[ 32 ];
+    unsigned char buffer_[ 32 ];
     int m_;
 
     std::uint64_t n_;
@@ -275,7 +274,7 @@ private:
         return acc;
     }
 
-    void update_( byte_type const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::ptrdiff_t k )
     {
         std::uint64_t v1 = v1_;
         std::uint64_t v2 = v2_;
@@ -314,7 +313,7 @@ public:
         init( seed );
     }
 
-    xxhash_64( byte_type const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_64( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -324,7 +323,7 @@ public:
         }
         else if( n <= 8 )
         {
-            byte_type q[ 8 ] = {};
+            unsigned char q[ 8 ] = {};
             std::memcpy( q, p, n );
 
             std::uint64_t seed = detail::read64le( q );
@@ -343,7 +342,7 @@ public:
         }
     }
 
-    void update( byte_type const * p, std::ptrdiff_t n )
+    void update( unsigned char const * p, std::ptrdiff_t n )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -420,7 +419,7 @@ public:
 
         h += n_;
 
-        byte_type const * p = buffer_;
+        unsigned char const * p = buffer_;
 
         int m = m_;
 
