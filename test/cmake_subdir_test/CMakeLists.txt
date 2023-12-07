@@ -8,9 +8,27 @@ project(cmake_subdir_test LANGUAGES CXX)
 
 add_subdirectory(../.. boostorg/hash2)
 
-add_subdirectory(../../../assert boostorg/assert)
-add_subdirectory(../../../config boostorg/config)
-add_subdirectory(../../../mp11 boostorg/mp11)
+# boostdep --brief hash2
+
+set(deps
+
+# Primary dependencies
+
+assert
+config
+container_hash
+mp11
+
+# Secondary dependencies
+
+describe
+)
+
+foreach(dep IN LISTS deps)
+
+    add_subdirectory(../../../${dep} boostorg/${dep})
+
+endforeach()
 
 add_executable(main main.cpp)
 target_link_libraries(main Boost::hash2)
