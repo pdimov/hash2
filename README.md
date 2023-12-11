@@ -21,17 +21,17 @@ The hashing algorithms conform to the following concept:
 ```
 struct HashAlgorithm
 {
-    typedef /*integral or array<byte_type, N>*/ result_type; // result type
+    typedef /*integral or array<unsigned char, N>*/ result_type; // result type
     typedef /*unsigned integral*/ size_type; // how is container.size() hashed
 
     HashAlgorithm(); // default-constructible
     explicit HashAlgorithm( uint64_t seed ); // seed-constructible
-    HashAlgorithm( byte_type const* seed, ptrdiff_t n ); // seed-constructible
+    HashAlgorithm( unsigned char const* seed, size_t n ); // seed-constructible
 
     HashAlgorithm( HashAlgorithm const& r ); // copy-constructible
     HashAlgorithm& operator=( HashAlgorithm const& r ); // assignable
 
-    void update( byte_type const* data, ptrdiff_t n ); // feed bytes
+    void update( void const* data, size_t n ); // feed bytes
 
     result_type result(); // obtain result; also advances state,
                           // and can be called multiple times
