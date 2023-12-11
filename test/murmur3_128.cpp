@@ -20,7 +20,7 @@ template<std::size_t N> std::string to_string( std::array<unsigned char, N> cons
     {
         char buffer[ 8 ];
 
-        std::sprintf( buffer, "%02x", static_cast<int>( v[ i ] ) );
+        std::snprintf( buffer, sizeof( buffer ), "%02x", static_cast<int>( v[ i ] ) );
 
         r += buffer;
     }
