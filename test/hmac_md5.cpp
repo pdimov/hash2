@@ -4,6 +4,10 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#ifdef _MSC_VER
+# pragma warning(disable: 4309) // truncation of constant value
+#endif
+
 #include <boost/hash2/md5.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>

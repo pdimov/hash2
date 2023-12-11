@@ -46,7 +46,7 @@ template<class H, class R> void test( R r )
     }
 
     {
-        std::pair<unsigned char, unsigned char> v( 1, 2 );
+        std::pair<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
 
         H h;
 
@@ -76,7 +76,7 @@ template<class H, class R> void test( R r )
     }
 
     {
-        std::tuple<unsigned char, unsigned char> v( 1, 2 );
+        std::tuple<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
 
         H h;
 

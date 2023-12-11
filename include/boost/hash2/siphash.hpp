@@ -208,7 +208,7 @@ private:
     std::uint32_t v0, v1, v2, v3;
 
     unsigned char buffer_[ 4 ];
-    std::size_t m_; // == n_ % 4
+    std::uint32_t m_; // == n_ % 4
 
     std::uint32_t n_;
 
@@ -319,11 +319,11 @@ public:
 
         if( m_ > 0 )
         {
-            std::size_t k = 4 - m_;
+            std::uint32_t k = 4 - m_;
 
             if( n < k )
             {
-                k = n;
+                k = static_cast<std::uint32_t>( n );
             }
 
             std::memcpy( buffer_ + m_, p, k );
@@ -358,7 +358,7 @@ public:
         if( n > 0 )
         {
             std::memcpy( buffer_, p, n );
-            m_ = n;
+            m_ = static_cast<std::uint32_t>( n );
         }
 
         BOOST_ASSERT( m_ == n_ % 4 );
