@@ -2,6 +2,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#ifdef _MSC_VER
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 #include <boost/hash2/endian.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>
