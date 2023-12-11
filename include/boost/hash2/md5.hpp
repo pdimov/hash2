@@ -227,8 +227,6 @@ public:
 
     md5_128( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         init();
 
         if( n != 0 )

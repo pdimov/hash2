@@ -246,8 +246,6 @@ public:
 
     spooky2_128( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             init( 0, 0 );

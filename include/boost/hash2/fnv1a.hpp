@@ -72,8 +72,6 @@ public:
 
     fnv1a( unsigned char const * p, std::size_t n ): st_( fnv1a_const<T>::basis )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n != 0 )
         {
             update( p, n );
