@@ -32,7 +32,7 @@ template<class H, class S, std::size_t N> std::string hash( char const (&s)[ N ]
 {
     H h( seed );
 
-    h.update( reinterpret_cast<unsigned char const*>( s ), N-1 );
+    h.update( s, N-1 );
 
     return to_string( h.result() );
 }

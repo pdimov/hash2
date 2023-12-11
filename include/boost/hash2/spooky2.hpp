@@ -151,7 +151,7 @@ private:
         s11 += detail::read64le( p + 88 ); s1  ^= s9;  s10 ^= s11; s11 = detail::rotl( s11, 46 ); s10 += s0;
     }
 
-    void update_( unsigned char const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::size_t k )
     {
         std::uint64_t h0  = v_[ 0];
         std::uint64_t h1  = v_[ 1];
@@ -166,7 +166,7 @@ private:
         std::uint64_t h10 = v_[10];
         std::uint64_t h11 = v_[11];
 
-        for( std::ptrdiff_t i = 0; i < k; ++i, p += 96 )
+        for( std::size_t i = 0; i < k; ++i, p += 96 )
         {
             mix( p, h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11 );
         }
@@ -244,7 +244,7 @@ public:
         init( seed1, seed2 );
     }
 
-    spooky2_128( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    spooky2_128( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -277,9 +277,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ % N ) );
 
@@ -313,7 +313,7 @@ public:
         BOOST_ASSERT( m_ == 0 );
 
         {
-            std::ptrdiff_t k = n / N;
+            std::size_t k = n / N;
 
             update_( p, k * 2 );
 

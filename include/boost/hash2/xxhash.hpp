@@ -48,14 +48,14 @@ private:
         return seed;
     }
 
-    void update_( unsigned char const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::size_t k )
     {
         std::uint32_t v1 = v1_;
         std::uint32_t v2 = v2_;
         std::uint32_t v3 = v3_;
         std::uint32_t v4 = v4_;
 
-        for( std::ptrdiff_t i = 0; i < k; ++i, p += 16 )
+        for( std::size_t i = 0; i < k; ++i, p += 16 )
         {
             v1 = round( v1, detail::read32le( p +  0 ) );
             v2 = round( v2, detail::read32le( p +  4 ) );
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    xxhash_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -127,9 +127,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
 
@@ -163,7 +163,7 @@ public:
         BOOST_ASSERT( m_ == 0 );
 
         {
-            std::ptrdiff_t k = n / 16;
+            std::size_t k = n / 16;
 
             update_( p, k );
 
@@ -274,14 +274,14 @@ private:
         return acc;
     }
 
-    void update_( unsigned char const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::size_t k )
     {
         std::uint64_t v1 = v1_;
         std::uint64_t v2 = v2_;
         std::uint64_t v3 = v3_;
         std::uint64_t v4 = v4_;
 
-        for( int i = 0; i < k; ++i, p += 32 )
+        for( std::size_t i = 0; i < k; ++i, p += 32 )
         {
             v1 = round( v1, detail::read64le( p +  0 ) );
             v2 = round( v2, detail::read64le( p +  8 ) );
@@ -313,10 +313,8 @@ public:
         init( seed );
     }
 
-    xxhash_64( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    xxhash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             init( 0 );
@@ -342,9 +340,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 31 ) );
 
@@ -378,7 +376,7 @@ public:
         BOOST_ASSERT( m_ == 0 );
 
         {
-            std::ptrdiff_t k = n / 32;
+            std::size_t k = n / 32;
 
             update_( p, k );
 

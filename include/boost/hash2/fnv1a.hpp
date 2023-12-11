@@ -70,7 +70,7 @@ public:
         }
     }
 
-    fnv1a( unsigned char const * p, std::ptrdiff_t n ): st_( fnv1a_const<T>::basis )
+    fnv1a( unsigned char const * p, std::size_t n ): st_( fnv1a_const<T>::basis )
     {
         BOOST_ASSERT( n >= 0 );
 
@@ -80,13 +80,13 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         T h = st_;
 
-        for( std::ptrdiff_t i = 0; i < n; ++i )
+        for( std::size_t i = 0; i < n; ++i )
         {
             h ^= static_cast<T>( p[i] );
             h *= fnv1a_const<T>::prime;
@@ -123,7 +123,7 @@ public:
     {
     }
 
-    fnv1a_32( unsigned char const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint32_t>( p, n )
+    fnv1a_32( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint32_t>( p, n )
     {
     }
 };
@@ -140,7 +140,7 @@ public:
     {
     }
 
-    fnv1a_64( unsigned char const * p, std::ptrdiff_t n ): detail::fnv1a<std::uint64_t>( p, n )
+    fnv1a_64( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint64_t>( p, n )
     {
     }
 };

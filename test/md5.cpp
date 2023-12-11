@@ -31,7 +31,7 @@ template<class H> std::string digest( char const * s )
 {
     H h;
 
-    h.update( reinterpret_cast<unsigned char const*>( s ), std::strlen( s ) );
+    h.update( s, std::strlen( s ) );
 
     return to_string( h.result() );
 }

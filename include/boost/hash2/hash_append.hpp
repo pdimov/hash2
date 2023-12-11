@@ -65,10 +65,7 @@ template<class H, class T>
         is_contiguously_hashable<T, endian::native>::value, void >::type
     hash_append_range_( H & h, T * first, T * last )
 {
-    unsigned char const * f2 = reinterpret_cast<unsigned char const*>( first );
-    unsigned char const * l2 = reinterpret_cast<unsigned char const*>( last );
-
-    h.update( f2, l2 - f2 );
+    h.update( first, (last - first) * sizeof(T) );
 }
 
 } // namespace detail

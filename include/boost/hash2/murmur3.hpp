@@ -50,11 +50,11 @@ private:
         h = h * 5 + 0xe6546b64;
     }
 
-    void update_( unsigned char const * p, std::ptrdiff_t m )
+    void update_( unsigned char const * p, std::size_t m )
     {
         std::uint32_t h = h_;
 
-        for( std::ptrdiff_t i = 0; i < m; ++i, p += 4 )
+        for( std::size_t i = 0; i < m; ++i, p += 4 )
         {
             std::uint32_t k = detail::read32le( p );
             mix( h, k );
@@ -80,10 +80,8 @@ public:
         }
     }
 
-    murmur3_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             h_ = 0;
@@ -107,9 +105,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
 
@@ -143,7 +141,7 @@ public:
         BOOST_ASSERT( m_ == 0 );
 
         {
-            std::ptrdiff_t k = n / 4;
+            std::size_t k = n / 4;
 
             update_( p, k );
 
@@ -232,11 +230,11 @@ private:
 
 private:
 
-    void update_( unsigned char const * p, std::ptrdiff_t k )
+    void update_( unsigned char const * p, std::size_t k )
     {
         std::uint64_t h1 = h1_, h2 = h2_;
 
-        for( std::ptrdiff_t i = 0; i < k; ++i, p += 16 )
+        for( std::size_t i = 0; i < k; ++i, p += 16 )
         {
             std::uint64_t k1 = detail::read64le( p + 0 );
             std::uint64_t k2 = detail::read64le( p + 8 );
@@ -281,10 +279,8 @@ public:
         h2_ = seed2;
     }
 
-    murmur3_128( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    murmur3_128( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             h1_ = h2_ = 0;
@@ -317,9 +313,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
 
@@ -353,7 +349,7 @@ public:
         BOOST_ASSERT( m_ == 0 );
 
         {
-            std::ptrdiff_t k = n / 16;
+            std::size_t k = n / 16;
 
             update_( p, k );
 

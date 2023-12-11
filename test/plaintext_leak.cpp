@@ -20,7 +20,7 @@ template<class H> void test()
     {
         H h;
 
-        h.update( reinterpret_cast<unsigned char const*>( s ), 4 );
+        h.update( s, 4 );
 
         h.result();
 
@@ -36,7 +36,7 @@ template<class H> void test()
         unsigned char buffer[ 1024 ] = {};
         h.update( buffer, 1024 );
 
-        h.update( reinterpret_cast<unsigned char const*>( s ), 4 );
+        h.update( s, 4 );
 
         h.result();
 

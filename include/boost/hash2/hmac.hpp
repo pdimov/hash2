@@ -34,7 +34,7 @@ private:
 
 private:
 
-    void init( unsigned char const * p, std::ptrdiff_t n )
+    void init( unsigned char const * p, std::size_t n )
     {
         int const m = block_size;
 
@@ -96,16 +96,14 @@ public:
         }
     }
 
-    hmac( unsigned char const * p, std::ptrdiff_t n )
+    hmac( unsigned char const * p, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
         init( p, n );
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
-        inner_.update( p, n );
+        inner_.update( pv, n );
     }
 
     result_type result()

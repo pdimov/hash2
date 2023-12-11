@@ -85,10 +85,8 @@ public:
         init( k0, k1 );
     }
 
-    siphash_64( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             init( 0, 0 );
@@ -119,9 +117,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 7 ) );
 
@@ -277,10 +275,8 @@ public:
         init( k0, k1 );
     }
 
-    siphash_32( unsigned char const * p, std::ptrdiff_t n ): m_( 0 ), n_( 0 )
+    siphash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        BOOST_ASSERT( n >= 0 );
-
         if( n == 0 )
         {
             init( 0, 0 );
@@ -311,9 +307,9 @@ public:
         }
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
-        BOOST_ASSERT( n >= 0 );
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
 
         BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
 

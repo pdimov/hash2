@@ -72,11 +72,13 @@ public:
     {
     }
 
-    void update( unsigned char const * p, std::ptrdiff_t n )
+    void update( void const * pv, std::size_t n )
     {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+
         std::uint32_t h = st_;
 
-        for( std::ptrdiff_t i = 0; i < n; ++i )
+        for( std::size_t i = 0; i < n; ++i )
         {
             h ^= static_cast<std::uint32_t>( p[i] );
             h *= 0x01000193ul;
