@@ -32,7 +32,7 @@ private:
     static const int N = 64;
 
     unsigned char buffer_[ N ];
-    int m_;
+    std::size_t m_; // == n_ % N
 
     std::uint64_t n_;
 
@@ -240,7 +240,7 @@ public:
     {
         unsigned char const* p = static_cast<unsigned char const*>( pv );
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & (N-1) ) );
+        BOOST_ASSERT( m_ == n_ % N );
 
         if( n == 0 ) return;
 
@@ -248,11 +248,11 @@ public:
 
         if( m_ > 0 )
         {
-            int k = N - m_;
+            std::size_t k = N - m_;
 
             if( n < k )
             {
-                k = static_cast<int>( n );
+                k = n;
             }
 
             std::memcpy( buffer_ + m_, p, k );
@@ -286,21 +286,21 @@ public:
         if( n > 0 )
         {
             std::memcpy( buffer_, p, n );
-            m_ = static_cast<int>( n );
+            m_ = n;
         }
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & (N-1) ) );
+        BOOST_ASSERT( m_ == n_ % N );
     }
 
     result_type result()
     {
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & (N-1) ) );
+        BOOST_ASSERT( m_ == n_ % N );
 
         unsigned char bits[ 8 ];
 
         detail::write64le( bits, n_ * 8 );
 
-        int k = m_ < 56? 56 - m_: 120 - m_;
+        std::size_t k = m_ < 56? 56 - m_: 120 - m_;
 
         unsigned char padding[ 64 ] = { 0x80 };
 

@@ -28,7 +28,7 @@ private:
     std::uint32_t h_;
 
     unsigned char buffer_[ 4 ];
-    int m_;
+    std::size_t m_; // == n_ % 4
 
     std::size_t n_;
 
@@ -109,7 +109,7 @@ public:
     {
         unsigned char const* p = static_cast<unsigned char const*>( pv );
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
+        BOOST_ASSERT( m_ == n_ % 4 );
 
         if( n == 0 ) return;
 
@@ -117,11 +117,11 @@ public:
 
         if( m_ > 0 )
         {
-            int k = 4 - m_;
+            std::size_t k = 4 - m_;
 
             if( n < k )
             {
-                k = static_cast<int>( n );
+                k = n;
             }
 
             std::memcpy( buffer_ + m_, p, k );
@@ -154,15 +154,15 @@ public:
         if( n > 0 )
         {
             std::memcpy( buffer_, p, n );
-            m_ = static_cast<int>( n );
+            m_ = n;
         }
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
+        BOOST_ASSERT( m_ == n_ % 4 );
     }
 
     std::uint32_t result()
     {
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 3 ) );
+        BOOST_ASSERT( m_ == n_ % 4 );
 
         // std::memset( buffer_ + m_, 0, 4 - m_ );
         // std::uint32_t k = detail::read32le( buffer_ );
@@ -219,7 +219,7 @@ private:
     std::uint64_t h1_, h2_;
 
     unsigned char buffer_[ 16 ];
-    int m_;
+    std::size_t m_; // == n_ % 16
 
     std::size_t n_;
 
@@ -317,7 +317,7 @@ public:
     {
         unsigned char const* p = static_cast<unsigned char const*>( pv );
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
+        BOOST_ASSERT( m_ == n_ % 16 );
 
         if( n == 0 ) return;
 
@@ -325,11 +325,11 @@ public:
 
         if( m_ > 0 )
         {
-            int k = 16 - m_;
+            std::size_t k = 16 - m_;
 
             if( n < k )
             {
-                k = static_cast<int>( n );
+                k = n;
             }
 
             std::memcpy( buffer_ + m_, p, k );
@@ -362,15 +362,15 @@ public:
         if( n > 0 )
         {
             std::memcpy( buffer_, p, n );
-            m_ = static_cast<int>( n );
+            m_ = n;
         }
 
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
+        BOOST_ASSERT( m_ == n_ % 16 );
     }
 
     result_type result()
     {
-        BOOST_ASSERT( m_ == static_cast<int>( n_ & 15 ) );
+        BOOST_ASSERT( m_ == n_ % 16 );
 
         std::memset( buffer_ + m_, 0, 16 - m_ );
 
