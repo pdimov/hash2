@@ -51,10 +51,32 @@ public:
 
         std::uint32_t h = st_;
 
+#if 0
+
         for( std::size_t i = 0; i < n; ++i )
         {
             h = h * 31 + static_cast<std::uint32_t>( p[i] );
         }
+
+#else
+
+        while( n >= 4 )
+        {
+            h = h * (31u * 31u * 31u * 31u) + p[0] * (31u * 31u * 31u) + p[1] * (31u * 31u) + p[2] * 31u + p[3];
+
+            p += 4;
+            n -= 4;
+        }
+
+        while( n > 0 )
+        {
+            h = h * 31u + *p;
+
+            ++p;
+            --n;
+        }
+
+#endif
 
         st_ = h;
     }
@@ -92,10 +114,32 @@ public:
 
         std::uint64_t h = st_;
 
+#if 0
+
         for( std::size_t i = 0; i < n; ++i )
         {
             h = h * 31 + static_cast<std::uint64_t>( p[i] );
         }
+
+#else
+
+        while( n >= 4 )
+        {
+            h = h * (31u * 31u * 31u * 31u) + p[0] * (31u * 31u * 31u) + p[1] * (31u * 31u) + p[2] * 31u + p[3];
+
+            p += 4;
+            n -= 4;
+        }
+
+        while( n > 0 )
+        {
+            h = h * 31u + *p;
+
+            ++p;
+            --n;
+        }
+
+#endif
 
         st_ = h;
     }
@@ -108,109 +152,45 @@ public:
     }
 };
 
-template<class H> class hasher1
-{
-private:
-
-    std::size_t seed_;
-
-public:
-
-    explicit hasher1( std::size_t seed ): seed_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( seed_ );
-
-        using boost::hash2::hash_append;
-        hash_append( h, v );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher2
+template<class T, class H> class hasher
 {
 private:
 
     H h_;
 
+private:
+
+    template<class = void> static void hash_append_impl( H& h, T const& v, std::false_type )
+    {
+        boost::hash2::hash_append( h, v );
+    }
+
+    template<class = void> static void hash_append_impl( H& h, T const& v, std::true_type )
+    {
+        boost::hash2::hash_append_range( h, v.data(), v.data() + v.size() );
+    }
+
 public:
 
-    explicit hasher2( std::size_t seed ): h_( seed )
+    hasher(): h_()
     {
     }
 
-    template<class T> std::size_t operator()( T const& v ) const
+    explicit hasher( std::uint64_t seed ): h_( seed )
+    {
+    }
+
+    hasher( unsigned char const* seed, std::size_t n ): h_( seed, n )
+    {
+    }
+
+    std::size_t operator()( T const& v ) const
     {
         H h( h_ );
 
-        using boost::hash2::hash_append;
-        hash_append( h, v );
+        hash_append_impl( h, v, boost::container_hash::is_contiguous_range<T>() );
 
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher3
-{
-private:
-
-    std::size_t seed_;
-
-public:
-
-    explicit hasher3( std::size_t seed ): seed_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( seed_ );
-
-        STATIC_ASSERT( boost::container_hash::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
-
-        typename T::value_type const * p = v.data();
-        typename T::size_type n = v.size();
-
-        h.update( p, n * sizeof(T) );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher4
-{
-private:
-
-    H h_;
-
-public:
-
-    explicit hasher4( std::size_t seed ): h_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( h_ );
-
-        STATIC_ASSERT( boost::container_hash::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
-
-        typename T::value_type const * p = v.data();
-        typename T::size_type n = v.size();
-
-        h.update( p, n * sizeof(T) );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
+        return boost::hash2::get_integral_result<std::size_t>( h.result() );
     }
 };
 
@@ -241,30 +221,19 @@ template<class V, class S> void test4( int N, V const& v, char const * hash, S s
 
     std::size_t n = s.bucket_count();
 
-#if defined( _MSC_VER )
-
-    std::printf( "%s: n=%Iu, q=%Iu, %lld + %lld ms\n", hash, n, q, ms1, ms2 );
-
-#else
-
     std::printf( "%s: n=%zu, q=%zu, %lld + %lld ms\n", hash, n, q, ms1, ms2 );
-
-#endif
 }
 
 template<class K, class H, class V> void test3( int N, V const& v, std::size_t seed )
 {
-    boost::unordered_flat_set<K, H> s( 0, H( seed ) );
+    using hasher = ::hasher<K, H>;
+    boost::unordered_flat_set<K, hasher> s( 0, hasher( seed ) );
     test4( N, v, boost::core::type_name<H>().c_str(), s );
 }
 
 template<class K, class H, class V> void test2( int N, V const& v )
 {
-    test3< K, hasher1<H> >( N, v, 0x9e3779b9 );
-    test3< K, hasher2<H> >( N, v, 0x9e3779b9 );
-    test3< K, hasher3<H> >( N, v, 0x9e3779b9 );
-    test3< K, hasher4<H> >( N, v, 0x9e3779b9 );
-    std::puts( "" );
+    test3< K, H >( N, v, 0x9e3779b9 );
 }
 
 int main()

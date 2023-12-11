@@ -76,6 +76,7 @@ public:
         }
 
 #endif
+
         st_ = h;
     }
 
@@ -150,109 +151,45 @@ public:
     }
 };
 
-template<class H> class hasher1
-{
-private:
-
-    std::size_t seed_;
-
-public:
-
-    explicit hasher1( std::size_t seed ): seed_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( seed_ );
-
-        using boost::hash2::hash_append;
-        hash_append( h, v );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher2
+template<class T, class H> class hasher
 {
 private:
 
     H h_;
 
+private:
+
+    template<class = void> static void hash_append_impl( H& h, T const& v, std::false_type )
+    {
+        boost::hash2::hash_append( h, v );
+    }
+
+    template<class = void> static void hash_append_impl( H& h, T const& v, std::true_type )
+    {
+        boost::hash2::hash_append_range( h, v.data(), v.data() + v.size() );
+    }
+
 public:
 
-    explicit hasher2( std::size_t seed ): h_( seed )
+    hasher(): h_()
     {
     }
 
-    template<class T> std::size_t operator()( T const& v ) const
+    explicit hasher( std::uint64_t seed ): h_( seed )
+    {
+    }
+
+    hasher( unsigned char const* seed, std::size_t n ): h_( seed, n )
+    {
+    }
+
+    std::size_t operator()( T const& v ) const
     {
         H h( h_ );
 
-        using boost::hash2::hash_append;
-        hash_append( h, v );
+        hash_append_impl( h, v, boost::container_hash::is_contiguous_range<T>() );
 
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher3
-{
-private:
-
-    std::size_t seed_;
-
-public:
-
-    explicit hasher3( std::size_t seed ): seed_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( seed_ );
-
-        STATIC_ASSERT( boost::container_hash::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
-
-        typename T::value_type const * p = v.data();
-        typename T::size_type n = v.size();
-
-        h.update( p, n * sizeof(T) );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
-    }
-};
-
-template<class H> class hasher4
-{
-private:
-
-    H h_;
-
-public:
-
-    explicit hasher4( std::size_t seed ): h_( seed )
-    {
-    }
-
-    template<class T> std::size_t operator()( T const& v ) const
-    {
-        H h( h_ );
-
-        STATIC_ASSERT( boost::container_hash::is_contiguous_range<T>::value );
-        STATIC_ASSERT( boost::hash2::is_contiguously_hashable<typename T::value_type, boost::hash2::endian::native>::value );
-
-        typename T::value_type const * p = v.data();
-        typename T::size_type n = v.size();
-
-        h.update( p, n * sizeof(T) );
-
-        using boost::hash2::get_integral_result;
-        return get_integral_result<std::size_t>( h.result() );
+        return boost::hash2::get_integral_result<std::size_t>( h.result() );
     }
 };
 
@@ -264,7 +201,7 @@ template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 
     std::size_t q = 0;
 
-    H const h( seed );
+    hasher<std::string, H> const h( seed );
 
     for( int i = 0; i < N; ++i )
     {
@@ -277,24 +214,12 @@ template<class H, class V> void test3( int N, V const& v, std::size_t seed )
 
     std::string hash = boost::core::type_name<H>();
 
-#if defined( _MSC_VER )
-
-    std::printf( "%s: q=%Iu, %lld ms\n", hash.c_str(), q, ms1 );
-
-#else
-
     std::printf( "%s: q=%zu, %lld ms\n", hash.c_str(), q, ms1 );
-
-#endif
 }
 
 template<class H, class V> void test2( int N, V const& v )
 {
-    test3< hasher1<H> >( N, v, 0x9e3779b9 );
-    test3< hasher2<H> >( N, v, 0x9e3779b9 );
-    test3< hasher3<H> >( N, v, 0x9e3779b9 );
-    test3< hasher4<H> >( N, v, 0x9e3779b9 );
-    std::puts( "" );
+    test3<H>( N, v, 0x9e3779b9 );
 }
 
 int main()
