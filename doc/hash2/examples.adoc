@@ -1,0 +1,20 @@
+////
+Copyright 2020 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#examples]
+# Usage Examples
+:idprefix: example_
+
+[#example_printing_enums_ct]
+## Printing Enumerators with a Compile Time Loop
+
+A simple example that just iterates over the enumerator
+descriptors using `mp11::mp_for_each` and prints them.
+
+[source]
+----
+include::../../example/printing_enums_ct.cpp[lines=5..-1]
+----

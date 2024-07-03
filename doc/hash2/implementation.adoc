@@ -1,0 +1,18 @@
+////
+Copyright 2020 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#implementation]
+# Implementation Features
+:idprefix: implementation_
+
+## Supported Compilers
+
+* g++ 4.4 or later
+* clang++ 3.3 or later
+* Visual Studio 2008 and above
+
+Tested on https://travis-ci.org/github/pdimov/hash2[Travis] and
+https://ci.appveyor.com/project/pdimov/hash2[Appveyor].

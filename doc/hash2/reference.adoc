@@ -1,0 +1,52 @@
+////
+Copyright 2020 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#reference]
+# Reference
+:idprefix: ref_
+
+## Hash Algorithms
+
+### <boost/hash2/fnv1a.hpp>
+
+### <boost/hash2/murmur3.hpp>
+
+### <boost/hash2/xxhash.hpp>
+
+### <boost/hash2/spooky2.hpp>
+
+### <boost/hash2/siphash.hpp>
+
+### <boost/hash2/hmac.hpp>
+
+### <boost/hash2/md5.hpp>
+
+### <boost/hash2/sha1.hpp>
+
+## Utilities and Traits
+
+### <boost/hash2/endian.hpp>
+
+### <boost/hash2/is_range.hpp>
+
+### <boost/hash2/is_contiguous_range.hpp>
+
+### <boost/hash2/is_unordered_range.hpp>
+
+### <boost/hash2/is_uniquely_represented.hpp>
+
+### <boost/hash2/is_contiguously_hashable.hpp>
+
+### <boost/hash2/is_tuple_like.hpp>
+
+### <boost/hash2/underlying_type.hpp>
+
+### <boost/hash2/get_integral_result.hpp>
+
+## hash_append
+
+### <boost/hash2/hash_append.hpp>
+
