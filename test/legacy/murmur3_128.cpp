@@ -4,7 +4,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <boost/hash2/murmur3.hpp>
+#include <boost/hash2/legacy/murmur3.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <cstdint>

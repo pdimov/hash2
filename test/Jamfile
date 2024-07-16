@@ -46,9 +46,6 @@ run fnv1a.cpp ;
 run siphash32.cpp ;
 run siphash64.cpp ;
 run xxhash.cpp ;
-run spooky2.cpp ;
-run murmur3_32.cpp ;
-run murmur3_128.cpp ;
 
 # cryptographic
 
@@ -56,6 +53,12 @@ run md5.cpp ;
 run hmac_md5.cpp ;
 run sha1.cpp ;
 run hmac_sha1.cpp ;
+
+# legacy
+
+run legacy/spooky2.cpp ;
+run legacy/murmur3_32.cpp ;
+run legacy/murmur3_128.cpp ;
 
 # general requirements
 

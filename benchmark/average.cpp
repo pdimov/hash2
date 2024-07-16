@@ -5,10 +5,8 @@
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/siphash.hpp>
 #include <boost/hash2/xxhash.hpp>
-#include <boost/hash2/spooky2.hpp>
 #include <boost/hash2/md5.hpp>
 #include <boost/hash2/sha1.hpp>
-#include <boost/hash2/murmur3.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/core/type_name.hpp>
@@ -57,11 +55,8 @@ template<class R> void test( int N )
 
     test_<R, boost::hash2::fnv1a_32>( N );
     test_<R, boost::hash2::fnv1a_64>( N );
-    test_<R, boost::hash2::murmur3_32>( N );
-    test_<R, boost::hash2::murmur3_128>( N );
     test_<R, boost::hash2::xxhash_32>( N );
     test_<R, boost::hash2::xxhash_64>( N );
-    test_<R, boost::hash2::spooky2_128>( N );
     test_<R, boost::hash2::siphash_32>( N );
     test_<R, boost::hash2::siphash_64>( N );
     test_<R, boost::hash2::md5_128>( N );
