@@ -8,9 +8,7 @@ by Howard Hinnant, Vinnie Falco and John Bytheway.
 It also contains implementations of several popular hashing algorithms:
 
 * [FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function)
-* [MurmurHash 3](https://github.com/aappleby/smhasher/wiki/MurmurHash3)
 * [xxHash](https://cyan4973.github.io/xxHash/)
-* [SpookyHash v2](http://burtleburtle.net/bob/hash/spooky.html)
 * [SipHash](https://131002.net/siphash/)
 * [MD5](https://tools.ietf.org/html/rfc1321)
 * [SHA-1](https://tools.ietf.org/html/rfc3174)

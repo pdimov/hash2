@@ -1,5 +1,5 @@
 ////
-Copyright 2020 Peter Dimov
+Copyright 2020, 2024 Peter Dimov
 Distributed under the Boost Software License, Version 1.0.
 https://www.boost.org/LICENSE_1_0.txt
 ////
@@ -12,11 +12,7 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ### <boost/hash2/fnv1a.hpp>
 
-### <boost/hash2/murmur3.hpp>
-
 ### <boost/hash2/xxhash.hpp>
-
-### <boost/hash2/spooky2.hpp>
 
 ### <boost/hash2/siphash.hpp>
 
@@ -30,19 +26,7 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ### <boost/hash2/endian.hpp>
 
-### <boost/hash2/is_range.hpp>
-
-### <boost/hash2/is_contiguous_range.hpp>
-
-### <boost/hash2/is_unordered_range.hpp>
-
-### <boost/hash2/is_uniquely_represented.hpp>
-
 ### <boost/hash2/is_contiguously_hashable.hpp>
-
-### <boost/hash2/is_tuple_like.hpp>
-
-### <boost/hash2/underlying_type.hpp>
 
 ### <boost/hash2/get_integral_result.hpp>
 

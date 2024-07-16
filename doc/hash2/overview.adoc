@@ -26,9 +26,7 @@ that weren't yet available at the time the type was defined.
 The following popular hashing algorithms are provided:
 
 * https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function[FNV-1a]
-* https://github.com/aappleby/smhasher/wiki/MurmurHash3[MurmurHash 3]
 * https://cyan4973.github.io/xxHash/[xxHash]
-* http://burtleburtle.net/bob/hash/spooky.html[SpookyHash v2]
 * https://131002.net/siphash/[SipHash]
 * https://tools.ietf.org/html/rfc1321[MD5]
 * https://tools.ietf.org/html/rfc3174[SHA-1]
