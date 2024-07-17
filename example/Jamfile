@@ -1,0 +1,6 @@
+# Copyright 2020, 2024 Peter Dimov
+# Distributed under the Boost Software License, Version 1.0.
+
+project : default-build release <link>static ;
+
+exe md5sum : md5sum.cpp ;
