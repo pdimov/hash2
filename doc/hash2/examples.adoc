@@ -1,5 +1,5 @@
 ////
-Copyright 2020 Peter Dimov
+Copyright 2020, 2024 Peter Dimov
 Distributed under the Boost Software License, Version 1.0.
 https://www.boost.org/LICENSE_1_0.txt
 ////
@@ -8,13 +8,22 @@ https://www.boost.org/LICENSE_1_0.txt
 # Usage Examples
 :idprefix: example_
 
-[#example_printing_enums_ct]
-## Printing Enumerators with a Compile Time Loop
+## md5sum
 
-A simple example that just iterates over the enumerator
-descriptors using `mp11::mp_for_each` and prints them.
+A command line utility that prints the MD5 digests
+of a list of files passed as arguments.
 
 [source]
 ----
-include::../../example/printing_enums_ct.cpp[lines=5..-1]
+include::../../example/md5sum.cpp[lines=5..-1]
+----
+
+Sample output:
+
+[listing]
+----
+7dc25b5fd9eb2217ed648dad23b311da *apache_builds.json
+8767d618bff99552b4946078d3a90c0c *canada.json
+b4391581160654374bee934a3b91255e *citm_catalog.json
+bf7d37451840af4e8873b65763315cbf *twitter.json
 ----
