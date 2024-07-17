@@ -3,10 +3,12 @@
         "key": "hash2",
         "name": "Hash2",
         "authors": [
-            "Peter Dimov"
+            "Peter Dimov",
+            "Christian Mazakas"
         ],
         "maintainers": [
-            "Peter Dimov <pdimov -at- gmail.com>"
+            "Peter Dimov <pdimov -at- gmail.com>",
+            "Christian Mazakas <christian.mazakas -at- gmail.com>"
         ],
         "description": "An extensible hashing framework.",
         "category": [
