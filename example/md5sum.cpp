@@ -7,6 +7,7 @@
 #include <boost/hash2/md5.hpp>
 #include <array>
 #include <string>
+#include <cerrno>
 #include <cstdio>
 
 template<std::size_t N> std::string result_to_string( std::array<unsigned char, N> const & v )
