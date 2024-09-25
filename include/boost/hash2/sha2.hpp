@@ -1,5 +1,5 @@
-#ifndef SHA2_HPP_INCLUDED
-#define SHA2_HPP_INCLUDED
+#ifndef BOOST_HASH2_SHA2_HPP_INCLUDED
+#define BOOST_HASH2_SHA2_HPP_INCLUDED
 
 // Copyright 2024 Peter Dimov.
 // Copyright 2024 Christian Mazakas.
@@ -223,7 +223,7 @@ public:
     }
 };
 
-} // namespace boost
 } // namespace hash2
+} // namespace boost
 
-#endif // #ifndef SHA2_HPP_INCLUDED
+#endif // #ifndef BOOST_HASH2_SHA2_HPP_INCLUDED
