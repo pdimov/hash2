@@ -52,6 +52,7 @@ run xxhash.cpp ;
 run md5.cpp ;
 run hmac_md5.cpp ;
 run sha1.cpp ;
+run sha2.cpp ;
 run hmac_sha1.cpp ;
 run ripemd.cpp ;
 
