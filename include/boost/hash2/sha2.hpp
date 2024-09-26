@@ -12,9 +12,7 @@
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/assert.hpp>
-#include <boost/cstdint.hpp>
 #include <array>
-#include <cstddef>
 #include <cstdint>
 #include <cstring>
 
@@ -23,10 +21,11 @@ namespace boost
 namespace hash2
 {
 
-class sha2_256
+namespace detail
 {
-private:
 
+struct sha2_256_base
+{
     std::uint32_t state_[ 8 ];
 
     static const int N = 64;
@@ -36,18 +35,8 @@ private:
 
     std::uint64_t n_;
 
-private:
-
-    void init()
+    sha2_256_base(): m_( 0 ), n_( 0 )
     {
-        state_[ 0 ] = 0x6a09e667;
-        state_[ 1 ] = 0xbb67ae85;
-        state_[ 2 ] = 0x3c6ef372;
-        state_[ 3 ] = 0xa54ff53a;
-        state_[ 4 ] = 0x510e527f;
-        state_[ 5 ] = 0x9b05688c;
-        state_[ 6 ] = 0x1f83d9ab;
-        state_[ 7 ] = 0x5be0cd19;
     }
 
     static std::uint32_t Sigma0( std::uint32_t x ) noexcept
@@ -140,14 +129,6 @@ private:
         state_[7] += h;
     }
 
-public:
-    using result_type = std::array<unsigned char, 32>;
-
-    sha2_256(): m_( 0 ), n_( 0 )
-    {
-        init();
-    }
-
     void update( void const * pv, std::size_t n )
     {
         unsigned char const* p = static_cast<unsigned char const*>( pv );
@@ -201,6 +182,35 @@ public:
 
         BOOST_ASSERT( m_ == n_ % N );
     }
+};
+
+} // namespace detail
+
+class sha2_256 : detail::sha2_256_base
+{
+private:
+
+    void init()
+    {
+        state_[ 0 ] = 0x6a09e667;
+        state_[ 1 ] = 0xbb67ae85;
+        state_[ 2 ] = 0x3c6ef372;
+        state_[ 3 ] = 0xa54ff53a;
+        state_[ 4 ] = 0x510e527f;
+        state_[ 5 ] = 0x9b05688c;
+        state_[ 6 ] = 0x1f83d9ab;
+        state_[ 7 ] = 0x5be0cd19;
+    }
+
+public:
+    using result_type = std::array<unsigned char, 32>;
+
+    sha2_256()
+    {
+        init();
+    }
+
+    using detail::sha2_256_base::update;
 
     result_type result()
     {
@@ -216,6 +226,53 @@ public:
 
         result_type digest;
         for( int i = 0; i < 8; ++i ) {
+            detail::write32be( &digest[ i * 4 ], state_[ i ] );
+        }
+
+        return digest;
+    }
+};
+
+class sha2_224 : detail::sha2_256_base
+{
+private:
+
+    void init()
+    {
+        state_[ 0 ] = 0xc1059ed8;
+        state_[ 1 ] = 0x367cd507;
+        state_[ 2 ] = 0x3070dd17;
+        state_[ 3 ] = 0xf70e5939;
+        state_[ 4 ] = 0xffc00b31;
+        state_[ 5 ] = 0x68581511;
+        state_[ 6 ] = 0x64f98fa7;
+        state_[ 7 ] = 0xbefa4fa4;
+    }
+
+public:
+    using result_type = std::array<unsigned char, 28>;
+
+    sha2_224()
+    {
+        init();
+    }
+
+    using detail::sha2_256_base::update;
+
+    result_type result()
+    {
+        unsigned char bits[ 8 ];
+        detail::write64be( bits, n_ * 8 );
+
+        std::size_t k = m_ < 56 ? 56 - m_ : 64 + 56 - m_;
+        unsigned char padding[ 64 ] = { 0x80 };
+
+        update( padding, k );
+        update( bits, 8 );
+        BOOST_ASSERT( m_ == 0 );
+
+        result_type digest;
+        for( int i = 0; i < 7; ++i ) {
             detail::write32be( &digest[ i * 4 ], state_[ i ] );
         }
 
