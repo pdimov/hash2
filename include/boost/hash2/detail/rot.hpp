@@ -29,6 +29,11 @@ BOOST_FORCEINLINE std::uint64_t rotl( std::uint64_t v, int k )
     return _rotl64( v, k );
 }
 
+BOOST_FORCEINLINE std::uint32_t rotr( std::uint32_t v, int k )
+{
+    return _rotr( v, k );
+}
+
 #else
 
 // k must not be 0
@@ -41,6 +46,12 @@ BOOST_FORCEINLINE std::uint32_t rotl( std::uint32_t v, int k )
 BOOST_FORCEINLINE std::uint64_t rotl( std::uint64_t v, int k )
 {
     return ( v << k ) + ( v >> ( 64 - k ) );
+}
+
+// k must not be 0
+BOOST_FORCEINLINE std::uint32_t rotr( std::uint32_t v, int k )
+{
+    return ( v >> k ) | ( v << ( 32 - k ) );
 }
 
 #endif
