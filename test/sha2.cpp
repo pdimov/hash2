@@ -24,6 +24,19 @@ template<std::size_t N> std::string to_string( std::array<unsigned char, N> cons
     return r;
 }
 
+std::string from_hex( char const* str )
+{
+    auto f = []( char c ) { return ( c >= 'a' ? c - 'a' + 10 : c - '0' ); };
+
+    std::string s;
+    while( *str != '\0' )
+    {
+        s.push_back( static_cast<char>( ( f( str[ 0 ] ) << 4 ) + f( str[ 1 ] ) ) );
+        str += 2;
+    }
+    return s;
+}
+
 template<class H> std::string digest( std::string const & s )
 {
     H h;
@@ -51,8 +64,7 @@ template<class H> std::string digest( std::vector<char> const & v )
     return to_string( h.result() );
 }
 
-static
-void sha_256()
+static void sha_256()
 {
     using boost::hash2::sha2_256;
 
@@ -109,8 +121,7 @@ void sha_256()
     }
 }
 
-static
-void sha_224()
+static void sha_224()
 {
     using boost::hash2::sha2_224;
 
@@ -155,8 +166,7 @@ void sha_224()
     }
 }
 
-static
-void sha_512()
+static void sha_512()
 {
     using boost::hash2::sha2_512;
 
@@ -214,7 +224,6 @@ void sha_512()
         std::vector<char> buf(1000000, 0x00);
         BOOST_TEST_EQ( digest<sha2_512>( buf ), std::string( "ce044bc9fd43269d5bbc946cbebc3bb711341115cc4abdf2edbc3ff2c57ad4b15deb699bda257fea5aef9c6e55fcf4cf9dc25a8c3ce25f2efe90908379bff7ed" ) );
     }
-
 }
 
 static void sha_384()
@@ -222,7 +231,7 @@ static void sha_384()
     using boost::hash2::sha2_384;
 
     // https://en.wikipedia.org/wiki/SHA-2#Test_vectors
-    BOOST_TEST_EQ( digest<sha2_384>( "" ), std::string("38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b"));
+    BOOST_TEST_EQ( digest<sha2_384>( "" ), std::string( "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b" ));
 
     // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA384.pdf
     BOOST_TEST_EQ( digest<sha2_384>( "abc" ), std::string( "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7" ) );
@@ -272,11 +281,33 @@ static void sha_384()
     }
 }
 
+static void sha_512_224()
+{
+    using boost::hash2::sha2_512_224;
+
+    // https://en.wikipedia.org/wiki/SHA-2#Test_vectors
+    BOOST_TEST_EQ( digest<sha2_512_224>( "" ), std::string( "6ed0dd02806fa89e25de060c19d3ac86cabb87d6a0ddd05c333b84f4" ));
+
+    // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA512_224.pdf
+    BOOST_TEST_EQ( digest<sha2_512_224>( "abc" ), std::string( "4634270f707b6a54daae7530460842e20e37ed265ceee9a43e8924aa" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu" ), std::string( "23fec5bb94d60b23308192640b0c453335d664734fe40e7268674af9" ) );
+
+    // selected samples from the download available here:
+    // https://csrc.nist.gov/Projects/Cryptographic-Algorithm-Validation-Program/Secure-Hashing
+    BOOST_TEST_EQ( digest<sha2_512_224>( "\xcf" ), std::string( "4199239e87d47b6feda016802bf367fb6e8b5655eff6225cb2668f4a" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( from_hex( "3c7e038401fa74c6c06e41" ) ), std::string( "a74af68819afe81bcdaceba64201c0d41f843e4b08e4002a375be761" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( from_hex( "cd5fee5fde5e9aa2884b4f4882cfa7d5571f8fd572c5f9bf77a3d21fda35" ) ), std::string( "72b43417b071f4811833027731b0ca28549c0357530fe258ca00533e" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( from_hex( "40bd7d47b636c2a749a247fdda75807c238b" ) ), std::string( "087ed68f1db90ffb2fb4ff7dc4b17fe08100b64383850378ef543339" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( from_hex( "f15284a11c61e129ea0606bd6531f2f1213776e01e253d1def530bed1c3c42b3c68caa" ) ), std::string( "fa425bc732d6033566c073560b2c5fe322aa4fa22aaa3ec51154ffd8" ) );
+    BOOST_TEST_EQ( digest<sha2_512_224>( from_hex( "13e6b1b4f021d610c81c97f0f952daba2766034d815b5dda4603bcf788ba60ee31541d5b4353b9f6645d96ad99ee90f6524b2963a7b7e476e1e8eeb83cbc0305eb29902a5d72" ) ), std::string( "09900c5ae3074fe73e6c4eef51f785e57947bafbe1d8dea38868e3d1" ) );
+}
+
 int main()
 {
     sha_256();
     sha_224();
     sha_512();
     sha_384();
+    sha_512_224();
     return boost::report_errors();
 }

@@ -72,6 +72,15 @@ BOOST_FORCEINLINE void write64be( unsigned char * p, std::uint64_t v )
     p[7] = static_cast<unsigned char>( v & 0xFF );
 }
 
+// used for sha-512/224 as we have 8 64-bit words and 28 bytes of output
+BOOST_FORCEINLINE void write64be_half( unsigned char * p, std::uint64_t v )
+{
+    p[0] = static_cast<unsigned char>( ( v >> 56 ) & 0xFF );
+    p[1] = static_cast<unsigned char>( ( v >> 48 ) & 0xFF );
+    p[2] = static_cast<unsigned char>( ( v >> 40 ) & 0xFF );
+    p[3] = static_cast<unsigned char>( ( v >> 32 ) & 0xFF );
+}
+
 } // namespace detail
 } // namespace hash2
 } // namespace boost
