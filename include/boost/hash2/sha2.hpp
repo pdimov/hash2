@@ -536,6 +536,54 @@ public:
     }
 };
 
+class sha2_512_256 : detail::sha2_512_base
+{
+private:
+
+    void init()
+    {
+        state_[ 0 ] = 0x22312194fc2bf72c;
+        state_[ 1 ] = 0x9f555fa3c84c64c2;
+        state_[ 2 ] = 0x2393b86b6f53b151;
+        state_[ 3 ] = 0x963877195940eabd;
+        state_[ 4 ] = 0x96283ee2a88effe3;
+        state_[ 5 ] = 0xbe5e1e2553863992;
+        state_[ 6 ] = 0x2b0199fc2c85b8aa;
+        state_[ 7 ] = 0x0eb72ddc81c52ca2;
+    }
+
+public:
+
+    using result_type = std::array<unsigned char, 32>;
+    using detail::sha2_512_base::update;
+
+    sha2_512_256()
+    {
+        init();
+    }
+
+    result_type result()
+    {
+        unsigned char bits[ 16 ] = { 0 };
+        detail::write64be( bits + 8, n_ * 8 );
+
+        std::size_t k = m_ < 112 ? 112 - m_ : 128 + 112 - m_;
+        unsigned char padding[ 128 ] = { 0x80 };
+
+        update( padding, k );
+        update( bits, 16 );
+        BOOST_ASSERT( m_ == 0 );
+
+        result_type digest;
+        for( int i = 0; i < 4; ++i )
+        {
+            detail::write64be( &digest[ i * 8 ], state_[ i ] );
+        }
+
+        return digest;
+    }
+};
+
 } // namespace hash2
 } // namespace boost
 
