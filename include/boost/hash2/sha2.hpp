@@ -530,7 +530,7 @@ public:
         {
             detail::write64be( &digest[ i * 8 ], state_[ i ] );
         }
-        detail::write64be_half( &digest[ 3 * 8 ], state_[ 3 ] );
+        detail::write32be( &digest[ 3 * 8 ], state_[ 3 ] >> 32 );
 
         return digest;
     }
