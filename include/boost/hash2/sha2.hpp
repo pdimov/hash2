@@ -8,6 +8,7 @@
 //
 // SHA2 message digest algorithm, https://csrc.nist.gov/pubs/fips/180-4/upd1/final, https://www.rfc-editor.org/rfc/rfc6234
 
+#include <boost/hash2/hmac.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/hash2/detail/write.hpp>
@@ -314,6 +315,9 @@ private:
 
 public:
     using result_type = std::array<unsigned char, 32>;
+    using size_type = std::uint64_t;
+
+    static const int block_size = 64;
 
     sha2_256()
     {
@@ -583,6 +587,26 @@ public:
         return digest;
     }
 };
+
+// hmac wrappers
+
+class hmac_sha2_256: public hmac<sha2_256>
+{
+public:
+
+    hmac_sha2_256()
+    {
+    }
+
+    explicit hmac_sha2_256( std::uint64_t seed ): hmac<sha2_256>( seed )
+    {
+    }
+
+    hmac_sha2_256( unsigned char const * p, std::size_t n ): hmac<sha2_256>( p, n )
+    {
+    }
+};
+
 
 } // namespace hash2
 } // namespace boost
