@@ -417,7 +417,10 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 64>;
+    using size_type = std::size_t;
     using detail::sha2_512_base::update;
+
+    static int const block_size = 128;
 
     sha2_512()
     {
@@ -626,6 +629,24 @@ public:
     {
     }
 };
+
+class hmac_sha2_512: public hmac<sha2_512>
+{
+public:
+
+    hmac_sha2_512()
+    {
+    }
+
+    explicit hmac_sha2_512( std::uint64_t seed ): hmac<sha2_512>( seed )
+    {
+    }
+
+    hmac_sha2_512( unsigned char const * p, std::size_t n ): hmac<sha2_512>( p, n )
+    {
+    }
+};
+
 
 } // namespace hash2
 } // namespace boost
