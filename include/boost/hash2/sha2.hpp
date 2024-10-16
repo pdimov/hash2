@@ -520,6 +520,10 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 28>;
+    using size_type = std::size_t;
+
+    static int const block_size = 128;
+
     using detail::sha2_512_base::update;
 
     sha2_512_224()
@@ -600,7 +604,7 @@ public:
 
 // hmac wrappers
 
-class hmac_sha2_256: public hmac<sha2_256>
+class hmac_sha2_256 : public hmac<sha2_256>
 {
 public:
 
@@ -617,7 +621,7 @@ public:
     }
 };
 
-class hmac_sha2_224: public hmac<sha2_224>
+class hmac_sha2_224 : public hmac<sha2_224>
 {
 public:
 
@@ -634,7 +638,7 @@ public:
     }
 };
 
-class hmac_sha2_512: public hmac<sha2_512>
+class hmac_sha2_512 : public hmac<sha2_512>
 {
 public:
 
@@ -651,7 +655,7 @@ public:
     }
 };
 
-class hmac_sha2_384: public hmac<sha2_384>
+class hmac_sha2_384 : public hmac<sha2_384>
 {
 public:
 
@@ -668,6 +672,22 @@ public:
     }
 };
 
+class hmac_sha2_512_224 : public hmac<sha2_512_224>
+{
+public:
+
+    hmac_sha2_512_224()
+    {
+    }
+
+    explicit hmac_sha2_512_224( std::uint64_t seed ): hmac<sha2_512_224>( seed )
+    {
+    }
+
+    hmac_sha2_512_224( unsigned char const * p, std::size_t n ): hmac<sha2_512_224>( p, n )
+    {
+    }
+};
 
 } // namespace hash2
 } // namespace boost
