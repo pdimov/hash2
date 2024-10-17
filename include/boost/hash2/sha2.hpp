@@ -324,6 +324,31 @@ public:
         init();
     }
 
+    explicit sha2_256( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_256( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
     using detail::sha2_256_base::update;
 
     result_type result()
@@ -374,6 +399,32 @@ public:
     {
         init();
     }
+
+    explicit sha2_224( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_224( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
 
     using detail::sha2_256_base::update;
 
@@ -427,6 +478,32 @@ public:
         init();
     }
 
+    explicit sha2_512( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_512( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
+
     result_type result()
     {
         unsigned char bits[ 16 ] = { 0 };
@@ -478,6 +555,32 @@ public:
     {
         init();
     }
+
+    explicit sha2_384( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_384( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
 
     result_type result()
     {
@@ -531,6 +634,32 @@ public:
         init();
     }
 
+    explicit sha2_512_224( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_512_224( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
+
     result_type result()
     {
         unsigned char bits[ 16 ] = { 0 };
@@ -583,6 +712,32 @@ public:
     {
         init();
     }
+
+    explicit sha2_512_256( std::uint64_t seed )
+    {
+        init();
+
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    sha2_512_256( unsigned char const * p, std::size_t n )
+    {
+        init();
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
 
     result_type result()
     {

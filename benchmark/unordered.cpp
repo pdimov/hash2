@@ -9,6 +9,7 @@
 #include <boost/hash2/xxhash.hpp>
 #include <boost/hash2/md5.hpp>
 #include <boost/hash2/sha1.hpp>
+#include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
@@ -155,6 +156,12 @@ int main()
     test2<K, boost::hash2::siphash_64>( N, v );
     test2<K, boost::hash2::md5_128>( N, v );
     test2<K, boost::hash2::sha1_160>( N, v );
+    test2<K, boost::hash2::sha2_256>( N, v );
+    test2<K, boost::hash2::sha2_224>( N, v );
+    test2<K, boost::hash2::sha2_512>( N, v );
+    test2<K, boost::hash2::sha2_384>( N, v );
+    test2<K, boost::hash2::sha2_512_224>( N, v );
+    test2<K, boost::hash2::sha2_512_256>( N, v );
     test2<K, boost::hash2::ripemd_160>( N, v );
 
     std::puts( "" );

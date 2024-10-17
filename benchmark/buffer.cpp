@@ -7,6 +7,7 @@
 #include <boost/hash2/xxhash.hpp>
 #include <boost/hash2/md5.hpp>
 #include <boost/hash2/sha1.hpp>
+#include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
@@ -51,9 +52,21 @@ void test( int N, int M )
     test_<boost::hash2::siphash_64>( data, N, M );
     test_<boost::hash2::md5_128>( data, N, M );
     test_<boost::hash2::sha1_160>( data, N, M );
+    test_<boost::hash2::sha2_256>( data, N, M );
+    test_<boost::hash2::sha2_224>( data, N, M );
+    test_<boost::hash2::sha2_512>( data, N, M );
+    test_<boost::hash2::sha2_384>( data, N, M );
+    test_<boost::hash2::sha2_512_224>( data, N, M );
+    test_<boost::hash2::sha2_512_256>( data, N, M );
     test_<boost::hash2::ripemd_160>( data, N, M );
     test_<boost::hash2::hmac_md5_128>( data, N, M );
     test_<boost::hash2::hmac_sha1_160>( data, N, M );
+    test_<boost::hash2::hmac_sha2_256>( data, N, M );
+    test_<boost::hash2::hmac_sha2_224>( data, N, M );
+    test_<boost::hash2::hmac_sha2_512>( data, N, M );
+    test_<boost::hash2::hmac_sha2_384>( data, N, M );
+    test_<boost::hash2::hmac_sha2_512_224>( data, N, M );
+    test_<boost::hash2::hmac_sha2_512_256>( data, N, M );
 
     puts( "--" );
 }
