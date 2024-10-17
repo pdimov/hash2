@@ -59,14 +59,6 @@ void test( int N, int M )
     test_<boost::hash2::sha2_512_224>( data, N, M );
     test_<boost::hash2::sha2_512_256>( data, N, M );
     test_<boost::hash2::ripemd_160>( data, N, M );
-    test_<boost::hash2::hmac_md5_128>( data, N, M );
-    test_<boost::hash2::hmac_sha1_160>( data, N, M );
-    test_<boost::hash2::hmac_sha2_256>( data, N, M );
-    test_<boost::hash2::hmac_sha2_224>( data, N, M );
-    test_<boost::hash2::hmac_sha2_512>( data, N, M );
-    test_<boost::hash2::hmac_sha2_384>( data, N, M );
-    test_<boost::hash2::hmac_sha2_512_224>( data, N, M );
-    test_<boost::hash2::hmac_sha2_512_256>( data, N, M );
 
     puts( "--" );
 }

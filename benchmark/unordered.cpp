@@ -155,14 +155,6 @@ int main()
     test2<K, boost::hash2::siphash_32>( N, v );
     test2<K, boost::hash2::siphash_64>( N, v );
     test2<K, boost::hash2::md5_128>( N, v );
-    test2<K, boost::hash2::sha1_160>( N, v );
-    test2<K, boost::hash2::sha2_256>( N, v );
-    test2<K, boost::hash2::sha2_224>( N, v );
-    test2<K, boost::hash2::sha2_512>( N, v );
-    test2<K, boost::hash2::sha2_384>( N, v );
-    test2<K, boost::hash2::sha2_512_224>( N, v );
-    test2<K, boost::hash2::sha2_512_256>( N, v );
-    test2<K, boost::hash2::ripemd_160>( N, v );
 
     std::puts( "" );
 }

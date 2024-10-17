@@ -131,7 +131,6 @@ int main()
     test2<boost::hash2::xxhash_64>( N, v );
     test2<boost::hash2::siphash_32>( N, v );
     test2<boost::hash2::siphash_64>( N, v );
-    test2<boost::hash2::ripemd_160>( N, v );
 
     std::puts( "" );
 }
