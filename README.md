@@ -12,7 +12,8 @@ It also contains implementations of several popular hashing algorithms:
 * [SipHash](https://131002.net/siphash/)
 * [MD5](https://tools.ietf.org/html/rfc1321)
 * [SHA-1](https://tools.ietf.org/html/rfc3174)
-* [HMAC-MD5 and HMAC-SHA1](https://tools.ietf.org/html/rfc2104)
+* [SHA-2](https://tools.ietf.org/html/rfc6234)
+* [HMAC-MD5, HMAC-SHA1, HMAC-SHA2](https://tools.ietf.org/html/rfc2104)
 
 The hashing algorithms conform to the following concept:
 
@@ -53,7 +54,6 @@ None yet.
 ## Planned Additions
 
 * Documentation (obv.)
-* SHA2-256, 384, 512
 * Support for endian-independent hashing
 * A `std::hash`-compatible adaptor
 * A type-erased `hash_function`
