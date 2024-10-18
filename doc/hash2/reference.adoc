@@ -22,6 +22,8 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ### <boost/hash2/sha1.hpp>
 
+include::sha-2.adoc[]
+
 ## Utilities and Traits
 
 ### <boost/hash2/endian.hpp>
@@ -33,4 +35,3 @@ https://www.boost.org/LICENSE_1_0.txt
 ## hash_append
 
 ### <boost/hash2/hash_append.hpp>
-
