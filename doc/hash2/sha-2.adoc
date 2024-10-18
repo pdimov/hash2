@@ -1,0 +1,260 @@
+### <boost/hash2/sha2.hpp>
+
+==== Synopsis
+
+```cpp
+#include <boost/hash2/sha2.hpp>
+
+namespace boost
+{
+namespace hash2
+{
+
+class sha2_256
+{
+public:
+
+    using result_type = std::array<unsigned char, 32>;
+    using size_type = std::uint64_t;
+
+    static const int block_size = 64;
+
+    sha2_256();
+
+    explicit sha2_256( std::uint64_t seed );
+
+    sha2_256( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+class sha2_224
+{
+public:
+
+    using result_type = std::array<unsigned char, 28>;
+    using size_type = std::uint64_t;
+
+    static int const block_size = 64;
+
+    sha2_224();
+
+    explicit sha2_224( std::uint64_t seed );
+
+    sha2_224( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+class sha2_512
+{
+public:
+
+    using result_type = std::array<unsigned char, 64>;
+    using size_type = std::uint64_t;
+
+    using detail::sha2_512_base::update;
+
+    static int const block_size = 128;
+
+    sha2_512();
+
+    explicit sha2_512( std::uint64_t seed );
+
+    sha2_512( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+class sha2_384
+{
+public:
+
+    using result_type = std::array<unsigned char, 48>;
+    using size_type = std::uint64_t;
+
+    static int const block_size = 128;
+
+    sha2_384();
+
+    explicit sha2_384( std::uint64_t seed );
+
+    sha2_384( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+class sha2_512_224
+{
+public:
+
+    using result_type = std::array<unsigned char, 28>;
+    using size_type = std::uint64_t;
+
+    static int const block_size = 128;
+
+    sha2_512_224();
+
+    explicit sha2_512_224( std::uint64_t seed );
+
+    sha2_512_224( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+class sha2_512_256
+{
+public:
+
+    using result_type = std::array<unsigned char, 32>;
+    using size_type = std::uint64_t;
+
+    static int const block_size = 128;
+
+    sha2_512_256();
+
+    explicit sha2_512_256( std::uint64_t seed );
+
+    sha2_512_256( unsigned char const * p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+
+    result_type result();
+};
+
+// hmac wrappers
+
+class hmac_sha2_256 : public hmac<sha2_256>
+{
+public:
+
+    hmac_sha2_256();
+
+    explicit hmac_sha2_256( std::uint64_t seed );
+
+    hmac_sha2_256( unsigned char const * p, std::size_t n );
+};
+
+class hmac_sha2_224 : public hmac<sha2_224>
+{
+public:
+
+    hmac_sha2_224();
+
+    explicit hmac_sha2_224( std::uint64_t seed );
+
+    hmac_sha2_224( unsigned char const * p, std::size_t n );
+};
+
+class hmac_sha2_512 : public hmac<sha2_512>
+{
+public:
+
+    hmac_sha2_512();
+
+    explicit hmac_sha2_512( std::uint64_t seed );
+
+    hmac_sha2_512( unsigned char const * p, std::size_t n );
+};
+
+class hmac_sha2_384 : public hmac<sha2_384>
+{
+public:
+
+    hmac_sha2_384();
+
+    explicit hmac_sha2_384( std::uint64_t seed );
+
+    hmac_sha2_384( unsigned char const * p, std::size_t n );
+};
+
+class hmac_sha2_512_224 : public hmac<sha2_512_224>
+{
+public:
+
+    hmac_sha2_512_224();
+
+    explicit hmac_sha2_512_224( std::uint64_t seed );
+
+    hmac_sha2_512_224( unsigned char const * p, std::size_t n );
+};
+
+class hmac_sha2_512_256 : public hmac<sha2_512_256>
+{
+public:
+
+    hmac_sha2_512_256();
+
+    explicit hmac_sha2_512_256( std::uint64_t seed );
+
+    hmac_sha2_512_256( unsigned char const * p, std::size_t n );
+};
+
+} // namespace hash2
+} // namespace boost
+```
+
+Each sha-2 hash function has the same basic behavior, the only difference is the size of the resulting digest.
+
+==== Constructors
+
+===== Default Constructor
+
+[source,c++]
+----
+hmac_sha2_<X>();
+----
+
+Default constructs the hasher.
+
+===== Integer Seed Constructor
+
+[source,c++]
+----
+explicit hmac_sha2_<X>( std::uint64_t seed );
+----
+
+Constructs the hasher with the provided seed, which is used to update the internal state.
+
+===== Range Seed Constructor
+
+[source,c++]
+----
+hmac_sha2_<X>( unsigned char const * p, std::size_t n );
+----
+
+Constructs the hasher with the provided range of bytes, which are used to update the internal state of the hasher.
+
+==== Modifiers
+
+===== sha-2 update
+
+[source,c++]
+----
+void update( void const * pv, std::size_t n );
+----
+
+Copies `n` bytes from `pv` into the hasher, processing the data block-by-block as required. A complete block is not required.
+
+==== Digest
+
+===== result
+
+[source,c++]
+----
+result_type result();
+----
+
+Processes all the current input in the hasher, pads it appropriately and then creates the message digest.
+
+This function is not destructive and can be called multiple times.
