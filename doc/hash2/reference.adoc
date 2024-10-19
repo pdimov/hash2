@@ -22,6 +22,10 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ### <boost/hash2/sha1.hpp>
 
+### <boost/hash2/sha2.hpp>
+
+### <boost/hash2/ripemd.hpp>
+
 ## Utilities and Traits
 
 ### <boost/hash2/endian.hpp>
