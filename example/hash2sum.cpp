@@ -115,7 +115,7 @@ int main( int argc, char const* argv[] )
 
     mp_for_each< mp_iota<mp_size<hashes>> >([&](auto I){
 
-        if( hash == names[ I ] )
+        if( hash == names[I] )
         {
             using Hash = mp_at_c<hashes, I>;
 
@@ -132,5 +132,6 @@ int main( int argc, char const* argv[] )
     if( !found )
     {
         std::fprintf( stderr, "hash2sum: unknown hash name '%s'\n", hash.c_str() );
+        return 1;
     }
 }
