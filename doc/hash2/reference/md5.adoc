@@ -22,5 +22,89 @@ using hmac_md5_128 = hmac<md5_128>;
 } // namespace boost
 ```
 
+This header implements the https://tools.ietf.org/html/rfc1321[MD5 algorithm].
+
 ## md5_128
+
+```
+class md5_128
+{
+public:
+
+    using result_type = std::array<unsigned char, 16>;
+    using size_type = std::uint64_t;
+
+    static constexpr int block_size = 64;
+
+    md5_128();
+    explicit md5_128( std::uint64_t seed );
+    md5_128( unsigned char const* p, std::size_t n );
+
+    void update( void const * p, std::size_t n );
+
+    result_type result();
+};
+```
+
+### Constructors
+
+```
+md5_128();
+```
+
+Default constructor.
+
+Effects: ::
+  Initializes the internal state of the MD5 algorithm to its initial values.
+
+```
+explicit md5_128( std::uint64_t seed );
+```
+
+Constructor taking an integral seed value.
+
+Effects: ::
+  Initializes the state as if by default construction, then if `seed` is not zero, performs `update(p, 8); result();` where `p` points to a little-endian representation of the value of `seed`.
+
+Remarks: ::
+  By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
+
+```
+md5_128( unsigned char const* p, std::size_t n );
+```
+
+Constructor taking a byte sequence seed.
+
+Effects: ::
+  Initializes the state as if by default construction, then if `n` is not zero, performs `update(p, n); result()`.
+
+Remarks: ::
+  By convention, if `n` is zero, the effect of this constructor is the same as default construction.
+
+### update
+
+```
+void update( void const * p, std::size_t n );
+```
+
+Effects: ::
+  Updates the internal state of the MD5 algorithm from the byte sequence `[p, p+n)`.
+
+Remarks: ::
+  Consecutive calls to `update` are equivalent to a single call with the concatenated byte sequences of the individual calls.
+
+### result
+
+```
+result_type result();
+```
+
+Effects: ::
+  Pads the accumulated message and finalizes the MD5 digest.
+
+Returns: ::
+  The MD5 digest of the message formed from the byte sequences of the preceding calls to `update`.
+
+Remarks: ::
+  Repeated calls to `result()` return a pseudorandom sequence of `result_type` values, effectively extending the output.
 
