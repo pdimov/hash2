@@ -15,7 +15,14 @@ of a list of files passed as arguments.
 
 [source]
 ----
-include::../../example/md5sum.cpp[lines=5..-1]
+include::../../example/md5sum.cpp[lines=7..-1]
+----
+
+Sample command:
+
+[listing]
+----
+md5sum apache_builds.json canada.json citm_catalog.json twitter.json
 ----
 
 Sample output:
@@ -26,4 +33,34 @@ Sample output:
 8767d618bff99552b4946078d3a90c0c *canada.json
 b4391581160654374bee934a3b91255e *citm_catalog.json
 bf7d37451840af4e8873b65763315cbf *twitter.json
+----
+
+## hash2sum
+
+A command line utility that prints the digests
+of a list of files, using a specified hash algorithm.
+
+The hash algorithm is passed as the first command
+line argument.
+
+[source]
+----
+include::../../example/hash2sum.cpp[lines=7..-1]
+----
+
+Sample command:
+
+[listing]
+----
+hash2sum sha2_512_224 apache_builds.json canada.json citm_catalog.json twitter.json
+----
+
+Sample output:
+
+[listing]
+----
+a95d7fde785fe24f9507fd1709014567bbc595867f1abaad96f50dbc *apache_builds.json
+b07e42587d10ec323a25fd8fc3eef2213fb0997beb7950350f4e8a4b *canada.json
+4ceee5a83ad320fedb0dfddfb6f80af50b99677e87158e2d039aa168 *citm_catalog.json
+854ebe0da98cadd426ea0fa3218d60bb52cf6494e435d2f385a37d48 *twitter.json
 ----
