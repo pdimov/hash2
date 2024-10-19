@@ -1,0 +1,26 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_ripemd]
+# <boost/hash2/ripemd.hpp>
+:idprefix: ref_ripemd_
+
+```
+#include <boost/hash2/hmac.hpp>
+
+namespace boost {
+namespace hash2 {
+
+class ripemd_160;
+
+using hmac_ripemd_160 = hmac<ripemd_160>;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## ripemd_160
+

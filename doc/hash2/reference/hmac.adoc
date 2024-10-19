@@ -1,0 +1,22 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_hmac]
+# <boost/hash2/hmac.hpp>
+:idprefix: ref_hmac_
+
+```
+namespace boost {
+namespace hash2 {
+
+template<class H> class hmac;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## hmac
+

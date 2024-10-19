@@ -1,0 +1,25 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_fnv1a]
+# <boost/hash2/fnv1a.hpp>
+:idprefix: ref_fnv1a_
+
+```
+namespace boost {
+namespace hash2 {
+
+class fnv1a_32;
+class fnv1a_64;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## fnv1a_32
+
+## fnv1a_64
+

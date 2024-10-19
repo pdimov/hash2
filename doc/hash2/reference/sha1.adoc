@@ -1,0 +1,26 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_sha1]
+# <boost/hash2/sha1.hpp>
+:idprefix: ref_sha1_
+
+```
+#include <boost/hash2/hmac.hpp>
+
+namespace boost {
+namespace hash2 {
+
+class sha1_160;
+
+using hmac_sha1_160 = hmac<sha1_160>;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## sha1_160
+

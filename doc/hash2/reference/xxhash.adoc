@@ -1,0 +1,25 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_xxhash]
+# <boost/hash2/xxhash.hpp>
+:idprefix: ref_xxhash_
+
+```
+namespace boost {
+namespace hash2 {
+
+class xxhash_32;
+class xxhash_64;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## xxhash_32
+
+## xxhash_64
+

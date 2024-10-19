@@ -1,0 +1,46 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_sha2]
+# <boost/hash2/sha2.hpp>
+:idprefix: ref_sha2_
+
+```
+#include <boost/hash2/hmac.hpp>
+
+namespace boost {
+namespace hash2 {
+
+class sha2_256;
+class sha2_224;
+class sha2_512;
+class sha2_384;
+class sha2_512_256;
+class sha2_512_224;
+
+using hmac_sha2_256 = hmac<sha2_256>;
+using hmac_sha2_224 = hmac<sha2_224>;
+using hmac_sha2_512 = hmac<sha2_512>;
+using hmac_sha2_384 = hmac<sha2_384>;
+using hmac_sha2_512_256 = hmac<sha2_512_256>;
+using hmac_sha2_512_224 = hmac<sha2_512_224>;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## sha2_256
+
+## sha2_224
+
+## sha2_512
+
+## sha2_384
+
+## sha2_512_256
+
+## sha2_512_224
+

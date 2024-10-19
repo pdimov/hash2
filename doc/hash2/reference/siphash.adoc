@@ -1,0 +1,25 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_siphash]
+# <boost/hash2/siphash.hpp>
+:idprefix: ref_siphash_
+
+```
+namespace boost {
+namespace hash2 {
+
+class siphash_32;
+class siphash_64;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## siphash_32
+
+## siphash_64
+

@@ -10,21 +10,18 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ## Hash Algorithms
 
-### <boost/hash2/fnv1a.hpp>
+:leveloffset: +2
 
-### <boost/hash2/xxhash.hpp>
+include::reference/fnv1a.adoc[]
+include::reference/xxhash.adoc[]
+include::reference/siphash.adoc[]
+include::reference/hmac.adoc[]
+include::reference/md5.adoc[]
+include::reference/sha1.adoc[]
+include::reference/sha2.adoc[]
+include::reference/ripemd.adoc[]
 
-### <boost/hash2/siphash.hpp>
-
-### <boost/hash2/hmac.hpp>
-
-### <boost/hash2/md5.hpp>
-
-### <boost/hash2/sha1.hpp>
-
-### <boost/hash2/sha2.hpp>
-
-### <boost/hash2/ripemd.hpp>
+:leveloffset: -2
 
 ## Utilities and Traits
 
