@@ -64,8 +64,12 @@ Constructor taking an integral seed value.
 
 Effects: ::
   Initializes the state as if by default construction, and then
+  * if `seed` is zero, does nothing;
   * if `seed` is less than 2^32^, performs `update(p, 4)` where `p` points to a little-endian representation of the value of `seed`;
   * otherwise, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
+
+Remarks: ::
+  By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
 fnv1a_32( unsigned char const* p, std::size_t n );
@@ -75,6 +79,9 @@ Constructor taking a byte sequence seed.
 
 Effects: ::
   Initializes the state as if by default construction, and then, if `n` is not zero, performs `update(p, n)`.
+
+Remarks: ::
+  By convention, if `n` is zero, the effect of this constructor is the same as default construction.
 
 ### update
 
@@ -93,12 +100,100 @@ result_type result();
 
 Effects: ::
   Updates `state_` to `(state_ ^ 0xFF) * 0x01000193`.
+
 Returns: ::
   The value of `state_` before the update.
+
 Remarks: ::
   The state is updated to allow repeated calls to `result()` to return
-  a pseudorandom sequence of `std::uint32_t` numbers, effectively extending
+  a pseudorandom sequence of `result_type` values, effectively extending
   the output.
 
 ## fnv1a_64
+
+```
+class fnv1a_64
+{
+private:
+
+    std::uint64_t state_; // exposition only
+
+public:
+
+    using result_type = std::uint64_t;
+    using size_type = std::uint64_t;
+
+    fnv1a_64();
+    explicit fnv1a_64( std::uint64_t seed );
+    fnv1a_64( unsigned char const* p, std::size_t n );
+
+    void update( void const * p, std::size_t n );
+
+    result_type result();
+};
+```
+
+### Constructors
+
+```
+fnv1a_64();
+```
+
+Default constructor.
+
+Effects: ::
+  Initializes `state_` to `0xcbf29ce484222325`.
+
+```
+explicit fnv1a_64( std::uint64_t seed );
+```
+
+Constructor taking an integral seed value.
+
+Effects: ::
+  Initializes the state as if by default construction, and then
+  * if `seed` is zero, does nothing;
+  * if `seed` is less than 2^32^, performs `update(p, 4)` where `p` points to a little-endian representation of the value of `seed`;
+  * otherwise, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
+
+Remarks: ::
+  By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
+
+```
+fnv1a_64( unsigned char const* p, std::size_t n );
+```
+
+Constructor taking a byte sequence seed.
+
+Effects: ::
+  Initializes the state as if by default construction, and then, if `n` is not zero, performs `update(p, n)`.
+
+Remarks: ::
+  By convention, if `n` is zero, the effect of this constructor is the same as default construction.
+
+### update
+
+```
+void update( void const * p, std::size_t n );
+```
+
+Effects: ::
+  For each `unsigned char` value `ch` in the range `[p, p+n)` performs `state_ = (state_ ^ ch) * 0x100000001b3`.
+
+### result
+
+```
+result_type result();
+```
+
+Effects: ::
+  Updates `state_` to `(state_ ^ 0xFF) * 0x100000001b3`.
+
+Returns: ::
+  The value of `state_` before the update.
+
+Remarks: ::
+  The state is updated to allow repeated calls to `result()` to return
+  a pseudorandom sequence of `result_type` values, effectively extending
+  the output.
 
