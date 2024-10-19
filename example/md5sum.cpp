@@ -17,7 +17,6 @@ template<std::size_t N> std::string result_to_string( std::array<unsigned char, 
     for( std::size_t i = 0; i < N; ++i )
     {
         char buffer[ 8 ];
-
         std::snprintf( buffer, sizeof( buffer ), "%02x", static_cast<int>( v[ i ] ) );
 
         r += buffer;

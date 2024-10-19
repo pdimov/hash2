@@ -4,3 +4,4 @@
 project : default-build release <link>static ;
 
 exe md5sum : md5sum.cpp ;
+exe hash2sum : hash2sum.cpp ;

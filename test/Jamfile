@@ -1,4 +1,4 @@
-# Copyright 2017-2023 Peter Dimov
+# Copyright 2017-2024 Peter Dimov
 # Distributed under the Boost Software License, Version 1.0.
 
 import testing ;
@@ -51,10 +51,13 @@ run xxhash.cpp ;
 
 run md5.cpp ;
 run hmac_md5.cpp ;
+
 run sha1.cpp ;
-run sha2.cpp ;
 run hmac_sha1.cpp ;
+
+run sha2.cpp ;
 run hmac_sha2.cpp ;
+
 run ripemd.cpp ;
 
 # legacy
@@ -70,13 +73,14 @@ run plaintext_leak.cpp ;
 run multiple_result.cpp ;
 run integral_result.cpp ;
 
-# compile benchmarks
+# benchmarks
 
-compile ../benchmark/buffer.cpp ;
-compile ../benchmark/unordered.cpp ;
-compile ../benchmark/average.cpp ;
-compile ../benchmark/keys.cpp ;
+link ../benchmark/buffer.cpp ;
+link ../benchmark/unordered.cpp ;
+link ../benchmark/average.cpp ;
+link ../benchmark/keys.cpp ;
 
-# compile examples
+# examples
 
-compile ../example/md5sum.cpp ;
+link ../example/md5sum.cpp ;
+link ../example/hash2sum.cpp ;
