@@ -14,6 +14,7 @@ It also contains implementations of several popular hashing algorithms:
 * [SHA-1](https://tools.ietf.org/html/rfc3174)
 * [SHA-2](https://tools.ietf.org/html/rfc6234)
 * [HMAC-MD5, HMAC-SHA1, HMAC-SHA2](https://tools.ietf.org/html/rfc2104)
+* [RIPEMD-160 and HMAC-RIPEMD-160](https://homes.esat.kuleuven.be/%7Ebosselae/ripemd160.html)
 
 The hashing algorithms conform to the following concept:
 
