@@ -63,10 +63,7 @@ explicit fnv1a_32( std::uint64_t seed );
 Constructor taking an integral seed value.
 
 Effects: ::
-  Initializes the state as if by default construction, and then
-  * if `seed` is zero, does nothing;
-  * if `seed` is less than 2^32^, performs `update(p, 4)` where `p` points to a little-endian representation of the value of `seed`;
-  * otherwise, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
+  Initializes the state as if by default construction, then if `seed` is not zero, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
 
 Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
@@ -151,10 +148,7 @@ explicit fnv1a_64( std::uint64_t seed );
 Constructor taking an integral seed value.
 
 Effects: ::
-  Initializes the state as if by default construction, and then
-  * if `seed` is zero, does nothing;
-  * if `seed` is less than 2^32^, performs `update(p, 4)` where `p` points to a little-endian representation of the value of `seed`;
-  * otherwise, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
+  Initializes the state as if by default construction, then if `seed` is not zero, performs `update(p, 8)` where `p` points to a little-endian representation of the value of `seed`.
 
 Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
