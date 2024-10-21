@@ -53,43 +53,67 @@ template<class H> void test_default_constructible()
     BOOST_TEST( r1 == r2 );
 }
 
-template<class H> void test_byte_seed_constructible()
+template<class H> void test_byte_seed_constructible( bool is_hmac )
 {
-    unsigned char const seed[ 3 ] = { 0x01, 0x02, 0x03 };
-
     {
-        H h1;
-        H h2( nullptr, 0 );
+        unsigned char const seed[ 3 ] = { 0x01, 0x02, 0x03 };
 
-        BOOST_TEST( h1.result() == h2.result() );
+        {
+            H h1;
+            H h2( nullptr, 0 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            H h2( seed, 0 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            H h2( seed, 3 );
+
+            BOOST_TEST( h1.result() != h2.result() );
+        }
+
+        {
+            H h1( seed, 3 );
+            H h2( seed, 3 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1( seed, 2 );
+            H h2( seed, 3 );
+
+            BOOST_TEST( h1.result() != h2.result() );
+        }
     }
 
+    if( !is_hmac )
     {
-        H h1;
-        H h2( seed, 0 );
+        // RFC 2104 mandates null padding of short keys,
+        // so these tests are required to fail for hmac_xxx
 
-        BOOST_TEST( h1.result() == h2.result() );
-    }
+        unsigned char const seed[ 3 ] = { 0x00, 0x00, 0x00 };
 
-    {
-        H h1;
-        H h2( seed, 3 );
+        {
+            H h1;
+            H h2( seed, 3 );
 
-        BOOST_TEST( h1.result() != h2.result() );
-    }
+            BOOST_TEST( h1.result() != h2.result() );
+        }
 
-    {
-        H h1( seed, 3 );
-        H h2( seed, 3 );
+        {
+            H h1( seed, 2 );
+            H h2( seed, 3 );
 
-        BOOST_TEST( h1.result() == h2.result() );
-    }
-
-    {
-        H h1( seed, 2 );
-        H h2( seed, 3 );
-
-        BOOST_TEST( h1.result() != h2.result() );
+            BOOST_TEST( h1.result() != h2.result() );
+        }
     }
 }
 
@@ -329,12 +353,12 @@ template<class H> void test_assignable()
     }
 }
 
-template<class H> void test()
+template<class H> void test( bool is_hmac = false )
 {
     test_result_type<H>();
     test_size_type<H>();
     test_default_constructible<H>();
-    test_byte_seed_constructible<H>();
+    test_byte_seed_constructible<H>( is_hmac );
     test_integral_seed_constructible<H>();
     test_copy_constructible<H>();
     test_update<H>();
@@ -360,15 +384,15 @@ int main()
     test<boost::hash2::sha2_512_256>();
     test<boost::hash2::ripemd_160>();
 
-    test<boost::hash2::hmac_md5_128>();
-    test<boost::hash2::hmac_sha1_160>();
-    test<boost::hash2::hmac_sha2_256>();
-    test<boost::hash2::hmac_sha2_224>();
-    test<boost::hash2::hmac_sha2_512>();
-    test<boost::hash2::hmac_sha2_384>();
-    test<boost::hash2::hmac_sha2_512_224>();
-    test<boost::hash2::hmac_sha2_512_256>();
-    test<boost::hash2::hmac_ripemd_160>();
+    test<boost::hash2::hmac_md5_128>( true );
+    test<boost::hash2::hmac_sha1_160>( true );
+    test<boost::hash2::hmac_sha2_256>( true );
+    test<boost::hash2::hmac_sha2_224>( true );
+    test<boost::hash2::hmac_sha2_512>( true );
+    test<boost::hash2::hmac_sha2_384>( true );
+    test<boost::hash2::hmac_sha2_512_224>( true );
+    test<boost::hash2::hmac_sha2_512_256>( true );
+    test<boost::hash2::hmac_ripemd_160>( true );
 
     return boost::report_errors();
 }
