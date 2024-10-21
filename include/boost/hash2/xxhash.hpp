@@ -105,26 +105,10 @@ public:
 
     xxhash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        if( n == 0 )
-        {
-            init( 0 );
-        }
-        else if( n <= 4 )
-        {
-            unsigned char q[ 4 ] = {};
-            std::memcpy( q, p, n );
+        init( 0 );
 
-            std::uint32_t seed = detail::read32le( q );
-            init( seed );
-        }
-        else
+        if( n != 0 )
         {
-            std::uint32_t seed = detail::read32le( p );
-            init( seed );
-
-            p += 4;
-            n -= 4;
-
             update( p, n );
             result();
         }
@@ -330,26 +314,10 @@ public:
 
     xxhash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        if( n == 0 )
-        {
-            init( 0 );
-        }
-        else if( n <= 8 )
-        {
-            unsigned char q[ 8 ] = {};
-            std::memcpy( q, p, n );
+        init( 0 );
 
-            std::uint64_t seed = detail::read64le( q );
-            init( seed );
-        }
-        else
+        if( n != 0 )
         {
-            std::uint64_t seed = detail::read64le( p );
-            init( seed );
-
-            p += 8;
-            n -= 8;
-
             update( p, n );
             result();
         }
