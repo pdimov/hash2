@@ -23,6 +23,8 @@ include::reference/ripemd.adoc[]
 
 :leveloffset: -2
 
+include::sha-2.adoc[]
+
 ## Utilities and Traits
 
 ### <boost/hash2/endian.hpp>
@@ -34,4 +36,3 @@ include::reference/ripemd.adoc[]
 ## hash_append
 
 ### <boost/hash2/hash_append.hpp>
-
