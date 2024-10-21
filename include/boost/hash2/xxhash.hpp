@@ -82,7 +82,12 @@ public:
     typedef std::uint32_t result_type;
     typedef std::uint32_t size_type;
 
-    explicit xxhash_32( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    xxhash_32(): m_( 0 ), n_( 0 )
+    {
+        init( 0 );
+    }
+
+    explicit xxhash_32( std::uint64_t seed ): m_( 0 ), n_( 0 )
     {
         std::uint32_t s0 = static_cast<std::uint32_t>( seed );
         std::uint32_t s1 = static_cast<std::uint32_t>( seed >> 32 );
@@ -306,7 +311,12 @@ public:
     typedef std::uint64_t result_type;
     typedef std::uint64_t size_type;
 
-    explicit xxhash_64( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    xxhash_64(): m_( 0 ), n_( 0 )
+    {
+        init( 0 );
+    }
+
+    explicit xxhash_64( std::uint64_t seed ): m_( 0 ), n_( 0 )
     {
         init( seed );
     }
