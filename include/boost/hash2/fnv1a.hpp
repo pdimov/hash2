@@ -55,18 +55,9 @@ public:
     {
         if( seed )
         {
-            if( seed >> 32 )
-            {
-                unsigned char tmp[ 8 ];
-                detail::write64le( tmp, seed );
-                update( tmp, 8 );
-            }
-            else
-            {
-                unsigned char tmp[ 4 ];
-                detail::write32le( tmp, static_cast<std::uint32_t>( seed ) );
-                update( tmp, 4 );
-            }
+            unsigned char tmp[ 8 ];
+            detail::write64le( tmp, seed );
+            update( tmp, 8 );
         }
     }
 
