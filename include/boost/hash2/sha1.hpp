@@ -318,22 +318,7 @@ public:
     }
 };
 
-class hmac_sha1_160: public hmac<sha1_160>
-{
-public:
-
-    hmac_sha1_160()
-    {
-    }
-
-    explicit hmac_sha1_160( std::uint64_t seed ): hmac<sha1_160>( seed )
-    {
-    }
-
-    hmac_sha1_160( unsigned char const * p, std::size_t n ): hmac<sha1_160>( p, n )
-    {
-    }
-};
+using hmac_sha1_160 = hmac<sha1_160>;
 
 } // namespace hash2
 } // namespace boost

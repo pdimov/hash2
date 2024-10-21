@@ -764,108 +764,12 @@ public:
 
 // hmac wrappers
 
-class hmac_sha2_256 : public hmac<sha2_256>
-{
-public:
-
-    hmac_sha2_256()
-    {
-    }
-
-    explicit hmac_sha2_256( std::uint64_t seed ): hmac<sha2_256>( seed )
-    {
-    }
-
-    hmac_sha2_256( unsigned char const * p, std::size_t n ): hmac<sha2_256>( p, n )
-    {
-    }
-};
-
-class hmac_sha2_224 : public hmac<sha2_224>
-{
-public:
-
-    hmac_sha2_224()
-    {
-    }
-
-    explicit hmac_sha2_224( std::uint64_t seed ): hmac<sha2_224>( seed )
-    {
-    }
-
-    hmac_sha2_224( unsigned char const * p, std::size_t n ): hmac<sha2_224>( p, n )
-    {
-    }
-};
-
-class hmac_sha2_512 : public hmac<sha2_512>
-{
-public:
-
-    hmac_sha2_512()
-    {
-    }
-
-    explicit hmac_sha2_512( std::uint64_t seed ): hmac<sha2_512>( seed )
-    {
-    }
-
-    hmac_sha2_512( unsigned char const * p, std::size_t n ): hmac<sha2_512>( p, n )
-    {
-    }
-};
-
-class hmac_sha2_384 : public hmac<sha2_384>
-{
-public:
-
-    hmac_sha2_384()
-    {
-    }
-
-    explicit hmac_sha2_384( std::uint64_t seed ): hmac<sha2_384>( seed )
-    {
-    }
-
-    hmac_sha2_384( unsigned char const * p, std::size_t n ): hmac<sha2_384>( p, n )
-    {
-    }
-};
-
-class hmac_sha2_512_224 : public hmac<sha2_512_224>
-{
-public:
-
-    hmac_sha2_512_224()
-    {
-    }
-
-    explicit hmac_sha2_512_224( std::uint64_t seed ): hmac<sha2_512_224>( seed )
-    {
-    }
-
-    hmac_sha2_512_224( unsigned char const * p, std::size_t n ): hmac<sha2_512_224>( p, n )
-    {
-    }
-};
-
-class hmac_sha2_512_256 : public hmac<sha2_512_256>
-{
-public:
-
-    hmac_sha2_512_256()
-    {
-    }
-
-    explicit hmac_sha2_512_256( std::uint64_t seed ): hmac<sha2_512_256>( seed )
-    {
-    }
-
-    hmac_sha2_512_256( unsigned char const * p, std::size_t n ): hmac<sha2_512_256>( p, n )
-    {
-    }
-};
-
+using hmac_sha2_256 = hmac<sha2_256>;
+using hmac_sha2_224 = hmac<sha2_224>;
+using hmac_sha2_512 = hmac<sha2_512>;
+using hmac_sha2_384 = hmac<sha2_384>;
+using hmac_sha2_512_224 = hmac<sha2_512_224>;
+using hmac_sha2_512_256 = hmac<sha2_512_256>;
 
 } // namespace hash2
 } // namespace boost

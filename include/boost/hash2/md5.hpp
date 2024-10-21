@@ -321,22 +321,7 @@ public:
     }
 };
 
-class hmac_md5_128: public hmac<md5_128>
-{
-public:
-
-    hmac_md5_128()
-    {
-    }
-
-    explicit hmac_md5_128( std::uint64_t seed ): hmac<md5_128>( seed )
-    {
-    }
-
-    hmac_md5_128( unsigned char const * p, std::size_t n ): hmac<md5_128>( p, n )
-    {
-    }
-};
+using hmac_md5_128 = hmac<md5_128>;
 
 } // namespace hash2
 } // namespace boost
