@@ -45,6 +45,15 @@ template<class H> void test()
 
         BOOST_TEST_EQ( std::search( p, p + n, s, s + 4 ) - p, n );
     }
+
+    {
+        H h( reinterpret_cast<unsigned char const*>( s ), 4 );
+
+        unsigned char const * p = reinterpret_cast<unsigned char const*>( &h );
+        std::size_t n = sizeof( h );
+
+        BOOST_TEST_EQ( std::search( p, p + n, s, s + 4 ) - p, n );
+    }
 }
 
 int main()
