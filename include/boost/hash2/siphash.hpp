@@ -92,33 +92,22 @@ public:
 
     siphash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        if( n == 0 )
-        {
-            init( 0, 0 );
-        }
-        else if( n <= 16 )
-        {
-            unsigned char q[ 16 ] = { 0 };
-            std::memcpy( q, p, n );
-
-            std::uint64_t k0 = detail::read64le( q + 0 );
-            std::uint64_t k1 = detail::read64le( q + 8 );
-
-            init( k0, k1 );
-        }
-        else
+        if( n == 16 )
         {
             std::uint64_t k0 = detail::read64le( p + 0 );
             std::uint64_t k1 = detail::read64le( p + 8 );
 
             init( k0, k1 );
+        }
+        else
+        {
+            init( 0, 0 );
 
-            p += 16;
-            n -= 16;
-
-            update( p, n );
-
-            result();
+            if( n != 0 )
+            {
+                update( p, n );
+                result();
+            }
         }
     }
 
@@ -287,33 +276,22 @@ public:
 
     siphash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
     {
-        if( n == 0 )
-        {
-            init( 0, 0 );
-        }
-        else if( n <= 8 )
-        {
-            unsigned char q[ 8 ] = { 0 };
-            std::memcpy( q, p, n );
-
-            std::uint32_t k0 = detail::read32le( q + 0 );
-            std::uint32_t k1 = detail::read32le( q + 4 );
-
-            init( k0, k1 );
-        }
-        else
+        if( n == 8 )
         {
             std::uint32_t k0 = detail::read32le( p + 0 );
             std::uint32_t k1 = detail::read32le( p + 4 );
 
             init( k0, k1 );
+        }
+        else
+        {
+            init( 0, 0 );
 
-            p += 8;
-            n -= 8;
-
-            update( p, n );
-
-            result();
+            if( n != 0 )
+            {
+                update( p, n );
+                result();
+            }
         }
     }
 
