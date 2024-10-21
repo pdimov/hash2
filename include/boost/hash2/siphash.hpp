@@ -80,7 +80,12 @@ public:
     typedef std::uint64_t result_type;
     typedef std::uint64_t size_type;
 
-    explicit siphash_64( std::uint64_t k0 = 0, std::uint64_t k1 = 0 ): m_( 0 ), n_( 0 )
+    siphash_64(): m_( 0 ), n_( 0 )
+    {
+        init( 0, 0 );
+    }
+
+    explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 ): m_( 0 ), n_( 0 )
     {
         init( k0, k1 );
     }
@@ -262,7 +267,12 @@ public:
     typedef std::uint32_t result_type;
     typedef std::uint32_t size_type;
 
-    explicit siphash_32( std::uint64_t seed = 0 ): m_( 0 ), n_( 0 )
+    siphash_32(): m_( 0 ), n_( 0 )
+    {
+        init( 0, 0 );
+    }
+
+    explicit siphash_32( std::uint64_t seed ): m_( 0 ), n_( 0 )
     {
         std::uint32_t k0 = static_cast<std::uint32_t>( seed );
         std::uint32_t k1 = static_cast<std::uint32_t>( seed >> 32 );
