@@ -15,18 +15,76 @@
 
 template<class H> void test()
 {
-    H h;
+    {
+        H h;
 
-    typename H::result_type r1 = h.result();
+        typename H::result_type r1 = h.result();
 
-    typename H::result_type r2 = h.result();
-    BOOST_TEST( r1 != r2 );
+        typename H::result_type r2 = h.result();
+        BOOST_TEST( r1 != r2 );
 
-    typename H::result_type r3 = h.result();
-    BOOST_TEST( r2 != r3 );
+        typename H::result_type r3 = h.result();
+        BOOST_TEST( r2 != r3 );
 
-    typename H::result_type r4 = h.result();
-    BOOST_TEST( r3 != r4 );
+        typename H::result_type r4 = h.result();
+        BOOST_TEST( r3 != r4 );
+    }
+
+    {
+        H h1;
+        H h2( 1 );
+
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+    }
+
+    {
+        H h1( 1 );
+        H h2( 2 );
+
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+    }
+
+    {
+        unsigned char const seed[] = { 0x01, 0x02, 0x03 };
+
+        H h1;
+        H h2( seed, 3 );
+
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+    }
+
+    {
+        unsigned char const seed[] = { 0x01, 0x02, 0x03 };
+
+        H h1( seed, 2 );
+        H h2( seed, 3 );
+
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+    }
+
+    {
+        unsigned char const seq[] = { 0x01, 0x02, 0x03 };
+
+        H h1; h1.update( seq, 2 );
+        H h2; h2.update( seq, 3 );
+
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+        BOOST_TEST( h1.result() != h2.result() );
+    }
 }
 
 int main()
