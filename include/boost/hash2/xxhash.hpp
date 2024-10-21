@@ -230,6 +230,13 @@ public:
         // clear buffered plaintext
         std::memset( buffer_, 0, 16 );
 
+        // advance state
+        v1_ = round( v1_, h );
+        v2_ = round( v2_, h );
+        v3_ = round( v3_, h );
+        v4_ = round( v4_, h );
+
+        // apply final mix
         h ^= h >> 15;
         h *= P2;
         h ^= h >> 13;
@@ -464,6 +471,13 @@ public:
         // clear buffered plaintext
         std::memset( buffer_, 0, 32 );
 
+        // advance state
+        v1_ = round( v1_, h );
+        v2_ = round( v2_, h );
+        v3_ = round( v3_, h );
+        v4_ = round( v4_, h );
+
+        // apply final mix
         h ^= h >> 33;
         h *= P2;
         h ^= h >> 29;
