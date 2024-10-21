@@ -349,6 +349,7 @@ int main()
     test<boost::hash2::xxhash_64>();
     test<boost::hash2::siphash_32>();
     test<boost::hash2::siphash_64>();
+
     test<boost::hash2::md5_128>();
     test<boost::hash2::sha1_160>();
     test<boost::hash2::sha2_256>();
@@ -357,6 +358,8 @@ int main()
     test<boost::hash2::sha2_384>();
     test<boost::hash2::sha2_512_224>();
     test<boost::hash2::sha2_512_256>();
+    test<boost::hash2::ripemd_160>();
+
     test<boost::hash2::hmac_md5_128>();
     test<boost::hash2::hmac_sha1_160>();
     test<boost::hash2::hmac_sha2_256>();
@@ -365,7 +368,7 @@ int main()
     test<boost::hash2::hmac_sha2_384>();
     test<boost::hash2::hmac_sha2_512_224>();
     test<boost::hash2::hmac_sha2_512_256>();
-    test<boost::hash2::ripemd_160>();
+    test<boost::hash2::hmac_ripemd_160>();
 
     return boost::report_errors();
 }

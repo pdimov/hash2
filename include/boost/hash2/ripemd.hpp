@@ -8,6 +8,7 @@
 //
 // RIPEMD-160 message digest algorithm, https://www.esat.kuleuven.be/cosic/publications/article-317.pdf
 
+#include <boost/hash2/hmac.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
@@ -455,6 +456,8 @@ public:
         return digest;
     }
 };
+
+using hmac_ripemd_160 = hmac<ripemd_160>;
 
 } // namespace hash2
 } // namespace boost
