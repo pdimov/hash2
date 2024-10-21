@@ -50,7 +50,7 @@ are being tested on [Github Actions](https://github.com/pdimov/hash2/actions/) a
 
 ## Documentation
 
-Work in progress.
+[Work in progress](https://pdimov.github.io/hash2/).
 
 ## Planned Additions
 
