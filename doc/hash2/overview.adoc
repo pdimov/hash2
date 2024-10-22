@@ -27,7 +27,7 @@ The following popular hashing algorithms are provided:
 
 * https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function[FNV-1a]
 * https://cyan4973.github.io/xxHash/[xxHash]
-* https://131002.net/siphash/[SipHash]
+* https://en.wikipedia.org/wiki/SipHash[SipHash]
 * https://tools.ietf.org/html/rfc1321[MD5]
 * https://tools.ietf.org/html/rfc3174[SHA-1]
 * https://tools.ietf.org/html/rfc6234[SHA-2]
