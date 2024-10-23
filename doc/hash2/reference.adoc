@@ -34,3 +34,4 @@ include::reference/ripemd.adoc[]
 ## hash_append
 
 ### <boost/hash2/hash_append.hpp>
+
