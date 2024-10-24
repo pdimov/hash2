@@ -10,17 +10,19 @@
 #include <boost/array.hpp>
 #include <array>
 
-template<class H, class R> void test( R r )
+template<class Hash, class Flavor, class R> void test( R r )
 {
+    Flavor f;
+
     {
         unsigned char v[4] = { 1, 2, 3, 4 };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v[0] );
-        hash_append( h, v[1] );
-        hash_append( h, v[2] );
-        hash_append( h, v[3] );
+        hash_append( h, f, v[0] );
+        hash_append( h, f, v[1] );
+        hash_append( h, f, v[2] );
+        hash_append( h, f, v[3] );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -28,9 +30,9 @@ template<class H, class R> void test( R r )
     {
         unsigned char v[4] = { 1, 2, 3, 4 };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -38,9 +40,9 @@ template<class H, class R> void test( R r )
     {
         unsigned char v[2][2] = { { 1, 2 }, { 3, 4 } };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -48,9 +50,9 @@ template<class H, class R> void test( R r )
     {
         boost::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -58,9 +60,9 @@ template<class H, class R> void test( R r )
     {
         std::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -68,8 +70,10 @@ template<class H, class R> void test( R r )
 
 int main()
 {
-    test<boost::hash2::fnv1a_32>( 1463068797ul );
-    test<boost::hash2::fnv1a_64>( 13725386680924731485ull );
+    using namespace boost::hash2;
+
+    test<fnv1a_32, default_flavor>( 1463068797ul );
+    test<fnv1a_64, default_flavor>( 13725386680924731485ull );
 
     return boost::report_errors();
 }
