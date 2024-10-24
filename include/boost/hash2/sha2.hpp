@@ -30,7 +30,7 @@ struct sha2_base
 {
     Word state_[ 8 ];
 
-    static int const N = M;
+    static constexpr int N = M;
 
     unsigned char buffer_[ N ];
     std::size_t m_; // == n_ % N
@@ -317,7 +317,7 @@ public:
     using result_type = std::array<unsigned char, 32>;
     using size_type = std::uint64_t;
 
-    static const int block_size = 64;
+    static constexpr int block_size = 64;
 
     sha2_256()
     {
@@ -393,7 +393,7 @@ public:
     using result_type = std::array<unsigned char, 28>;
     using size_type = std::uint64_t;
 
-    static int const block_size = 64;
+    static constexpr int block_size = 64;
 
     sha2_224()
     {
@@ -472,7 +472,7 @@ public:
 
     using detail::sha2_512_base::update;
 
-    static int const block_size = 128;
+    static constexpr int block_size = 128;
 
     sha2_512()
     {
@@ -548,7 +548,7 @@ public:
     using result_type = std::array<unsigned char, 48>;
     using size_type = std::uint64_t;
 
-    static int const block_size = 128;
+    static constexpr int block_size = 128;
 
     using detail::sha2_512_base::update;
 
@@ -626,7 +626,7 @@ public:
     using result_type = std::array<unsigned char, 28>;
     using size_type = std::uint64_t;
 
-    static int const block_size = 128;
+    static constexpr int block_size = 128;
 
     using detail::sha2_512_base::update;
 
@@ -705,7 +705,7 @@ public:
     using result_type = std::array<unsigned char, 32>;
     using size_type = std::uint64_t;
 
-    static int const block_size = 128;
+    static constexpr int block_size = 128;
 
     using detail::sha2_512_base::update;
 

@@ -9,7 +9,7 @@ It also contains implementations of several popular hashing algorithms:
 
 * [FNV-1a](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function)
 * [xxHash](https://cyan4973.github.io/xxHash/)
-* [SipHash](https://131002.net/siphash/)
+* [SipHash](https://en.wikipedia.org/wiki/SipHash)
 * [MD5](https://tools.ietf.org/html/rfc1321)
 * [SHA-1](https://tools.ietf.org/html/rfc3174)
 * [SHA-2](https://tools.ietf.org/html/rfc6234)
@@ -50,7 +50,7 @@ are being tested on [Github Actions](https://github.com/pdimov/hash2/actions/) a
 
 ## Documentation
 
-Work in progress.
+[Work in progress](https://pdimov.github.io/hash2/).
 
 ## Planned Additions
 
