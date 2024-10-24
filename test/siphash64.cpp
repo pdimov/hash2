@@ -110,7 +110,7 @@ int main()
 
             boost::hash2::siphash_64 h( k, 16 );
 
-            hash_append_range( h, in, in + i );
+            hash_append_range( h, {}, in, in + i );
 
             BOOST_TEST_EQ( h.result(), vectors_sip64[ i ] );
         }
@@ -123,7 +123,7 @@ int main()
         {
             boost::hash2::siphash_64 h( k, 16 );
 
-            hash_append_range( h, in.begin(), in.end() );
+            hash_append_range( h, {}, in.begin(), in.end() );
 
             BOOST_TEST_EQ( h.result(), vectors_sip64[ i ] );
 
@@ -138,7 +138,7 @@ int main()
         {
             boost::hash2::siphash_64 h( k, 16 );
 
-            hash_append_range( h, in.begin(), in.end() );
+            hash_append_range( h, {}, in.begin(), in.end() );
 
             BOOST_TEST_EQ( h.result(), vectors_sip64[ i ] );
 
