@@ -503,8 +503,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ref_sha2_sha2_224">sha2_224</a></li>
 <li><a href="#ref_sha2_sha2_512">sha2_512</a></li>
 <li><a href="#ref_sha2_sha2_384">sha2_384</a></li>
-<li><a href="#ref_sha2_sha2_512_256">sha2_512_256</a></li>
 <li><a href="#ref_sha2_sha2_512_224">sha2_512_224</a></li>
+<li><a href="#ref_sha2_sha2_512_256">sha2_512_256</a></li>
 </ul>
 </li>
 <li><a href="#ref_ripemd">&lt;boost/hash2/ripemd.hpp&gt;</a>
@@ -566,7 +566,7 @@ that weren&#8217;t yet available at the time the type was defined.</p>
 <p><a href="https://cyan4973.github.io/xxHash/">xxHash</a></p>
 </li>
 <li>
-<p><a href="https://131002.net/siphash/">SipHash</a></p>
+<p><a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a></p>
 </li>
 <li>
 <p><a href="https://tools.ietf.org/html/rfc1321">MD5</a></p>
@@ -1565,29 +1565,338 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 } // namespace boost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This header implements the <a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">SHA-2</a> family of functions.</p>
+</div>
 <div class="sect4">
 <h5 id="ref_sha2_sha2_256">sha2_256</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>class sha2_256
+{
+    using result_type = std::array&lt;unsigned char, 32&gt;;
+    using size_type = std::uint64_t;
 
+    static constexpr int block_size = 64;
+
+    sha2_256();
+    explicit sha2_256( std::uint64_t seed );
+    sha2_256( unsigned char const * p, std::size_t n );
+
+    void update( void const * p, std::size_t n );
+
+    result_type result();
+};</code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>sha2_256();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the SHA-256 algorithm to its initial values.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>explicit sha2_256( std::uint64_t seed );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integral seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>seed</code> is not zero, performs <code>update(p, 8); result();</code> where <code>p</code> points to a little-endian representation of the value of <code>seed</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>sha2_256( unsigned char const * p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_update">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the SHA-256 algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_result">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>result_type result();</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Pads the accumulated message and finalizes the SHA-256 digest.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The SHA-256 digest of the message formed from the byte sequences of the preceding calls to <code>update</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Repeated calls to <code>result()</code> return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_sha2_sha2_224">sha2_224</h5>
-
+<div class="paragraph">
+<p>The SHA-224 algorithm is identical to the SHA-256 algorithm described above.</p>
+</div>
+<div class="paragraph">
+<p>The only differences are the internal state&#8217;s initial values and the size of the message digest, which is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 28&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, all other operations and constants are identical.</p>
+</div>
+<div class="paragraph">
+<p>The message digest is obtained by truncating the final results of the SHA-256 algorithm to its leftmost 224 bits.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_sha2_sha2_512">sha2_512</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>class sha2_512
+{
+    using result_type = std::array&lt;unsigned char, 64&gt;;
+    using size_type = std::uint64_t;
 
+    static constexpr int block_size = 128;
+
+    sha2_512();
+    explicit sha2_512( std::uint64_t seed );
+    sha2_512( unsigned char const * p, std::size_t n );
+
+    void update( void const * p, std::size_t n );
+
+    result_type result();
+};</code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_constructors_2">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>sha2_512();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the SHA-512 algorithm to its initial values.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>explicit sha2_512( std::uint64_t seed );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integral seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>seed</code> is not zero, performs <code>update(p, 8); result();</code> where <code>p</code> points to a little-endian representation of the value of <code>seed</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>sha2_512( unsigned char const * p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_update_2">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the SHA-512 algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_sha2_result_2">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>result_type result();</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Pads the accumulated message and finalizes the SHA-512 digest.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The SHA-512 digest of the message formed from the byte sequences of the preceding calls to <code>update</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Repeated calls to <code>result()</code> return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_sha2_sha2_384">sha2_384</h5>
-
+<div class="paragraph">
+<p>The SHA-384 algorithm is identical to the SHA-512 algorithm described above.</p>
 </div>
-<div class="sect4">
-<h5 id="ref_sha2_sha2_512_256">sha2_512_256</h5>
-
+<div class="paragraph">
+<p>The only differences are the internal state&#8217;s initial values and the size of the message digest, which is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 48&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, all other operations and constants are identical.</p>
+</div>
+<div class="paragraph">
+<p>The message digest is obtained by truncating the final results of the SHA-512 algorithm to its leftmost 384 bits.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_sha2_sha2_512_224">sha2_512_224</h5>
-
+<div class="paragraph">
+<p>The SHA-512/224 algorithm is identical to the SHA-512 algorithm described above.</p>
+</div>
+<div class="paragraph">
+<p>The only differences are the internal state&#8217;s initial values and the size of the message digest, which is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 28&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, all other operations and constants are identical.</p>
+</div>
+<div class="paragraph">
+<p>The message digest is obtained by truncating the final results of the SHA-512 algorithm to its leftmost 224 bits.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_sha2_sha2_512_256">sha2_512_256</h5>
+<div class="paragraph">
+<p>The SHA-512/256 algorithm is identical to the SHA-512 algorithm described above.</p>
+</div>
+<div class="paragraph">
+<p>The only differences are the internal state&#8217;s initial values and the size of the message digest, which is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 32&gt;;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, all other operations and constants are identical.</p>
+</div>
+<div class="paragraph">
+<p>The message digest is obtained by truncating the final results of the SHA-512 algorithm to its leftmost 256 bits.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
