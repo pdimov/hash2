@@ -25,6 +25,43 @@ template<std::size_t N> void reverse( unsigned char (&d)[ N ], void const* s )
     }
 }
 
+#if defined(__GNUC__) || defined(__clang__)
+
+inline void reverse( unsigned char (&d)[ 2 ], void const* s )
+{
+    std::uint16_t tmp;
+    std::memcpy( &tmp, s, 2 );
+    tmp = __builtin_bswap16( tmp );
+    std::memcpy( d, &tmp, 2 );
+}
+
+inline void reverse( unsigned char (&d)[ 4 ], void const* s )
+{
+    std::uint32_t tmp;
+    std::memcpy( &tmp, s, 4 );
+    tmp = __builtin_bswap32( tmp );
+    std::memcpy( d, &tmp, 4 );
+}
+
+inline void reverse( unsigned char (&d)[ 8 ], void const* s )
+{
+    std::uint64_t tmp;
+    std::memcpy( &tmp, s, 8 );
+    tmp = __builtin_bswap64( tmp );
+    std::memcpy( d, &tmp, 8 );
+}
+
+inline void reverse( unsigned char (&d)[ 16 ], void const* s )
+{
+    std::uint64_t tmp[ 2 ];
+    std::memcpy( tmp, s, 16 );
+
+    std::uint64_t tmp2[ 2 ] = { __builtin_bswap64( tmp[1] ), __builtin_bswap64( tmp[0] ) };
+    std::memcpy( d, tmp2, 16 );
+}
+
+#endif
+
 } // namespace detail
 } // namespace hash2
 } // namespace boost
