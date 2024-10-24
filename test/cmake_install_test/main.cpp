@@ -11,7 +11,7 @@ int main()
 
     char const str[ 6 ] = { 'f', 'o', 'o', 'b', 'a', 'r' };
 
-    boost::hash2::hash_append( hash, str );
+    boost::hash2::hash_append( hash, {}, str );
 
     return hash.result() == 0xbf9cf968ul? 0: 1;
 }
