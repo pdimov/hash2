@@ -10,51 +10,54 @@
 #include <map>
 #include <unordered_map>
 
-template<class H, class M, class R> void test( R r )
+template<class Hash, class Flavor, class Map, class R> void test( R r )
 {
     {
-        M m;
+        Map m;
 
         for( int i = 0; i < 64; ++i )
         {
-            m.insert( typename M::value_type( i, 3 * i + 1 ) );
+            m.insert( typename Map::value_type( i, 3 * i + 1 ) );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, m );
+        hash_append( h, f, m );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        M m;
+        Map m;
 
         for( int i = 0; i < 64; ++i )
         {
             int j = 63 - i;
-            m.insert( typename M::value_type( j, 3 * j + 1 ) );
+            m.insert( typename Map::value_type( j, 3 * j + 1 ) );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, m );
+        hash_append( h, f, m );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        M m;
+        Map m;
 
         for( int i = 0; i < 64; ++i )
         {
             int j = ( i * 17 ) % 64;
-            m.insert( typename M::value_type( j, 3 * j + 1 ) );
+            m.insert( typename Map::value_type( j, 3 * j + 1 ) );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, m );
+        hash_append( h, f, m );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -62,17 +65,19 @@ template<class H, class M, class R> void test( R r )
 
 int main()
 {
-    test< boost::hash2::fnv1a_32, std::map<int, int> >( 3152726101ul );
-    test< boost::hash2::fnv1a_64, std::map<int, int> >( 12051529320333828229ull );
+    using namespace boost::hash2;
 
-    test< boost::hash2::fnv1a_32, std::multimap<int, int> >( 3152726101ul );
-    test< boost::hash2::fnv1a_64, std::multimap<int, int> >( 12051529320333828229ull );
+    test< fnv1a_32, default_flavor, std::map<int, int> >( 3152726101ul );
+    test< fnv1a_64, default_flavor, std::map<int, int> >( 11386405661620022965ull );
 
-    test< boost::hash2::fnv1a_32, std::unordered_map<int, int> >( 2742410178ul );
-    test< boost::hash2::fnv1a_64, std::unordered_map<int, int> >( 2617313294186790738ull );
+    test< fnv1a_32, default_flavor, std::multimap<int, int> >( 3152726101ul );
+    test< fnv1a_64, default_flavor, std::multimap<int, int> >( 11386405661620022965ull );
 
-    test< boost::hash2::fnv1a_32, std::unordered_multimap<int, int> >( 2742410178ul );
-    test< boost::hash2::fnv1a_64, std::unordered_multimap<int, int> >( 2617313294186790738ull );
+    test< fnv1a_32, default_flavor, std::unordered_map<int, int> >( 2742410178ul );
+    test< fnv1a_64, default_flavor, std::unordered_map<int, int> >( 7026041901235387186ull );
+
+    test< fnv1a_32, default_flavor, std::unordered_multimap<int, int> >( 2742410178ul );
+    test< fnv1a_64, default_flavor, std::unordered_multimap<int, int> >( 7026041901235387186ull );
 
     return boost::report_errors();
 }
