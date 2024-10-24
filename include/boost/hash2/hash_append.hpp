@@ -142,6 +142,24 @@ template<class Hash, class Flavor, class T>
     hash2::hash_append_range( h, f, p, p + sizeof(T) );
 }
 
+// trivially equality comparable, but not contiguously hashable (because of endianness)
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if<
+        is_trivially_equality_comparable<T>::value && Flavor::byte_order != endian::native && !is_endian_independent<T>::value
+        , void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+{
+    constexpr auto N = sizeof(T);
+
+    unsigned char tmp[ N ];
+    std::memcpy( tmp, &v, N );
+
+    std::reverse( tmp, tmp + N );
+
+    hash2::hash_append_range( h, f, tmp, tmp + N );
+}
+
 // floating point
 
 template<class Hash, class Flavor, class T>
@@ -233,6 +251,18 @@ struct default_flavor
 {
     using size_type = std::uint32_t;
     static constexpr auto byte_order = endian::native;
+};
+
+struct little_endian_flavor
+{
+    using size_type = std::uint32_t;
+    static constexpr auto byte_order = endian::little;
+};
+
+struct big_endian_flavor
+{
+    using size_type = std::uint32_t;
+    static constexpr auto byte_order = endian::big;
 };
 
 // hash_append
