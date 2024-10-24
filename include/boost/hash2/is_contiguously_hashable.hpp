@@ -14,9 +14,6 @@ namespace boost
 namespace hash2
 {
 
-namespace detail
-{
-
 // is_trivially_equality_comparable
 
 template<class T> struct is_trivially_equality_comparable:
@@ -41,12 +38,10 @@ template<class T> struct is_endian_independent<T const>:
 {
 };
 
-} // namespace detail
-
 // is_contiguously_hashable
 
 template<class T, endian E> struct is_contiguously_hashable:
-    std::integral_constant<bool, detail::is_trivially_equality_comparable<T>::value && (E == endian::native || detail::is_endian_independent<T>::value)>
+    std::integral_constant<bool, is_trivially_equality_comparable<T>::value && (E == endian::native || is_endian_independent<T>::value)>
 {
 };
 
