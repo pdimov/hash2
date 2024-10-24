@@ -10,49 +10,52 @@
 #include <set>
 #include <unordered_set>
 
-template<class H, class S, class R> void test( R r )
+template<class Hash, class Flavor, class Set, class R> void test( R r )
 {
     {
-        S s;
+        Set s;
 
         for( int i = 0; i < 64; ++i )
         {
             s.insert( i );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, s );
+        hash_append( h, f, s );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        S s;
+        Set s;
 
         for( int i = 0; i < 64; ++i )
         {
             s.insert( 63 - i );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, s );
+        hash_append( h, f, s );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        S s;
+        Set s;
 
         for( int i = 0; i < 64; ++i )
         {
             s.insert( ( i * 17 ) % 64 );
         }
 
-        H h;
+        Hash h;
+        Flavor f;
 
-        hash_append( h, s );
+        hash_append( h, f, s );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -60,17 +63,19 @@ template<class H, class S, class R> void test( R r )
 
 int main()
 {
-    test< boost::hash2::fnv1a_32, std::set<int> >( 2078558933ul );
-    test< boost::hash2::fnv1a_64, std::set<int> >( 17046016161958689285ull );
+    using namespace boost::hash2;
 
-    test< boost::hash2::fnv1a_32, std::multiset<int> >( 2078558933ul );
-    test< boost::hash2::fnv1a_64, std::multiset<int> >( 17046016161958689285ull );
+    test< fnv1a_32, default_flavor, std::set<int> >( 2078558933ul );
+    test< fnv1a_64, default_flavor, std::set<int> >( 6271229243378528309ull );
 
-    test< boost::hash2::fnv1a_32, std::unordered_set<int> >( 2270492092ul );
-    test< boost::hash2::fnv1a_64, std::unordered_set<int> >( 3232503781718511241ull );
+    test< fnv1a_32, default_flavor, std::multiset<int> >( 2078558933ul );
+    test< fnv1a_64, default_flavor, std::multiset<int> >( 6271229243378528309ull );
 
-    test< boost::hash2::fnv1a_32, std::unordered_multiset<int> >( 2270492092ul );
-    test< boost::hash2::fnv1a_64, std::unordered_multiset<int> >( 3232503781718511241ull );
+    test< fnv1a_32, default_flavor, std::unordered_set<int> >( 2270492092ul );
+    test< fnv1a_64, default_flavor, std::unordered_set<int> >( 2830007867253608057ull );
+
+    test< fnv1a_32, default_flavor, std::unordered_multiset<int> >( 2270492092ul );
+    test< fnv1a_64, default_flavor, std::unordered_multiset<int> >( 2830007867253608057ull );
 
     return boost::report_errors();
 }
