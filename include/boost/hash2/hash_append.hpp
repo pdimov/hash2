@@ -36,6 +36,7 @@ template<class H, class T> void hash_append( H & h, T const & v );
 template<class H, class It> void hash_append_range( H & h, It first, It last );
 template<class H, class T> void hash_append_size( H & h, T const & v );
 template<class H, class It> void hash_append_sized_range( H & h, It first, It last );
+template<class H, class It> void hash_append_unordered_range( H & h, It first, It last );
 
 // hash_append_range
 
@@ -112,6 +113,27 @@ template<class H, class It> void hash_append_sized_range( H & h, It first, It la
     detail::hash_append_sized_range_( h, first, last, typename std::iterator_traits<It>::iterator_category() );
 }
 
+// hash_append_unordered_range
+
+template<class H, class It> void hash_append_unordered_range( H & h, It first, It last )
+{
+    typename std::iterator_traits<It>::difference_type m = 0;
+
+    std::uint64_t w = 0;
+
+    for( ; first != last; ++first, ++m )
+    {
+        H h2( h );
+
+        hash_append( h2, *first );
+
+        w += get_integral_result<std::uint64_t>( h2.result() );
+    }
+
+    hash_append( h, w );
+    hash_append_size( h, m );
+}
+
 // do_hash_append
 
 // contiguously hashable (this includes unsigned char const&)
@@ -181,35 +203,11 @@ template<class H, class T, std::size_t N> void do_hash_append( H & h, boost::arr
 
 // unordered containers (is_unordered_range implies is_range)
 
-namespace detail
-{
-
-template<class H, class It> void hash_append_unordered_range_( H & h, It first, It last )
-{
-    typename std::iterator_traits<It>::difference_type m = 0;
-
-    std::uint64_t w = 0;
-
-    for( ; first != last; ++first, ++m )
-    {
-        H h2( h );
-
-        hash_append( h2, *first );
-
-        w += get_integral_result<std::uint64_t>( h2.result() );
-    }
-
-    hash_append( h, w );
-    hash_append_size( h, m );
-}
-
-} // namespace detail
-
 template<class H, class T>
     typename std::enable_if< container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( H & h, T const & v )
 {
-    detail::hash_append_unordered_range_( h, v.begin(), v.end() );
+    hash_append_unordered_range( h, v.begin(), v.end() );
 }
 
 // tuple-likes
