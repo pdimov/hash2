@@ -11,6 +11,7 @@
 // Howard E. Hinnant, Vinnie Falco, John Bytheway
 // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3980.html
 
+#include <boost/hash2/hash_append_fwd.hpp>
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/container_hash/is_range.hpp>
@@ -29,14 +30,6 @@ template<class T, std::size_t N> class array;
 
 namespace hash2
 {
-
-// forward declarations
-
-template<class Hash, class T> void hash_append( Hash& h, T const& v );
-template<class Hash, class It> void hash_append_range( Hash& h, It first, It last );
-template<class Hash, class T> void hash_append_size( Hash& h, T const& v );
-template<class Hash, class It> void hash_append_sized_range( Hash& h, It first, It last );
-template<class Hash, class It> void hash_append_unordered_range( Hash& h, It first, It last );
 
 // hash_append_range
 
