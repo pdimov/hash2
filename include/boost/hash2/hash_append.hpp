@@ -32,6 +32,8 @@ template<class T, std::size_t N> class array;
 namespace hash2
 {
 
+struct default_flavor;
+
 // hash_append_range
 
 namespace detail
@@ -65,14 +67,14 @@ template<class Hash, class Flavor, class T>
 
 } // namespace detail
 
-template<class Hash, class Flavor, class It> void hash_append_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> void hash_append_range( Hash& h, Flavor const& f, It first, It last )
 {
     detail::hash_append_range_( h, f, first, last );
 }
 
 // hash_append_size
 
-template<class Hash, class Flavor, class T> void hash_append_size( Hash& h, Flavor const& f, T const& v )
+template<class Hash, class Flavor = default_flavor, class T> void hash_append_size( Hash& h, Flavor const& f, T const& v )
 {
     hash2::hash_append( h, f, static_cast<typename Flavor::size_type>( v ) );
 }
@@ -102,14 +104,14 @@ template<class Hash, class Flavor, class It> void hash_append_sized_range_( Hash
 
 } // namespace detail
 
-template<class Hash, class Flavor, class It> void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last )
 {
     detail::hash_append_sized_range_( h, f, first, last, typename std::iterator_traits<It>::iterator_category() );
 }
 
 // hash_append_unordered_range
 
-template<class Hash, class Flavor, class It> void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last )
 {
     typename std::iterator_traits<It>::difference_type m = 0;
 
