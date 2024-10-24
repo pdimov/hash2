@@ -12,12 +12,14 @@
 #include <array>
 #include <tuple>
 
-template<class H, class R> void test( R r )
+template<class Hash, class Flavor, class R> void test( R r )
 {
+    Flavor f;
+
     {
         unsigned char v[2] = { 1, 2 };
 
-        H h;
+        Hash h;
 
         h.update( v, 2 );
 
@@ -27,10 +29,10 @@ template<class H, class R> void test( R r )
     {
         unsigned char v[2] = { 1, 2 };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v[0] );
-        hash_append( h, v[1] );
+        hash_append( h, f, v[0] );
+        hash_append( h, f, v[1] );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -38,9 +40,9 @@ template<class H, class R> void test( R r )
     {
         unsigned char v[2] = { 1, 2 };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -48,9 +50,9 @@ template<class H, class R> void test( R r )
     {
         std::pair<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -58,9 +60,9 @@ template<class H, class R> void test( R r )
     {
         boost::array<unsigned char, 2> v = { { 1, 2 } };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -68,9 +70,9 @@ template<class H, class R> void test( R r )
     {
         std::array<unsigned char, 2> v = { { 1, 2 } };
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -78,9 +80,9 @@ template<class H, class R> void test( R r )
     {
         std::tuple<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
 
-        H h;
+        Hash h;
 
-        hash_append( h, v );
+        hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -88,8 +90,10 @@ template<class H, class R> void test( R r )
 
 int main()
 {
-    test<boost::hash2::fnv1a_32>( 3983810698ul );
-    test<boost::hash2::fnv1a_64>( 589729691727335466ull );
+    using namespace boost::hash2;
+
+    test<fnv1a_32, default_flavor>( 3983810698ul );
+    test<fnv1a_64, default_flavor>( 589729691727335466ull );
 
     return boost::report_errors();
 }
