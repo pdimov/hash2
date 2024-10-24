@@ -15,6 +15,7 @@
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/hash2/endian.hpp>
+#include <boost/hash2/detail/reverse.hpp>
 #include <boost/container_hash/is_range.hpp>
 #include <boost/container_hash/is_contiguous_range.hpp>
 #include <boost/container_hash/is_unordered_range.hpp>
@@ -153,9 +154,8 @@ template<class Hash, class Flavor, class T>
     constexpr auto N = sizeof(T);
 
     unsigned char tmp[ N ];
-    std::memcpy( tmp, &v, N );
 
-    std::reverse( tmp, tmp + N );
+    detail::reverse( tmp, &v );
 
     hash2::hash_append_range( h, f, tmp, tmp + N );
 }
