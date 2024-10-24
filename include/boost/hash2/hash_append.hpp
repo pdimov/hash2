@@ -40,7 +40,7 @@ template<class Hash, class It> void hash_append_range_( Hash& h, It first, It la
 {
     for( ; first != last; ++first )
     {
-        hash_append( h, *first );
+        hash2::hash_append( h, *first );
     }
 }
 
@@ -73,7 +73,7 @@ template<class Hash, class It> void hash_append_range( Hash& h, It first, It las
 
 template<class Hash, class T> void hash_append_size( Hash& h, T const& v )
 {
-    hash_append( h, static_cast<typename Hash::size_type>( v ) );
+    hash2::hash_append( h, static_cast<typename Hash::size_type>( v ) );
 }
 
 // hash_append_sized_range
@@ -87,16 +87,16 @@ template<class Hash, class It> void hash_append_sized_range_( Hash& h, It first,
 
     for( ; first != last; ++first, ++m )
     {
-        hash_append( h, *first );
+        hash2::hash_append( h, *first );
     }
 
-    hash_append_size( h, m );
+    hash2::hash_append_size( h, m );
 }
 
 template<class Hash, class It> void hash_append_sized_range_( Hash& h, It first, It last, std::random_access_iterator_tag )
 {
-    hash_append_range( h, first, last );
-    hash_append_size( h, last - first );
+    hash2::hash_append_range( h, first, last );
+    hash2::hash_append_size( h, last - first );
 }
 
 } // namespace detail
@@ -117,13 +117,13 @@ template<class Hash, class It> void hash_append_unordered_range( Hash& h, It fir
     for( ; first != last; ++first, ++m )
     {
         Hash h2( h );
-        hash_append( h2, *first );
+        hash2::hash_append( h2, *first );
 
-        w += get_integral_result<std::uint64_t>( h2.result() );
+        w += hash2::get_integral_result<std::uint64_t>( h2.result() );
     }
 
-    hash_append( h, w );
-    hash_append_size( h, m );
+    hash2::hash_append( h, w );
+    hash2::hash_append_size( h, m );
 }
 
 // do_hash_append
@@ -136,7 +136,7 @@ template<class Hash, class T>
     do_hash_append( Hash& h, T const& v )
 {
     unsigned char const * p = reinterpret_cast<unsigned char const*>( &v );
-    hash_append_range( h, p, p + sizeof(T) );
+    hash2::hash_append_range( h, p, p + sizeof(T) );
 }
 
 // floating point
@@ -148,14 +148,14 @@ template<class Hash, class T>
     T w = v == 0? 0: v;
 
     unsigned char const * p = reinterpret_cast<unsigned char const*>( &w );
-    hash_append_range( h, p, p + sizeof(T) );
+    hash2::hash_append_range( h, p, p + sizeof(T) );
 }
 
 // C arrays
 
 template<class Hash, class T, std::size_t N> void do_hash_append( Hash& h, T const (&v)[ N ] )
 {
-    hash_append_range( h, v + 0, v + N );
+    hash2::hash_append_range( h, v + 0, v + N );
 }
 
 // contiguous containers and ranges, w/ size
@@ -164,8 +164,8 @@ template<class Hash, class T>
     typename std::enable_if< container_hash::is_contiguous_range<T>::value && !container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, T const& v )
 {
-    hash_append_range( h, v.data(), v.data() + v.size() );
-    hash_append_size( h, v.size() );
+    hash2::hash_append_range( h, v.data(), v.data() + v.size() );
+    hash2::hash_append_size( h, v.size() );
 }
 
 // containers and ranges, w/ size
@@ -174,7 +174,7 @@ template<class Hash, class T>
     typename std::enable_if< container_hash::is_range<T>::value && !container_hash::is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( Hash& h, T const& v )
 {
-    hash_append_sized_range( h, v.begin(), v.end() );
+    hash2::hash_append_sized_range( h, v.begin(), v.end() );
 }
 
 // std::array (both range and tuple-like)
@@ -183,14 +183,14 @@ template<class Hash, class T>
     typename std::enable_if< container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, T const& v )
 {
-    hash_append_range( h, v.begin(), v.end() );
+    hash2::hash_append_range( h, v.begin(), v.end() );
 }
 
 // boost::array (constant size, but not tuple-like)
 
 template<class Hash, class T, std::size_t N> void do_hash_append( Hash& h, boost::array<T, N> const& v )
 {
-    hash_append_range( h, v.begin(), v.end() );
+    hash2::hash_append_range( h, v.begin(), v.end() );
 }
 
 // unordered containers (is_unordered_range implies is_range)
@@ -199,7 +199,7 @@ template<class Hash, class T>
     typename std::enable_if< container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( Hash& h, T const& v )
 {
-    hash_append_unordered_range( h, v.begin(), v.end() );
+    hash2::hash_append_unordered_range( h, v.begin(), v.end() );
 }
 
 // tuple-likes
