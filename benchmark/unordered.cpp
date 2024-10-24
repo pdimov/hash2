@@ -36,12 +36,12 @@ private:
 
     template<class = void> static void hash_append_impl( H& h, T const& v, std::false_type )
     {
-        boost::hash2::hash_append( h, v );
+        boost::hash2::hash_append( h, {}, v );
     }
 
     template<class = void> static void hash_append_impl( H& h, T const& v, std::true_type )
     {
-        boost::hash2::hash_append_range( h, v.data(), v.data() + v.size() );
+        boost::hash2::hash_append_range( h, {}, v.data(), v.data() + v.size() );
     }
 
 public:
