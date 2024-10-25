@@ -14,7 +14,7 @@
 #include <boost/hash2/hash_append_fwd.hpp>
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/get_integral_result.hpp>
-#include <boost/hash2/endian.hpp>
+#include <boost/hash2/flavor.hpp>
 #include <boost/hash2/detail/reverse.hpp>
 #include <boost/container_hash/is_range.hpp>
 #include <boost/container_hash/is_contiguous_range.hpp>
@@ -32,8 +32,6 @@ template<class T, std::size_t N> class array;
 
 namespace hash2
 {
-
-struct default_flavor;
 
 // hash_append_range
 
@@ -245,26 +243,6 @@ template<class Hash, class Flavor, class T>
     typedef boost::mp11::make_index_sequence<std::tuple_size<T>::value> seq;
     detail::hash_append_tuple( h, f, v, seq() );
 }
-
-// flavors
-
-struct default_flavor
-{
-    using size_type = std::uint32_t;
-    static constexpr auto byte_order = endian::native;
-};
-
-struct little_endian_flavor
-{
-    using size_type = std::uint32_t;
-    static constexpr auto byte_order = endian::little;
-};
-
-struct big_endian_flavor
-{
-    using size_type = std::uint32_t;
-    static constexpr auto byte_order = endian::big;
-};
 
 // hash_append
 
