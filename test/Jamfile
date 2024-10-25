@@ -17,12 +17,15 @@ project
 
 # type traits
 
-run is_contiguously_hashable.cpp ;
 run is_range.cpp ;
 run is_contiguous_range.cpp ;
 run is_unordered_range.cpp ;
 run is_tuple_like.cpp ;
+
 run endian.cpp ;
+
+run is_contiguously_hashable.cpp ;
+run is_trivially_equality_comparable.cpp ;
 
 # helpers
 
