@@ -38,10 +38,9 @@ run hash_append_5.cpp ;
 run hash_append_range.cpp ;
 run hash_append_range_2.cpp ;
 
-run append_integral.cpp ;
-
-run set.cpp ;
-run map.cpp ;
+run append_integer.cpp ;
+run append_set.cpp ;
+run append_map.cpp ;
 
 # non-cryptographic
 
