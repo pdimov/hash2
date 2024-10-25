@@ -160,11 +160,24 @@ template<class Hash, class Flavor, class T>
 // floating point
 
 template<class Hash, class Flavor, class T>
-    typename std::enable_if< std::is_floating_point<T>::value, void >::type
+    typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order == endian::native, void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
     T w = v + 0;
     h.update( &w, sizeof(T) );
+}
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order != endian::native, void >::type
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
+{
+    T w = v + 0;
+    constexpr auto N = sizeof(T);
+
+    unsigned char tmp[ N ];
+    detail::reverse( tmp, &w );
+
+    h.update( tmp, N );
 }
 
 // C arrays
