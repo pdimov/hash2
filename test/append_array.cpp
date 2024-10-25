@@ -71,7 +71,14 @@ int main()
     using namespace boost::hash2;
 
     test<fnv1a_32, default_flavor, unsigned char>( 1463068797 );
+    test<fnv1a_32, little_endian_flavor, unsigned char>( 1463068797 );
+    test<fnv1a_32, big_endian_flavor, unsigned char>( 1463068797 );
+
     test<fnv1a_32, little_endian_flavor, int>( 1041505217 );
+    test<fnv1a_32, big_endian_flavor, int>( 3216558841 );
+
+    test<fnv1a_32, little_endian_flavor, double>( 4043691488 );
+    test<fnv1a_32, big_endian_flavor, double>( 3684964226 );
 
     return boost::report_errors();
 }
