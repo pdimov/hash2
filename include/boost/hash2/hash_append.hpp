@@ -180,6 +180,15 @@ template<class Hash, class Flavor, class T>
     h.update( tmp, N );
 }
 
+// std::nullptr_t
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if< std::is_same<T, std::nullptr_t>::value, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+{
+    hash2::hash_append( h, f, static_cast<void*>( v ) );
+}
+
 // C arrays
 
 template<class Hash, class Flavor, class T, std::size_t N> void do_hash_append( Hash& h, Flavor const& f, T const (&v)[ N ] )
