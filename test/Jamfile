@@ -28,6 +28,10 @@ run endian.cpp ;
 
 run get_integral_result.cpp ;
 
+# detail
+
+run detail_read.cpp ;
+
 # hash_append
 
 run hash_append.cpp ;
