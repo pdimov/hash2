@@ -42,7 +42,6 @@ run detail_reverse.cpp ;
 
 # hash_append
 
-run hash_append.cpp ;
 run hash_append_2.cpp ;
 run hash_append_3.cpp ;
 run hash_append_4.cpp ;
@@ -56,6 +55,7 @@ run append_byte_sized.cpp ;
 run append_character.cpp ;
 run append_floating_point.cpp ;
 run append_pointer.cpp ;
+run append_array.cpp ;
 run append_set.cpp ;
 run append_map.cpp ;
 
