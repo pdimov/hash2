@@ -26,6 +26,7 @@ run endian.cpp ;
 
 run is_contiguously_hashable.cpp ;
 run is_trivially_equality_comparable.cpp ;
+run is_endian_independent.cpp ;
 
 # helpers
 
