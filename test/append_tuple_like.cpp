@@ -1,8 +1,6 @@
-// Copyright 2017 Peter Dimov.
+// Copyright 2017, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-independent test
 
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
@@ -12,22 +10,12 @@
 #include <array>
 #include <tuple>
 
-template<class Hash, class Flavor, class R> void test( R r )
+template<class Hash, class Flavor, class T, class R> void test( R r )
 {
     Flavor f;
 
     {
-        unsigned char v[2] = { 1, 2 };
-
-        Hash h;
-
-        h.update( v, 2 );
-
-        BOOST_TEST_EQ( h.result(), r );
-    }
-
-    {
-        unsigned char v[2] = { 1, 2 };
+        T v[2] = { 1, 2 };
 
         Hash h;
 
@@ -38,50 +26,45 @@ template<class Hash, class Flavor, class R> void test( R r )
     }
 
     {
-        unsigned char v[2] = { 1, 2 };
+        T v[2] = { 1, 2 };
 
         Hash h;
-
         hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        std::pair<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
+        std::pair<T, T> v( static_cast<T>( 1 ), static_cast<T>( 2 ) );
 
         Hash h;
-
         hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        boost::array<unsigned char, 2> v = { { 1, 2 } };
+        boost::array<T, 2> v = {{ 1, 2 }};
 
         Hash h;
-
         hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        std::array<unsigned char, 2> v = { { 1, 2 } };
+        std::array<T, 2> v = {{ 1, 2 }};
 
         Hash h;
-
         hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        std::tuple<unsigned char, unsigned char> v( static_cast<unsigned char>( 1 ), static_cast<unsigned char>( 2 ) );
+        std::tuple<T, T> v( static_cast<T>( 1 ), static_cast<T>( 2 ) );
 
         Hash h;
-
         hash_append( h, f, v );
 
         BOOST_TEST_EQ( h.result(), r );
@@ -92,8 +75,15 @@ int main()
 {
     using namespace boost::hash2;
 
-    test<fnv1a_32, default_flavor>( 3983810698ul );
-    test<fnv1a_64, default_flavor>( 589729691727335466ull );
+    test<fnv1a_32, default_flavor, unsigned char>( 3983810698 );
+    test<fnv1a_32, little_endian_flavor, unsigned char>( 3983810698 );
+    test<fnv1a_32, big_endian_flavor, unsigned char>( 3983810698 );
+
+    test<fnv1a_32, little_endian_flavor, int>( 3738734694 );
+    test<fnv1a_32, big_endian_flavor, int>( 1396319868 );
+
+    test<fnv1a_32, little_endian_flavor, double>( 1170904120 );
+    test<fnv1a_32, big_endian_flavor, double>( 786481930 );
 
     return boost::report_errors();
 }
