@@ -44,7 +44,8 @@ template<class Hash, class Flavor, class It> void hash_append_range_( Hash& h, F
 {
     for( ; first != last; ++first )
     {
-        hash2::hash_append( h, f, *first );
+        typename std::iterator_traits<It>::value_type const& v = *first;
+        hash2::hash_append( h, f, v );
     }
 }
 
