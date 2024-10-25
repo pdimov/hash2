@@ -4,7 +4,6 @@
 
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <array>
 
 int main()
 {
