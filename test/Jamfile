@@ -23,6 +23,7 @@ run is_unordered_range.cpp ;
 run is_tuple_like.cpp ;
 
 run endian.cpp ;
+run flavor.cpp ;
 
 run is_contiguously_hashable.cpp ;
 run is_trivially_equality_comparable.cpp ;
