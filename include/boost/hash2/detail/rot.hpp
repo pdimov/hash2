@@ -44,13 +44,13 @@ BOOST_FORCEINLINE std::uint64_t rotr( std::uint64_t v, int k )
 // k must not be 0
 BOOST_FORCEINLINE std::uint32_t rotl( std::uint32_t v, int k )
 {
-    return ( v << k ) + ( v >> ( 32 - k ) );
+    return ( v << k ) | ( v >> ( 32 - k ) );
 }
 
 // k must not be 0
 BOOST_FORCEINLINE std::uint64_t rotl( std::uint64_t v, int k )
 {
-    return ( v << k ) + ( v >> ( 64 - k ) );
+    return ( v << k ) | ( v >> ( 64 - k ) );
 }
 
 // k must not be 0

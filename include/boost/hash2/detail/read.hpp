@@ -27,9 +27,9 @@ BOOST_FORCEINLINE std::uint32_t read32le( unsigned char const * p )
 #else
 
     return
-        static_cast<std::uint32_t>( p[0] ) +
-        ( static_cast<std::uint32_t>( p[1] ) <<  8 ) +
-        ( static_cast<std::uint32_t>( p[2] ) << 16 ) +
+        static_cast<std::uint32_t>( p[0] ) |
+        ( static_cast<std::uint32_t>( p[1] ) <<  8 ) |
+        ( static_cast<std::uint32_t>( p[2] ) << 16 ) |
         ( static_cast<std::uint32_t>( p[3] ) << 24 );
 
 #endif
@@ -46,13 +46,13 @@ BOOST_FORCEINLINE std::uint64_t read64le( unsigned char const * p )
 #else
 
     return
-        static_cast<std::uint64_t>( p[0] ) +
-        ( static_cast<std::uint64_t>( p[1] ) <<  8 ) +
-        ( static_cast<std::uint64_t>( p[2] ) << 16 ) +
-        ( static_cast<std::uint64_t>( p[3] ) << 24 ) +
-        ( static_cast<std::uint64_t>( p[4] ) << 32 ) +
-        ( static_cast<std::uint64_t>( p[5] ) << 40 ) +
-        ( static_cast<std::uint64_t>( p[6] ) << 48 ) +
+        static_cast<std::uint64_t>( p[0] ) |
+        ( static_cast<std::uint64_t>( p[1] ) <<  8 ) |
+        ( static_cast<std::uint64_t>( p[2] ) << 16 ) |
+        ( static_cast<std::uint64_t>( p[3] ) << 24 ) |
+        ( static_cast<std::uint64_t>( p[4] ) << 32 ) |
+        ( static_cast<std::uint64_t>( p[5] ) << 40 ) |
+        ( static_cast<std::uint64_t>( p[6] ) << 48 ) |
         ( static_cast<std::uint64_t>( p[7] ) << 56 );
 
 #endif
@@ -61,22 +61,22 @@ BOOST_FORCEINLINE std::uint64_t read64le( unsigned char const * p )
 BOOST_FORCEINLINE std::uint32_t read32be( unsigned char const * p )
 {
     return
-        static_cast<std::uint32_t>( p[3] ) +
-        ( static_cast<std::uint32_t>( p[2] ) <<  8 ) +
-        ( static_cast<std::uint32_t>( p[1] ) << 16 ) +
+        static_cast<std::uint32_t>( p[3] ) |
+        ( static_cast<std::uint32_t>( p[2] ) <<  8 ) |
+        ( static_cast<std::uint32_t>( p[1] ) << 16 ) |
         ( static_cast<std::uint32_t>( p[0] ) << 24 );
 }
 
 BOOST_FORCEINLINE std::uint64_t read64be( unsigned char const * p )
 {
     return
-        static_cast<std::uint64_t>( p[7] ) +
-        ( static_cast<std::uint64_t>( p[6] ) <<  8 ) +
-        ( static_cast<std::uint64_t>( p[5] ) << 16 ) +
-        ( static_cast<std::uint64_t>( p[4] ) << 24 ) +
-        ( static_cast<std::uint64_t>( p[3] ) << 32 ) +
-        ( static_cast<std::uint64_t>( p[2] ) << 40 ) +
-        ( static_cast<std::uint64_t>( p[1] ) << 48 ) +
+        static_cast<std::uint64_t>( p[7] ) |
+        ( static_cast<std::uint64_t>( p[6] ) <<  8 ) |
+        ( static_cast<std::uint64_t>( p[5] ) << 16 ) |
+        ( static_cast<std::uint64_t>( p[4] ) << 24 ) |
+        ( static_cast<std::uint64_t>( p[3] ) << 32 ) |
+        ( static_cast<std::uint64_t>( p[2] ) << 40 ) |
+        ( static_cast<std::uint64_t>( p[1] ) << 48 ) |
         ( static_cast<std::uint64_t>( p[0] ) << 56 );
 }
 
