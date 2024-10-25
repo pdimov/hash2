@@ -41,6 +41,7 @@ run hash_append_range_2.cpp ;
 run append_integer.cpp ;
 run append_bool.cpp ;
 run append_byte_sized.cpp ;
+run append_character.cpp ;
 run append_set.cpp ;
 run append_map.cpp ;
 
