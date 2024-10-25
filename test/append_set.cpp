@@ -1,8 +1,6 @@
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-dependent test
 
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
@@ -65,17 +63,17 @@ int main()
 {
     using namespace boost::hash2;
 
-    test< fnv1a_32, default_flavor, std::set<int> >( 2078558933ul );
-    test< fnv1a_64, default_flavor, std::set<int> >( 6271229243378528309ull );
+    test< fnv1a_32, little_endian_flavor, std::set<int> >( 2078558933ul );
+    test< fnv1a_64, little_endian_flavor, std::set<int> >( 6271229243378528309ull );
 
-    test< fnv1a_32, default_flavor, std::multiset<int> >( 2078558933ul );
-    test< fnv1a_64, default_flavor, std::multiset<int> >( 6271229243378528309ull );
+    test< fnv1a_32, little_endian_flavor, std::multiset<int> >( 2078558933ul );
+    test< fnv1a_64, little_endian_flavor, std::multiset<int> >( 6271229243378528309ull );
 
-    test< fnv1a_32, default_flavor, std::unordered_set<int> >( 2270492092ul );
-    test< fnv1a_64, default_flavor, std::unordered_set<int> >( 2830007867253608057ull );
+    test< fnv1a_32, little_endian_flavor, std::unordered_set<int> >( 2270492092ul );
+    test< fnv1a_64, little_endian_flavor, std::unordered_set<int> >( 2830007867253608057ull );
 
-    test< fnv1a_32, default_flavor, std::unordered_multiset<int> >( 2270492092ul );
-    test< fnv1a_64, default_flavor, std::unordered_multiset<int> >( 2830007867253608057ull );
+    test< fnv1a_32, little_endian_flavor, std::unordered_multiset<int> >( 2270492092ul );
+    test< fnv1a_64, little_endian_flavor, std::unordered_multiset<int> >( 2830007867253608057ull );
 
     return boost::report_errors();
 }

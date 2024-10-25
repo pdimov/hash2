@@ -1,8 +1,6 @@
 // Copyright 2017, 2018 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-dependent test
 
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
@@ -67,17 +65,17 @@ int main()
 {
     using namespace boost::hash2;
 
-    test< fnv1a_32, default_flavor, std::map<int, int> >( 3152726101ul );
-    test< fnv1a_64, default_flavor, std::map<int, int> >( 11386405661620022965ull );
+    test< fnv1a_32, little_endian_flavor, std::map<int, int> >( 3152726101ul );
+    test< fnv1a_64, little_endian_flavor, std::map<int, int> >( 11386405661620022965ull );
 
-    test< fnv1a_32, default_flavor, std::multimap<int, int> >( 3152726101ul );
-    test< fnv1a_64, default_flavor, std::multimap<int, int> >( 11386405661620022965ull );
+    test< fnv1a_32, little_endian_flavor, std::multimap<int, int> >( 3152726101ul );
+    test< fnv1a_64, little_endian_flavor, std::multimap<int, int> >( 11386405661620022965ull );
 
-    test< fnv1a_32, default_flavor, std::unordered_map<int, int> >( 2742410178ul );
-    test< fnv1a_64, default_flavor, std::unordered_map<int, int> >( 7026041901235387186ull );
+    test< fnv1a_32, little_endian_flavor, std::unordered_map<int, int> >( 2742410178ul );
+    test< fnv1a_64, little_endian_flavor, std::unordered_map<int, int> >( 7026041901235387186ull );
 
-    test< fnv1a_32, default_flavor, std::unordered_multimap<int, int> >( 2742410178ul );
-    test< fnv1a_64, default_flavor, std::unordered_multimap<int, int> >( 7026041901235387186ull );
+    test< fnv1a_32, little_endian_flavor, std::unordered_multimap<int, int> >( 2742410178ul );
+    test< fnv1a_64, little_endian_flavor, std::unordered_multimap<int, int> >( 7026041901235387186ull );
 
     return boost::report_errors();
 }
