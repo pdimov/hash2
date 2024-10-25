@@ -32,6 +32,7 @@ run get_integral_result.cpp ;
 
 run detail_read.cpp ;
 run detail_write.cpp ;
+run detail_rot.cpp ;
 
 # hash_append
 
