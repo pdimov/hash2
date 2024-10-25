@@ -136,10 +136,9 @@ template<class Hash, class Flavor = default_flavor, class It> void hash_append_u
 template<class Hash, class Flavor, class T>
     typename std::enable_if<
         is_contiguously_hashable<T, Flavor::byte_order>::value, void >::type
-    do_hash_append( Hash& h, Flavor const& f, T const& v )
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
-    unsigned char const * p = reinterpret_cast<unsigned char const*>( &v );
-    hash2::hash_append_range( h, f, p, p + sizeof(T) );
+    h.update( &v, sizeof(T) );
 }
 
 // trivially equality comparable, but not contiguously hashable (because of endianness)
@@ -148,27 +147,24 @@ template<class Hash, class Flavor, class T>
     typename std::enable_if<
         is_trivially_equality_comparable<T>::value && Flavor::byte_order != endian::native && !is_endian_independent<T>::value
         , void >::type
-    do_hash_append( Hash& h, Flavor const& f, T const& v )
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
     constexpr auto N = sizeof(T);
 
     unsigned char tmp[ N ];
-
     detail::reverse( tmp, &v );
 
-    hash2::hash_append_range( h, f, tmp, tmp + N );
+    h.update( tmp, N );
 }
 
 // floating point
 
 template<class Hash, class Flavor, class T>
     typename std::enable_if< std::is_floating_point<T>::value, void >::type
-    do_hash_append( Hash& h, Flavor const& f, T const& v )
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
-    T w = v == 0? 0: v;
-
-    unsigned char const * p = reinterpret_cast<unsigned char const*>( &w );
-    hash2::hash_append_range( h, f, p, p + sizeof(T) );
+    T w = v + 0;
+    h.update( &w, sizeof(T) );
 }
 
 // C arrays
