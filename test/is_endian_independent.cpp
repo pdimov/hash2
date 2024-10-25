@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/is_contiguously_hashable.hpp>
+#include <boost/hash2/is_endian_independent.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <cstddef>
 
