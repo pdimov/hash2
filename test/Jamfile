@@ -51,6 +51,7 @@ run append_pointer.cpp ;
 run append_array.cpp ;
 run append_container.cpp ;
 run append_string.cpp ;
+run append_string_view.cpp ;
 run append_tuple_like.cpp ;
 run append_set.cpp ;
 run append_map.cpp ;
