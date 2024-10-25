@@ -1,8 +1,6 @@
-// Copyright 2017 Peter Dimov.
+// Copyright 2017, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-independent test
 
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
@@ -10,12 +8,12 @@
 #include <boost/array.hpp>
 #include <array>
 
-template<class Hash, class Flavor, class R> void test( R r )
+template<class Hash, class Flavor, class T, class R> void test( R r )
 {
     Flavor f;
 
     {
-        unsigned char v[4] = { 1, 2, 3, 4 };
+        T v[4] = { 1, 2, 3, 4 };
 
         Hash h;
 
@@ -28,7 +26,7 @@ template<class Hash, class Flavor, class R> void test( R r )
     }
 
     {
-        unsigned char v[4] = { 1, 2, 3, 4 };
+        T v[4] = { 1, 2, 3, 4 };
 
         Hash h;
 
@@ -38,7 +36,7 @@ template<class Hash, class Flavor, class R> void test( R r )
     }
 
     {
-        unsigned char v[2][2] = { { 1, 2 }, { 3, 4 } };
+        T v[2][2] = { { 1, 2 }, { 3, 4 } };
 
         Hash h;
 
@@ -48,7 +46,7 @@ template<class Hash, class Flavor, class R> void test( R r )
     }
 
     {
-        boost::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
+        boost::array<T, 4> v = {{ 1, 2, 3, 4 }};
 
         Hash h;
 
@@ -58,7 +56,7 @@ template<class Hash, class Flavor, class R> void test( R r )
     }
 
     {
-        std::array<unsigned char, 4> v = {{ 1, 2, 3, 4 }};
+        std::array<T, 4> v = {{ 1, 2, 3, 4 }};
 
         Hash h;
 
@@ -72,8 +70,8 @@ int main()
 {
     using namespace boost::hash2;
 
-    test<fnv1a_32, default_flavor>( 1463068797ul );
-    test<fnv1a_64, default_flavor>( 13725386680924731485ull );
+    test<fnv1a_32, default_flavor, unsigned char>( 1463068797 );
+    test<fnv1a_32, little_endian_flavor, int>( 1041505217 );
 
     return boost::report_errors();
 }
