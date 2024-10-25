@@ -1,10 +1,11 @@
 #ifndef BOOST_HASH2_IS_CONTIGUOUSLY_HASHABLE_HPP_INCLUDED
 #define BOOST_HASH2_IS_CONTIGUOUSLY_HASHABLE_HPP_INCLUDED
 
-// Copyright 2017, 2023 Peter Dimov.
+// Copyright 2017, 2023, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/hash2/is_trivially_equality_comparable.hpp>
 #include <boost/hash2/endian.hpp>
 #include <type_traits>
 #include <cstddef>
@@ -13,18 +14,6 @@ namespace boost
 {
 namespace hash2
 {
-
-// is_trivially_equality_comparable
-
-template<class T> struct is_trivially_equality_comparable:
-    std::integral_constant< bool, std::is_integral<T>::value || std::is_enum<T>::value || std::is_pointer<T>::value >
-{
-};
-
-template<class T> struct is_trivially_equality_comparable<T const>:
-    is_trivially_equality_comparable<T>
-{
-};
 
 // is_endian_independent
 
