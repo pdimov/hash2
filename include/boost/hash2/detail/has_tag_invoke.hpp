@@ -16,7 +16,7 @@ namespace hash2
 {
 
 struct hash_append_tag;
-    
+
 namespace detail
 {
 
