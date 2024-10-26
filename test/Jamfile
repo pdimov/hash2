@@ -55,6 +55,9 @@ run append_string_view.cpp ;
 run append_tuple_like.cpp ;
 run append_set.cpp ;
 run append_map.cpp ;
+run append_described.cpp ;
+run append_described_2.cpp ;
+run append_described_3.cpp ;
 
 run hash_append_5.cpp ;
 run hash_append_range.cpp ;

@@ -20,6 +20,10 @@
 #include <boost/container_hash/is_contiguous_range.hpp>
 #include <boost/container_hash/is_unordered_range.hpp>
 #include <boost/container_hash/is_tuple_like.hpp>
+#include <boost/container_hash/is_described_class.hpp>
+#include <boost/describe/bases.hpp>
+#include <boost/describe/members.hpp>
+#include <boost/mp11/algorithm.hpp>
 #include <boost/mp11/integer_sequence.hpp>
 #include <cstdint>
 #include <type_traits>
@@ -261,6 +265,56 @@ template<class Hash, class Flavor, class T>
     typedef boost::mp11::make_index_sequence<std::tuple_size<T>::value> seq;
     detail::hash_append_tuple( h, f, v, seq() );
 }
+
+// described classes
+
+#if defined(BOOST_DESCRIBE_CXX14)
+
+#if defined(_MSC_VER) && _MSC_VER == 1900
+# pragma warning(push)
+# pragma warning(disable: 4100) // unreferenced formal parameter
+#endif
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if< container_hash::is_described_class<T>::value, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+    {
+        static_assert( !std::is_union<T>::value, "Described unions are not supported" );
+
+        std::size_t r = 0;
+
+        using Bd = describe::describe_bases<T, describe::mod_any_access>;
+
+        mp11::mp_for_each<Bd>([&](auto D){
+
+            using B = typename decltype(D)::type;
+            hash2::hash_append( h, f, (B const&)v );
+            ++r;
+
+        });
+
+        using Md = describe::describe_members<T, describe::mod_any_access>;
+
+        mp11::mp_for_each<Md>([&](auto D){
+
+            hash2::hash_append( h, f, v.*D.pointer );
+            ++r;
+
+        });
+
+        // A hash_append call must always result in a call to Hash::update
+
+        if( r == 0 )
+        {
+            hash2::hash_append( h, f, '\x00' );
+        }
+    }
+
+#if defined(_MSC_VER) && _MSC_VER == 1900
+# pragma warning(pop)
+#endif
+
+#endif // defined(BOOST_DESCRIBE_CXX14)
 
 // hash_append
 
