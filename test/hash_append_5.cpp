@@ -1,14 +1,12 @@
-// Copyright 2017 Peter Dimov.
+// Copyright 2017, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-dependent test
 
 // lib1.hpp
 
 #include <string>
 
-// forward declaration of boost::hash2::hash_append
+// forward declarations
 
 namespace boost
 {
@@ -16,6 +14,7 @@ namespace hash2
 {
 
 template<class Hash, class Flavor, class T> void hash_append( Hash& h, Flavor const& f, T const& v );
+struct hash_append_tag;
 
 } // namespace hash2
 } // namespace boost
@@ -32,7 +31,8 @@ private:
     std::string s1_;
     std::string s2_;
 
-    template<class Hash, class Flavor> friend void do_hash_append( Hash& h, Flavor const& f, X const& x )
+    template<class Hash, class Flavor>
+    friend void tag_invoke( boost::hash2::hash_append_tag const&, Hash& h, Flavor const& f, X const& x )
     {
         boost::hash2::hash_append( h, f, x.s1_ );
         boost::hash2::hash_append( h, f, x.s2_ );
@@ -127,8 +127,8 @@ template<class Hash, class Flavor, class R> void test( R r )
 
 int main()
 {
-    test<boost::hash2::fnv1a_32, boost::hash2::default_flavor>( 2425039999ul );
-    test<lib2::fnv1a, boost::hash2::default_flavor>( 2425039999ul );
+    test<boost::hash2::fnv1a_32, boost::hash2::little_endian_flavor>( 2425039999ul );
+    test<lib2::fnv1a, boost::hash2::little_endian_flavor>( 2425039999ul );
 
     return boost::report_errors();
 }
