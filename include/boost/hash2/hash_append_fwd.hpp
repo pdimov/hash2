@@ -35,6 +35,8 @@ template<class Hash, class Flavor, class It> void hash_append_unordered_range( H
 
 #endif
 
+struct hash_append_tag;
+
 } // namespace hash2
 } // namespace boost
 

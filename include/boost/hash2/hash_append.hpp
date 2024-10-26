@@ -16,6 +16,7 @@
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/hash2/flavor.hpp>
 #include <boost/hash2/detail/reverse.hpp>
+#include <boost/hash2/detail/has_tag_invoke.hpp>
 #include <boost/container_hash/is_range.hpp>
 #include <boost/container_hash/is_contiguous_range.hpp>
 #include <boost/container_hash/is_unordered_range.hpp>
@@ -315,6 +316,19 @@ template<class Hash, class Flavor, class T>
 #endif
 
 #endif // defined(BOOST_DESCRIBE_CXX14)
+
+// classes with tag_invoke
+
+struct hash_append_tag
+{
+};
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if< detail::has_tag_invoke<T>::value, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+{
+    tag_invoke( hash_append_tag(), h, f, v );
+}
 
 // hash_append
 
