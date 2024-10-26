@@ -5,6 +5,15 @@
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/describe/class.hpp>
+#include <boost/config/pragma_message.hpp>
+
+#if !defined(BOOST_DESCRIBE_CXX14)
+
+BOOST_PRAGMA_MESSAGE( "Test skipped, because BOOST_DESCRIBE_CXX14 is not defined" )
+int main() {}
+
+#else
+
 #include <boost/core/lightweight_test.hpp>
 
 class X
@@ -62,3 +71,5 @@ int main()
 
     return boost::report_errors();
 }
+
+#endif
