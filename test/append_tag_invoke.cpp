@@ -42,9 +42,9 @@ int main()
 {
     using namespace boost::hash2;
 
-    test<fnv1a_32, default_flavor>( {}, {}, 2615243109 );
-    test<fnv1a_32, little_endian_flavor>( {}, {}, 2615243109 );
-    test<fnv1a_32, big_endian_flavor>( {}, {}, 2615243109 );
+    test<fnv1a_32, default_flavor>( { 0, 0 }, { 0, 0 }, 2615243109 );
+    test<fnv1a_32, little_endian_flavor>( { 0, 0 }, { 0, 0 }, 2615243109 );
+    test<fnv1a_32, big_endian_flavor>( { 0, 0 }, { 0, 0 }, 2615243109 );
 
     test<fnv1a_32, little_endian_flavor>( { 1, 2 }, { 1, 2 }, 3738734694 );
     test<fnv1a_32, big_endian_flavor>( { 1, 2 }, { 1, 2 }, 1396319868 );
