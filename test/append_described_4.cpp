@@ -6,6 +6,7 @@
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/describe/class.hpp>
 #include <boost/config/pragma_message.hpp>
+#include <string>
 
 #if !defined(BOOST_DESCRIBE_CXX14)
 

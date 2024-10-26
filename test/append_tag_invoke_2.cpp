@@ -5,6 +5,7 @@
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <string>
 
 class X
 {
