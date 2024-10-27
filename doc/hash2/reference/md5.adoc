@@ -32,7 +32,6 @@ class md5_128
 public:
 
     using result_type = std::array<unsigned char, 16>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 64;
 

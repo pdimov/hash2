@@ -32,7 +32,6 @@ class sha1_160
 public:
 
     using result_type = std::array<unsigned char, 20>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 64;
 

@@ -33,7 +33,6 @@ private:
 public:
 
     using result_type = std::uint32_t;
-    using size_type = std::uint32_t;
 
     fnv1a_32();
     explicit fnv1a_32( std::uint64_t seed );
@@ -118,7 +117,6 @@ private:
 public:
 
     using result_type = std::uint64_t;
-    using size_type = std::uint64_t;
 
     fnv1a_64();
     explicit fnv1a_64( std::uint64_t seed );
