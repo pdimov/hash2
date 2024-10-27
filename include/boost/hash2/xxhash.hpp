@@ -31,7 +31,10 @@ private:
 
 private:
 
-    std::uint32_t v1_ = P1 + P2, v2_ = P2, v3_ = 0, v4_ = static_cast<std::uint32_t>( 0 ) - P1;
+    std::uint32_t v1_ = P1 + P2;
+    std::uint32_t v2_ = P2;
+    std::uint32_t v3_ = 0;
+    std::uint32_t v4_ = static_cast<std::uint32_t>( 0 ) - P1;
 
     unsigned char buffer_[ 16 ] = {};
     std::size_t m_ = 0; // == n_ % 16
@@ -230,22 +233,33 @@ class xxhash_64
 {
 private:
 
-    std::uint64_t v1_, v2_, v3_, v4_;
+    static constexpr std::uint64_t P1 = 11400714785074694791ULL;
+    static constexpr std::uint64_t P2 = 14029467366897019727ULL;
+    static constexpr std::uint64_t P3 =  1609587929392839161ULL;
+    static constexpr std::uint64_t P4 =  9650029242287828579ULL;
+    static constexpr std::uint64_t P5 =  2870177450012600261ULL;
 
-    unsigned char buffer_[ 32 ];
-    std::size_t m_; // == n_ % 32
+private:
 
-    std::uint64_t n_;
+    std::uint64_t v1_ = P1 + P2;
+    std::uint64_t v2_ = P2;
+    std::uint64_t v3_ = 0;
+    std::uint64_t v4_ = static_cast<std::uint64_t>( 0 ) - P1;
+
+    unsigned char buffer_[ 32 ] = {};
+    std::size_t m_ = 0; // == n_ % 32
+
+    std::uint64_t n_ = 0;
 
 private:
 
-    static const std::uint64_t P1 = 11400714785074694791ULL;
-    static const std::uint64_t P2 = 14029467366897019727ULL;
-    static const std::uint64_t P3 =  1609587929392839161ULL;
-    static const std::uint64_t P4 =  9650029242287828579ULL;
-    static const std::uint64_t P5 =  2870177450012600261ULL;
-
-private:
+    void init( std::uint64_t seed )
+    {
+        v1_ = seed + P1 + P2;
+        v2_ = seed + P2;
+        v3_ = seed;
+        v4_ = seed - P1;
+    }
 
     static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
     {
@@ -284,33 +298,20 @@ private:
         v4_ = v4; 
     }
 
-    void init( std::uint64_t seed )
-    {
-        v1_ = seed + P1 + P2;
-        v2_ = seed + P2;
-        v3_ = seed;
-        v4_ = seed - P1;
-    }
-
 public:
 
     typedef std::uint64_t result_type;
     typedef std::uint64_t size_type;
 
-    xxhash_64(): m_( 0 ), n_( 0 )
-    {
-        init( 0 );
-    }
+    xxhash_64() = default;
 
-    explicit xxhash_64( std::uint64_t seed ): m_( 0 ), n_( 0 )
+    explicit xxhash_64( std::uint64_t seed )
     {
         init( seed );
     }
 
-    xxhash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    xxhash_64( unsigned char const * p, std::size_t n )
     {
-        init( 0 );
-
         if( n != 0 )
         {
             update( p, n );
