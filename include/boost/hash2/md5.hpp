@@ -194,7 +194,6 @@ private:
 public:
 
     typedef std::array<unsigned char, 16> result_type;
-    typedef std::uint64_t size_type;
 
     static constexpr int block_size = 64;
 

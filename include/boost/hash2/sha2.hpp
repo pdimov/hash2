@@ -314,8 +314,8 @@ private:
     }
 
 public:
+
     using result_type = std::array<unsigned char, 32>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 64;
 
@@ -390,8 +390,8 @@ private:
     }
 
 public:
+
     using result_type = std::array<unsigned char, 28>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 64;
 
@@ -468,7 +468,6 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 64>;
-    using size_type = std::uint64_t;
 
     using detail::sha2_512_base::update;
 
@@ -546,7 +545,6 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 48>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 128;
 
@@ -624,7 +622,6 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 28>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 128;
 
@@ -703,7 +700,6 @@ private:
 public:
 
     using result_type = std::array<unsigned char, 32>;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 128;
 

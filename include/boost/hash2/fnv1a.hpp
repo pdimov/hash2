@@ -45,7 +45,6 @@ private:
 public:
 
     typedef T result_type;
-    typedef T size_type;
 
     fnv1a() = default;
 

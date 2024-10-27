@@ -68,7 +68,6 @@ private:
 public:
 
     typedef std::uint64_t result_type;
-    typedef std::uint64_t size_type;
 
     siphash_64() = default;
 
@@ -232,7 +231,6 @@ private:
 public:
 
     typedef std::uint32_t result_type;
-    typedef std::uint32_t size_type;
 
     siphash_32() = default;
 
