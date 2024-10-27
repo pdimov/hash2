@@ -146,11 +146,13 @@ template<class Hash, class Flavor, class T>
     h.update( &v, sizeof(T) );
 }
 
-// trivially equality comparable, but not contiguously hashable (because of endianness)
+// trivially equality comparable, scalar, but not contiguously hashable (because of endianness)
 
 template<class Hash, class Flavor, class T>
     typename std::enable_if<
-        is_trivially_equality_comparable<T>::value && Flavor::byte_order != endian::native && !is_endian_independent<T>::value
+        is_trivially_equality_comparable<T>::value &&
+        std::is_scalar<T>::value &&
+        Flavor::byte_order != endian::native && !is_endian_independent<T>::value
         , void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
