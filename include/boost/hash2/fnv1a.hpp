@@ -40,18 +40,16 @@ template<class T> class fnv1a
 {
 private:
 
-    T st_;
+    T st_ = fnv1a_const<T>::basis;
 
 public:
 
     typedef T result_type;
     typedef T size_type;
 
-    fnv1a(): st_( fnv1a_const<T>::basis )
-    {
-    }
+    fnv1a() = default;
 
-    explicit fnv1a( std::uint64_t seed ): st_( fnv1a_const<T>::basis )
+    explicit fnv1a( std::uint64_t seed )
     {
         if( seed )
         {
@@ -61,7 +59,7 @@ public:
         }
     }
 
-    fnv1a( unsigned char const * p, std::size_t n ): st_( fnv1a_const<T>::basis )
+    fnv1a( unsigned char const * p, std::size_t n )
     {
         if( n != 0 )
         {
@@ -104,9 +102,7 @@ class fnv1a_32: public detail::fnv1a<std::uint32_t>
 {
 public:
 
-    fnv1a_32(): detail::fnv1a<std::uint32_t>()
-    {
-    }
+    fnv1a_32() = default;
 
     explicit fnv1a_32( std::uint64_t seed ): detail::fnv1a<std::uint32_t>( seed )
     {
@@ -121,9 +117,7 @@ class fnv1a_64: public detail::fnv1a<std::uint64_t>
 {
 public:
 
-    fnv1a_64(): detail::fnv1a<std::uint64_t>()
-    {
-    }
+    fnv1a_64() = default;
 
     explicit fnv1a_64( std::uint64_t seed ): detail::fnv1a<std::uint64_t>( seed )
     {
