@@ -27,25 +27,16 @@ class sha1_160
 {
 private:
 
-    std::uint32_t state_[ 5 ];
+    std::uint32_t state_[ 5 ] = { 0x67452301u, 0xefcdab89u, 0x98badcfeu, 0x10325476u, 0xc3d2e1f0u };
 
-    static const int N = 64;
+    static constexpr int N = 64;
 
-    unsigned char buffer_[ N ];
-    std::size_t m_; // == n_ % N
+    unsigned char buffer_[ N ] = {};
+    std::size_t m_ = 0; // == n_ % N
 
-    std::uint64_t n_;
+    std::uint64_t n_ = 0;
 
 private:
-
-    void init()
-    {
-        state_[ 0 ] = 0x67452301u;
-        state_[ 1 ] = 0xefcdab89u;
-        state_[ 2 ] = 0x98badcfeu;
-        state_[ 3 ] = 0x10325476u;
-        state_[ 4 ] = 0xc3d2e1f0u;
-    }
 
     static BOOST_FORCEINLINE void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], unsigned char const block[ 64 ], int i )
     {
@@ -201,17 +192,12 @@ public:
     typedef std::array<unsigned char, 20> result_type;
     typedef std::uint64_t size_type;
 
-    static const int block_size = 64;
+    static constexpr int block_size = 64;
 
-    sha1_160(): m_( 0 ), n_( 0 )
+    sha1_160() = default;
+
+    explicit sha1_160( std::uint64_t seed )
     {
-        init();
-    }
-
-    explicit sha1_160( std::uint64_t seed ): m_( 0 ), n_( 0 )
-    {
-        init();
-
         if( seed != 0 )
         {
             unsigned char tmp[ 8 ];
@@ -222,10 +208,8 @@ public:
         }
     }
 
-    sha1_160( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    sha1_160( unsigned char const * p, std::size_t n )
     {
-        init();
-
         if( n != 0 )
         {
             update( p, n );
