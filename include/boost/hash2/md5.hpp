@@ -27,14 +27,14 @@ class md5_128
 {
 private:
 
-    std::uint32_t state_[ 4 ];
+    std::uint32_t state_[ 4 ] = { 0x67452301u, 0xefcdab89u, 0x98badcfeu, 0x10325476u };
 
-    static const int N = 64;
+    static constexpr int N = 64;
 
-    unsigned char buffer_[ N ];
-    std::size_t m_; // == n_ % N
+    unsigned char buffer_[ N ] = {};
+    std::size_t m_ = 0; // == n_ % N
 
-    std::uint64_t n_;
+    std::uint64_t n_ = 0;
 
 private:
 
@@ -86,30 +86,22 @@ private:
         a += b;
     }
 
-    void init()
-    {
-        state_[ 0 ] = 0x67452301u;
-        state_[ 1 ] = 0xefcdab89u;
-        state_[ 2 ] = 0x98badcfeu;
-        state_[ 3 ] = 0x10325476u;
-    }
-
-    static const int S11 = 7;
-    static const int S12 = 12;
-    static const int S13 = 17;
-    static const int S14 = 22;
-    static const int S21 = 5;
-    static const int S22 = 9;
-    static const int S23 = 14;
-    static const int S24 = 20;
-    static const int S31 = 4;
-    static const int S32 = 11;
-    static const int S33 = 16;
-    static const int S34 = 23;
-    static const int S41 = 6;
-    static const int S42 = 10;
-    static const int S43 = 15;
-    static const int S44 = 21;
+    static constexpr int S11 = 7;
+    static constexpr int S12 = 12;
+    static constexpr int S13 = 17;
+    static constexpr int S14 = 22;
+    static constexpr int S21 = 5;
+    static constexpr int S22 = 9;
+    static constexpr int S23 = 14;
+    static constexpr int S24 = 20;
+    static constexpr int S31 = 4;
+    static constexpr int S32 = 11;
+    static constexpr int S33 = 16;
+    static constexpr int S34 = 23;
+    static constexpr int S41 = 6;
+    static constexpr int S42 = 10;
+    static constexpr int S43 = 15;
+    static constexpr int S44 = 21;
 
     void transform( unsigned char const block[ 64 ] )
     {
@@ -204,17 +196,12 @@ public:
     typedef std::array<unsigned char, 16> result_type;
     typedef std::uint64_t size_type;
 
-    static const int block_size = 64;
+    static constexpr int block_size = 64;
 
-    md5_128(): m_( 0 ), n_( 0 )
+    md5_128() = default;
+
+    explicit md5_128( std::uint64_t seed )
     {
-        init();
-    }
-
-    explicit md5_128( std::uint64_t seed ): m_( 0 ), n_( 0 )
-    {
-        init();
-
         if( seed != 0 )
         {
             unsigned char tmp[ 8 ];
@@ -225,10 +212,8 @@ public:
         }
     }
 
-    md5_128( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    md5_128( unsigned char const * p, std::size_t n )
     {
-        init();
-
         if( n != 0 )
         {
             update( p, n );
