@@ -23,22 +23,30 @@ class xxhash_32
 {
 private:
 
-    std::uint32_t v1_, v2_, v3_, v4_;
+    static constexpr std::uint32_t P1 = 2654435761U;
+    static constexpr std::uint32_t P2 = 2246822519U;
+    static constexpr std::uint32_t P3 = 3266489917U;
+    static constexpr std::uint32_t P4 =  668265263U;
+    static constexpr std::uint32_t P5 =  374761393U;
 
-    unsigned char buffer_[ 16 ];
-    std::size_t m_; // == n_ % 16
+private:
 
-    std::size_t n_;
+    std::uint32_t v1_ = P1 + P2, v2_ = P2, v3_ = 0, v4_ = static_cast<std::uint32_t>( 0 ) - P1;
+
+    unsigned char buffer_[ 16 ] = {};
+    std::size_t m_ = 0; // == n_ % 16
+
+    std::size_t n_ = 0;
 
 private:
 
-    static const std::uint32_t P1 = 2654435761U;
-    static const std::uint32_t P2 = 2246822519U;
-    static const std::uint32_t P3 = 3266489917U;
-    static const std::uint32_t P4 =  668265263U;
-    static const std::uint32_t P5 =  374761393U;
-
-private:
+    void init( std::uint32_t seed )
+    {
+        v1_ = seed + P1 + P2;
+        v2_ = seed + P2;
+        v3_ = seed;
+        v4_ = seed - P1;
+    }
 
     static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
     {
@@ -69,25 +77,14 @@ private:
         v4_ = v4; 
     }
 
-    void init( std::uint32_t seed )
-    {
-        v1_ = seed + P1 + P2;
-        v2_ = seed + P2;
-        v3_ = seed;
-        v4_ = seed - P1;
-    }
-
 public:
 
     typedef std::uint32_t result_type;
     typedef std::uint32_t size_type;
 
-    xxhash_32(): m_( 0 ), n_( 0 )
-    {
-        init( 0 );
-    }
+    xxhash_32() = default;
 
-    explicit xxhash_32( std::uint64_t seed ): m_( 0 ), n_( 0 )
+    explicit xxhash_32( std::uint64_t seed )
     {
         std::uint32_t s0 = static_cast<std::uint32_t>( seed );
         std::uint32_t s1 = static_cast<std::uint32_t>( seed >> 32 );
@@ -103,10 +100,8 @@ public:
         }
     }
 
-    xxhash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    xxhash_32( unsigned char const * p, std::size_t n )
     {
-        init( 0 );
-
         if( n != 0 )
         {
             update( p, n );
