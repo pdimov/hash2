@@ -10,9 +10,15 @@
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <cstdint>
 #include <cstring>
 #include <cstddef>
+
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1920
+# pragma warning(push)
+# pragma warning(disable: 4307) // '+': integral constant overflow
+#endif
 
 namespace boost
 {
@@ -454,5 +460,9 @@ public:
 
 } // namespace hash2
 } // namespace boost
+
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1920
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_HASH2_XXHASH_HPP_INCLUDED
