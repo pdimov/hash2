@@ -23,12 +23,15 @@ class siphash_64
 {
 private:
 
-    std::uint64_t v0, v1, v2, v3;
+    std::uint64_t v0 = 0x736f6d6570736575ULL;
+    std::uint64_t v1 = 0x646f72616e646f6dULL;
+    std::uint64_t v2 = 0x6c7967656e657261ULL;
+    std::uint64_t v3 = 0x7465646279746573ULL;
 
-    unsigned char buffer_[ 8 ];
-    std::size_t m_; // == n_ % 8
+    unsigned char buffer_[ 8 ] = {};
+    std::size_t m_ = 0; // == n_ % 8
 
-    std::uint64_t n_;
+    std::uint64_t n_ = 0;
 
 private:
 
@@ -62,52 +65,37 @@ private:
         v0 ^= m;
     }
 
-    void init( std::uint64_t k0, std::uint64_t k1 )
-    {
-        v0 = 0x736f6d6570736575ULL;
-        v1 = 0x646f72616e646f6dULL;
-        v2 = 0x6c7967656e657261ULL;
-        v3 = 0x7465646279746573ULL;
-
-        v3 ^= k1;
-        v2 ^= k0;
-        v1 ^= k1;
-        v0 ^= k0;
-    }
-
 public:
 
     typedef std::uint64_t result_type;
     typedef std::uint64_t size_type;
 
-    siphash_64(): m_( 0 ), n_( 0 )
+    siphash_64() = default;
+
+    explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 )
     {
-        init( 0, 0 );
+        v0 ^= k0;
+        v1 ^= k1;
+        v2 ^= k0;
+        v3 ^= k1;
     }
 
-    explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 ): m_( 0 ), n_( 0 )
-    {
-        init( k0, k1 );
-    }
-
-    siphash_64( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    siphash_64( unsigned char const * p, std::size_t n )
     {
         if( n == 16 )
         {
             std::uint64_t k0 = detail::read64le( p + 0 );
             std::uint64_t k1 = detail::read64le( p + 8 );
 
-            init( k0, k1 );
+            v0 ^= k0;
+            v1 ^= k1;
+            v2 ^= k0;
+            v3 ^= k1;
         }
-        else
+        else if( n != 0 )
         {
-            init( 0, 0 );
-
-            if( n != 0 )
-            {
-                update( p, n );
-                result();
-            }
+            update( p, n );
+            result();
         }
     }
 
