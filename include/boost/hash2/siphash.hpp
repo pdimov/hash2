@@ -187,12 +187,15 @@ class siphash_32
 {
 private:
 
-    std::uint32_t v0, v1, v2, v3;
+    std::uint32_t v0 = 0;
+    std::uint32_t v1 = 0;
+    std::uint32_t v2 = 0x6c796765;
+    std::uint32_t v3 = 0x74656462;
 
-    unsigned char buffer_[ 4 ];
-    std::uint32_t m_; // == n_ % 4
+    unsigned char buffer_[ 4 ] = {};
+    std::uint32_t m_ = 0; // == n_ % 4
 
-    std::uint32_t n_;
+    std::uint32_t n_ = 0;
 
 private:
 
@@ -226,60 +229,48 @@ private:
         v0 ^= m;
     }
 
-    void init( std::uint32_t k0, std::uint32_t k1 )
-    {
-        v0 = 0;
-        v1 = 0;
-        v2 = 0x6c796765;
-        v3 = 0x74656462;
-
-        v3 ^= k1;
-        v2 ^= k0;
-        v1 ^= k1;
-        v0 ^= k0;
-    }
-
 public:
 
     typedef std::uint32_t result_type;
     typedef std::uint32_t size_type;
 
-    siphash_32(): m_( 0 ), n_( 0 )
-    {
-        init( 0, 0 );
-    }
+    siphash_32() = default;
 
-    explicit siphash_32( std::uint64_t seed ): m_( 0 ), n_( 0 )
+    explicit siphash_32( std::uint64_t seed )
     {
         std::uint32_t k0 = static_cast<std::uint32_t>( seed );
         std::uint32_t k1 = static_cast<std::uint32_t>( seed >> 32 );
 
-        init( k0, k1 );
+        v0 ^= k0;
+        v1 ^= k1;
+        v2 ^= k0;
+        v3 ^= k1;
     }
 
-    siphash_32( std::uint32_t k0, std::uint32_t k1 ): m_( 0 ), n_( 0 )
+    siphash_32( std::uint32_t k0, std::uint32_t k1 )
     {
-        init( k0, k1 );
+        v0 ^= k0;
+        v1 ^= k1;
+        v2 ^= k0;
+        v3 ^= k1;
     }
 
-    siphash_32( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    siphash_32( unsigned char const * p, std::size_t n )
     {
         if( n == 8 )
         {
             std::uint32_t k0 = detail::read32le( p + 0 );
             std::uint32_t k1 = detail::read32le( p + 4 );
 
-            init( k0, k1 );
+            v0 ^= k0;
+            v1 ^= k1;
+            v2 ^= k0;
+            v3 ^= k1;
         }
-        else
+        else if( n != 0 )
         {
-            init( 0, 0 );
-
-            if( n != 0 )
-            {
-                update( p, n );
-                result();
-            }
+            update( p, n );
+            result();
         }
     }
 
