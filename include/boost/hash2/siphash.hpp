@@ -9,6 +9,9 @@
 
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
+#include <boost/hash2/detail/memcpy.hpp>
+#include <boost/hash2/detail/memset.hpp>
+#include <boost/hash2/detail/config.hpp>
 #include <boost/assert.hpp>
 #include <cstdint>
 #include <cstring>
@@ -35,7 +38,7 @@ private:
 
 private:
 
-    void sipround()
+    BOOST_HASH2_CXX14_CONSTEXPR void sipround()
     {
         v0 += v1;
         v1 = detail::rotl(v1, 13);
@@ -53,7 +56,7 @@ private:
         v2 = detail::rotl(v2, 32);
     }
 
-    void update_( unsigned char const * p )
+    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p )
     {
         std::uint64_t m = detail::read64le( p );
 
@@ -67,11 +70,11 @@ private:
 
 public:
 
-    typedef std::uint64_t result_type;
+    using result_type = std::uint64_t;
 
     siphash_64() = default;
 
-    explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 )
+    BOOST_CXX14_CONSTEXPR explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 )
     {
         v0 ^= k0;
         v1 ^= k1;
@@ -79,7 +82,7 @@ public:
         v3 ^= k1;
     }
 
-    siphash_64( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR siphash_64( unsigned char const * p, std::size_t n )
     {
         if( n == 16 )
         {
@@ -98,10 +101,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % 8 );
 
         if( n == 0 ) return;
@@ -117,7 +118,7 @@ public:
                 k = n;
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -131,7 +132,7 @@ public:
             m_ = 0;
 
             // clear buffered plaintext
-            std::memset( buffer_, 0, 8 );
+            detail::memset( buffer_, 0, 8 );
         }
 
         BOOST_ASSERT( m_ == 0 );
@@ -148,18 +149,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = n;
         }
 
         BOOST_ASSERT( m_ == n_ % 8 );
     }
 
-    std::uint64_t result()
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t result()
     {
         BOOST_ASSERT( m_ == n_ % 8 );
 
-        std::memset( buffer_ + m_, 0, 8 - m_ );
+        detail::memset( buffer_ + m_, 0, 8 - m_ );
 
         buffer_[ 7 ] = static_cast<unsigned char>( n_ & 0xFF );
 
@@ -176,7 +183,7 @@ public:
         m_ = 0;
 
         // clear buffered plaintext
-        std::memset( buffer_, 0, 8 );
+        detail::memset( buffer_, 0, 8 );
 
         return v0 ^ v1 ^ v2 ^ v3;
     }
@@ -198,7 +205,7 @@ private:
 
 private:
 
-    void sipround()
+    BOOST_HASH2_CXX14_CONSTEXPR void sipround()
     {
         v0 += v1;
         v1 = detail::rotl(v1, 5);
@@ -216,7 +223,7 @@ private:
         v2 = detail::rotl(v2, 16);
     }
 
-    void update_( unsigned char const * p )
+    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p )
     {
         std::uint32_t m = detail::read32le( p );
 
@@ -230,11 +237,11 @@ private:
 
 public:
 
-    typedef std::uint32_t result_type;
+    using result_type = std::uint32_t;
 
     siphash_32() = default;
 
-    explicit siphash_32( std::uint64_t seed )
+    BOOST_CXX14_CONSTEXPR explicit siphash_32( std::uint64_t seed )
     {
         std::uint32_t k0 = static_cast<std::uint32_t>( seed );
         std::uint32_t k1 = static_cast<std::uint32_t>( seed >> 32 );
@@ -245,7 +252,7 @@ public:
         v3 ^= k1;
     }
 
-    siphash_32( std::uint32_t k0, std::uint32_t k1 )
+    BOOST_CXX14_CONSTEXPR siphash_32( std::uint32_t k0, std::uint32_t k1 )
     {
         v0 ^= k0;
         v1 ^= k1;
@@ -253,7 +260,7 @@ public:
         v3 ^= k1;
     }
 
-    siphash_32( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR siphash_32( unsigned char const * p, std::size_t n )
     {
         if( n == 8 )
         {
@@ -272,10 +279,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % 4 );
 
         if( n == 0 ) return;
@@ -291,7 +296,7 @@ public:
                 k = static_cast<std::uint32_t>( n );
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -305,7 +310,7 @@ public:
             m_ = 0;
 
             // clear buffered plaintext
-            std::memset( buffer_, 0, 4 );
+            detail::memset( buffer_, 0, 4 );
         }
 
         BOOST_ASSERT( m_ == 0 );
@@ -322,18 +327,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = static_cast<std::uint32_t>( n );
         }
 
         BOOST_ASSERT( m_ == n_ % 4 );
     }
 
-    std::uint32_t result()
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t result()
     {
         BOOST_ASSERT( m_ == n_ % 4 );
 
-        std::memset( buffer_ + m_, 0, 4 - m_ );
+        detail::memset( buffer_ + m_, 0, 4 - m_ );
 
         buffer_[ 3 ] = static_cast<unsigned char>( n_ & 0xFF );
 
@@ -350,7 +361,7 @@ public:
         m_ = 0;
 
         // clear buffered plaintext
-        std::memset( buffer_, 0, 4 );
+        detail::memset( buffer_, 0, 4 );
 
         return v1 ^ v3;
     }
