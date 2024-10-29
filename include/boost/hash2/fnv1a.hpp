@@ -11,6 +11,7 @@
 
 #include <boost/hash2/detail/write.hpp>
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <cstdint>
 #include <cstddef>
 
@@ -48,17 +49,17 @@ public:
 
     fnv1a() = default;
 
-    explicit fnv1a( std::uint64_t seed )
+    BOOST_CXX14_CONSTEXPR explicit fnv1a( std::uint64_t seed )
     {
         if( seed )
         {
-            unsigned char tmp[ 8 ];
+            unsigned char tmp[ 8 ] = {};
             detail::write64le( tmp, seed );
             update( tmp, 8 );
         }
     }
 
-    fnv1a( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR fnv1a( unsigned char const * p, std::size_t n )
     {
         if( n != 0 )
         {
@@ -66,10 +67,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const * p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         T h = st_;
 
         for( std::size_t i = 0; i < n; ++i )
@@ -81,7 +80,13 @@ public:
         st_ = h;
     }
 
-    T result()
+    void update( void const * pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_CXX14_CONSTEXPR T result()
     {
         T r = st_;
 
@@ -103,11 +108,11 @@ public:
 
     fnv1a_32() = default;
 
-    explicit fnv1a_32( std::uint64_t seed ): detail::fnv1a<std::uint32_t>( seed )
+    BOOST_CXX14_CONSTEXPR explicit fnv1a_32( std::uint64_t seed ): detail::fnv1a<std::uint32_t>( seed )
     {
     }
 
-    fnv1a_32( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint32_t>( p, n )
+    BOOST_CXX14_CONSTEXPR fnv1a_32( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint32_t>( p, n )
     {
     }
 };
@@ -118,11 +123,11 @@ public:
 
     fnv1a_64() = default;
 
-    explicit fnv1a_64( std::uint64_t seed ): detail::fnv1a<std::uint64_t>( seed )
+    BOOST_CXX14_CONSTEXPR explicit fnv1a_64( std::uint64_t seed ): detail::fnv1a<std::uint64_t>( seed )
     {
     }
 
-    fnv1a_64( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint64_t>( p, n )
+    BOOST_CXX14_CONSTEXPR fnv1a_64( unsigned char const * p, std::size_t n ): detail::fnv1a<std::uint64_t>( p, n )
     {
     }
 };
