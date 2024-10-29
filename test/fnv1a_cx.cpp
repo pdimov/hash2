@@ -7,6 +7,10 @@
 #include <boost/config.hpp>
 #include <cstring>
 
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1920
+# pragma warning(disable: 4307) // '*': integral constant overflow
+#endif
+
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
 template<class H, std::size_t N> BOOST_CXX14_CONSTEXPR typename H::result_type test( std::uint64_t seed, unsigned char const (&v)[ N ] )

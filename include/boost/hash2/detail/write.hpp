@@ -18,7 +18,7 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32le( unsigned char * p, std::uint32_t v )
+BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write32le( unsigned char * p, std::uint32_t v )
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {
@@ -33,7 +33,7 @@ BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32le( unsigned char * p, std::
     }
 }
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write64le( unsigned char * p, std::uint64_t v )
+BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write64le( unsigned char * p, std::uint64_t v )
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {

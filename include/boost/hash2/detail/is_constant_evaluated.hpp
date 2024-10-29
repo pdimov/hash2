@@ -41,4 +41,16 @@ constexpr bool is_constant_evaluated() noexcept
 } // namespace hash2
 } // namespace boost
 
+// Needed for msvc-14.1
+
+#if defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
+
+# define BOOST_HASH2_CXX14_CONSTEXPR BOOST_CXX14_CONSTEXPR
+
+#else
+
+# define BOOST_HASH2_CXX14_CONSTEXPR
+
+#endif
+
 #endif // #ifndef BOOST_HASH2_DETAIL_IS_CONSTANT_EVALUATED_HPP_INCLUDED
