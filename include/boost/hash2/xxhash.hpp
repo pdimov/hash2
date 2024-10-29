@@ -9,6 +9,8 @@
 
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/rot.hpp>
+#include <boost/hash2/detail/memset.hpp>
+#include <boost/hash2/detail/memcpy.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <cstdint>
@@ -49,7 +51,7 @@ private:
 
 private:
 
-    void init( std::uint32_t seed )
+    BOOST_CXX14_CONSTEXPR void init( std::uint32_t seed )
     {
         v1_ = seed + P1 + P2;
         v2_ = seed + P2;
@@ -57,7 +59,7 @@ private:
         v4_ = seed - P1;
     }
 
-    static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
+    BOOST_HASH2_CXX14_CONSTEXPR static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 13 );
@@ -65,7 +67,7 @@ private:
         return seed;
     }
 
-    void update_( unsigned char const * p, std::size_t k )
+    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
     {
         std::uint32_t v1 = v1_;
         std::uint32_t v2 = v2_;
@@ -88,11 +90,11 @@ private:
 
 public:
 
-    typedef std::uint32_t result_type;
+    using result_type = std::uint32_t;
 
     xxhash_32() = default;
 
-    explicit xxhash_32( std::uint64_t seed )
+    BOOST_CXX14_CONSTEXPR explicit xxhash_32( std::uint64_t seed )
     {
         std::uint32_t s0 = static_cast<std::uint32_t>( seed );
         std::uint32_t s1 = static_cast<std::uint32_t>( seed >> 32 );
@@ -108,7 +110,7 @@ public:
         }
     }
 
-    xxhash_32( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR xxhash_32( unsigned char const * p, std::size_t n )
     {
         if( n != 0 )
         {
@@ -117,10 +119,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % 16 );
 
         if( n == 0 ) return;
@@ -136,7 +136,7 @@ public:
                 k = n;
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -165,18 +165,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = n;
         }
 
         BOOST_ASSERT( m_ == n_ % 16 );
     }
 
-    std::uint32_t result()
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t result()
     {
         BOOST_ASSERT( m_ == n_ % 16 );
 
-        std::uint32_t h;
+        std::uint32_t h = 0;
 
         if( n_ >= 16 )
         {
@@ -215,7 +221,7 @@ public:
         m_ = 0;
 
         // clear buffered plaintext
-        std::memset( buffer_, 0, 16 );
+        detail::memset( buffer_, 0, 16 );
 
         // advance state
         v1_ = round( v1_, h );
@@ -258,7 +264,7 @@ private:
 
 private:
 
-    void init( std::uint64_t seed )
+    BOOST_CXX14_CONSTEXPR void init( std::uint64_t seed )
     {
         v1_ = seed + P1 + P2;
         v2_ = seed + P2;
@@ -266,7 +272,7 @@ private:
         v4_ = seed - P1;
     }
 
-    static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
+    BOOST_HASH2_CXX14_CONSTEXPR static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 31 );
@@ -274,7 +280,7 @@ private:
         return seed;
     }
 
-    static std::uint64_t merge_round( std::uint64_t acc, std::uint64_t val )
+    BOOST_HASH2_CXX14_CONSTEXPR static std::uint64_t merge_round( std::uint64_t acc, std::uint64_t val )
     {
         val = round( 0, val );
         acc ^= val;
@@ -282,7 +288,7 @@ private:
         return acc;
     }
 
-    void update_( unsigned char const * p, std::size_t k )
+    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
     {
         std::uint64_t v1 = v1_;
         std::uint64_t v2 = v2_;
@@ -309,12 +315,12 @@ public:
 
     xxhash_64() = default;
 
-    explicit xxhash_64( std::uint64_t seed )
+    BOOST_CXX14_CONSTEXPR explicit xxhash_64( std::uint64_t seed )
     {
         init( seed );
     }
 
-    xxhash_64( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR xxhash_64( unsigned char const * p, std::size_t n )
     {
         if( n != 0 )
         {
@@ -323,10 +329,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % 32 );
 
         if( n == 0 ) return;
@@ -342,7 +346,7 @@ public:
                 k = n;
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -371,18 +375,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = n;
         }
 
         BOOST_ASSERT( m_ == n_ % 32 );
     }
 
-    std::uint64_t result()
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t result()
     {
         BOOST_ASSERT( m_ == n_ % 32 );
 
-        std::uint64_t h;
+        std::uint64_t h = 0;
 
         if( n_ >= 32 )
         {
@@ -437,7 +447,7 @@ public:
         m_ = 0;
 
         // clear buffered plaintext
-        std::memset( buffer_, 0, 32 );
+        detail::memset( buffer_, 0, 32 );
 
         // advance state
         v1_ = round( v1_, h );

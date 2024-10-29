@@ -76,10 +76,11 @@ run hash_append_range_2.cpp ;
 run fnv1a.cpp ;
 run fnv1a_cx.cpp ;
 
+run xxhash.cpp ;
+run xxhash_cx.cpp ;
+
 run siphash32.cpp ;
 run siphash64.cpp ;
-
-run xxhash.cpp ;
 
 # cryptographic
 
