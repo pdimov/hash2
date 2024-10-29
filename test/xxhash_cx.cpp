@@ -3,6 +3,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/xxhash.hpp>
+#include <boost/hash2/detail/config.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
 #include <cstring>
@@ -38,7 +39,7 @@ int main()
     BOOST_TEST_EQ( test<xxhash_64>( 7, v21 ), 16168826474312362322ull );
     BOOST_TEST_EQ( test<xxhash_64>( 7, v45 ), 14120916949766558435ull );
 
-#if !defined(BOOST_NO_CXX14_CONSTEXPR) && defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
+#if defined(BOOST_HASH2_HAS_CXX14_CONSTEXPR)
 
     STATIC_ASSERT( test<xxhash_32>( 0, v21 ) == 86206869 );
     STATIC_ASSERT( test<xxhash_32>( 0, v45 ) == 747548280 );
