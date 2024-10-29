@@ -22,31 +22,34 @@ int main()
 {
     using namespace boost::hash2;
 
-    BOOST_TEST_EQ( test<fnv1a_32>( 0, { 0 } ), 84696351 );
-    BOOST_TEST_EQ( test<fnv1a_32>( 0, { 0, 1, 2, 3 } ), 3282719153 );
+    constexpr unsigned char v1[] = { 0 };
+    constexpr unsigned char v4[] = { 0, 1, 2, 3 };
 
-    BOOST_TEST_EQ( test<fnv1a_32>( 7, { 0 } ), 1695235878 );
-    BOOST_TEST_EQ( test<fnv1a_32>( 7, { 0, 1, 2, 3 } ), 4085431250 );
+    BOOST_TEST_EQ( test<fnv1a_32>( 0, v1 ), 84696351 );
+    BOOST_TEST_EQ( test<fnv1a_32>( 0, v4 ), 3282719153 );
 
-    BOOST_TEST_EQ( test<fnv1a_64>( 0, { 0 } ), 12638153115695167455ull );
-    BOOST_TEST_EQ( test<fnv1a_64>( 0, { 0, 1, 2, 3 } ), 4932904490461320209 );
+    BOOST_TEST_EQ( test<fnv1a_32>( 7, v1 ), 1695235878 );
+    BOOST_TEST_EQ( test<fnv1a_32>( 7, v4 ), 4085431250 );
 
-    BOOST_TEST_EQ( test<fnv1a_64>( 7, { 0 } ), 3154070194012243846 );
-    BOOST_TEST_EQ( test<fnv1a_64>( 7, { 0, 1, 2, 3 } ), 9028993744456876338 );
+    BOOST_TEST_EQ( test<fnv1a_64>( 0, v1 ), 12638153115695167455ull );
+    BOOST_TEST_EQ( test<fnv1a_64>( 0, v4 ), 4932904490461320209 );
+
+    BOOST_TEST_EQ( test<fnv1a_64>( 7, v1 ), 3154070194012243846 );
+    BOOST_TEST_EQ( test<fnv1a_64>( 7, v4 ), 9028993744456876338 );
 
 #if !defined(BOOST_NO_CXX14_CONSTEXPR)
 
-    STATIC_ASSERT( test<fnv1a_32>( 0, { 0 } ) == 84696351 );
-    STATIC_ASSERT( test<fnv1a_32>( 0, { 0, 1, 2, 3 } ) == 3282719153 );
+    STATIC_ASSERT( test<fnv1a_32>( 0, v1 ) == 84696351 );
+    STATIC_ASSERT( test<fnv1a_32>( 0, v4 ) == 3282719153 );
 
-    STATIC_ASSERT( test<fnv1a_32>( 7, { 0 } ) == 1695235878 );
-    STATIC_ASSERT( test<fnv1a_32>( 7, { 0, 1, 2, 3 } ) == 4085431250 );
+    STATIC_ASSERT( test<fnv1a_32>( 7, v1 ) == 1695235878 );
+    STATIC_ASSERT( test<fnv1a_32>( 7, v4 ) == 4085431250 );
 
-    STATIC_ASSERT( test<fnv1a_64>( 0, { 0 } ) == 12638153115695167455ull );
-    STATIC_ASSERT( test<fnv1a_64>( 0, { 0, 1, 2, 3 } ) == 4932904490461320209 );
+    STATIC_ASSERT( test<fnv1a_64>( 0, v1 ) == 12638153115695167455ull );
+    STATIC_ASSERT( test<fnv1a_64>( 0, v4 ) == 4932904490461320209 );
 
-    STATIC_ASSERT( test<fnv1a_64>( 7, { 0 } ) == 3154070194012243846 );
-    STATIC_ASSERT( test<fnv1a_64>( 7, { 0, 1, 2, 3 } ) == 9028993744456876338 );
+    STATIC_ASSERT( test<fnv1a_64>( 7, v1 ) == 3154070194012243846 );
+    STATIC_ASSERT( test<fnv1a_64>( 7, v4 ) == 9028993744456876338 );
 
 #endif
 
