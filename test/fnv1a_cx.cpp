@@ -28,11 +28,11 @@ int main()
     BOOST_TEST_EQ( test<fnv1a_32>( 0, v1 ), 84696351 );
     BOOST_TEST_EQ( test<fnv1a_32>( 0, v4 ), 3282719153 );
 
-    BOOST_TEST_EQ( test<fnv1a_32>( 7, v1 ), 1695235878 );
-    BOOST_TEST_EQ( test<fnv1a_32>( 7, v4 ), 4085431250 );
-
     BOOST_TEST_EQ( test<fnv1a_64>( 0, v1 ), 12638153115695167455ull );
     BOOST_TEST_EQ( test<fnv1a_64>( 0, v4 ), 4932904490461320209 );
+
+    BOOST_TEST_EQ( test<fnv1a_32>( 7, v1 ), 1695235878 );
+    BOOST_TEST_EQ( test<fnv1a_32>( 7, v4 ), 4085431250 );
 
     BOOST_TEST_EQ( test<fnv1a_64>( 7, v1 ), 3154070194012243846 );
     BOOST_TEST_EQ( test<fnv1a_64>( 7, v4 ), 9028993744456876338 );
@@ -42,15 +42,18 @@ int main()
     STATIC_ASSERT( test<fnv1a_32>( 0, v1 ) == 84696351 );
     STATIC_ASSERT( test<fnv1a_32>( 0, v4 ) == 3282719153 );
 
-    STATIC_ASSERT( test<fnv1a_32>( 7, v1 ) == 1695235878 );
-    STATIC_ASSERT( test<fnv1a_32>( 7, v4 ) == 4085431250 );
-
     STATIC_ASSERT( test<fnv1a_64>( 0, v1 ) == 12638153115695167455ull );
     STATIC_ASSERT( test<fnv1a_64>( 0, v4 ) == 4932904490461320209 );
+
+#if defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
+
+    STATIC_ASSERT( test<fnv1a_32>( 7, v1 ) == 1695235878 );
+    STATIC_ASSERT( test<fnv1a_32>( 7, v4 ) == 4085431250 );
 
     STATIC_ASSERT( test<fnv1a_64>( 7, v1 ) == 3154070194012243846 );
     STATIC_ASSERT( test<fnv1a_64>( 7, v4 ) == 9028993744456876338 );
 
+#endif
 #endif
 
     return boost::report_errors();
