@@ -9,6 +9,7 @@
 #include <boost/hash2/sha1.hpp>
 #include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
+#include <boost/hash2/digest.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <array>
@@ -25,6 +26,11 @@ template<class R> struct is_valid_result:
 };
 
 template<std::size_t N> struct is_valid_result< std::array<unsigned char, N> >:
+    std::integral_constant<bool, N >= 8>
+{
+};
+
+template<std::size_t N> struct is_valid_result< boost::hash2::digest<N> >:
     std::integral_constant<bool, N >= 8>
 {
 };

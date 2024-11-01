@@ -14,7 +14,7 @@
 #include <cerrno>
 #include <cstdio>
 
-template<std::size_t N> std::string result_to_string( std::array<unsigned char, N> const & v )
+template<std::size_t N> std::string to_string( std::array<unsigned char, N> const & v )
 {
     std::string r;
 
@@ -51,7 +51,7 @@ template<class Hash> void hash2sum( std::FILE* f, char const* fn )
         hash.update( buffer, n );
     }
 
-    std::string digest = result_to_string( hash.result() );
+    std::string digest = to_string( hash.result() );
 
     std::printf( "%s *%s\n", digest.c_str(), fn );
 }

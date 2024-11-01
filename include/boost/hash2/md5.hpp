@@ -7,6 +7,7 @@
 //
 // MD5 message digest algorithm, https://tools.ietf.org/html/rfc1321
 
+#include <boost/hash2/digest.hpp>
 #include <boost/hash2/hmac.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
@@ -196,7 +197,7 @@ private:
 
 public:
 
-    using result_type = std::array<unsigned char, 16>;
+    using result_type = digest<16>;
 
     static constexpr int block_size = 64;
 
