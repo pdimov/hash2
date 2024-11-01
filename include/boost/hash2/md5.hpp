@@ -107,7 +107,7 @@ private:
     static constexpr int S43 = 15;
     static constexpr int S44 = 21;
 
-    BOOST_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
+    BOOST_HASH2_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t a = state_[ 0 ];
         std::uint32_t b = state_[ 1 ];
