@@ -137,7 +137,7 @@ template<std::size_t N> BOOST_CXX14_CONSTEXPR bool operator!=( digest<N> const& 
 
 template<std::size_t N> BOOST_CXX14_CONSTEXPR bool to_chars( char* first, char* last, digest<N> const& v ) noexcept
 {
-    if( last - first < 2 * N )
+    if( last - first < static_cast<std::ptrdiff_t>( 2 * N ) )
     {
         return false;
     }
