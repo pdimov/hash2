@@ -26,8 +26,8 @@ int main()
 
     constexpr unsigned char v[ 95 ] = {};
 
-    constexpr digest<16> r1 = {{ 10, 29, 252, 24, 200, 200, 56, 31, 5, 248, 173, 157, 43, 69, 9, 181 }};
-    constexpr digest<16> r2 = {{ 181, 92, 80, 91, 73, 60, 132, 154, 25, 168, 65, 211, 8, 142, 193, 207 }};
+    BOOST_CXX14_CONSTEXPR digest<16> r1 = {{ 10, 29, 252, 24, 200, 200, 56, 31, 5, 248, 173, 157, 43, 69, 9, 181 }};
+    BOOST_CXX14_CONSTEXPR digest<16> r2 = {{ 181, 92, 80, 91, 73, 60, 132, 154, 25, 168, 65, 211, 8, 142, 193, 207 }};
 
     BOOST_TEST_EQ( test<md5_128>( 0, v ), r1 );
     BOOST_TEST_EQ( test<md5_128>( 7, v ), r2 );
