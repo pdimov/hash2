@@ -32,6 +32,7 @@ run is_endian_independent.cpp ;
 # helpers
 
 run get_integral_result.cpp ;
+run digest.cpp ;
 
 # detail
 
