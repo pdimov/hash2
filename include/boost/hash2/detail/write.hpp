@@ -18,7 +18,7 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write32le( unsigned char * p, std::uint32_t v )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32le( unsigned char * p, std::uint32_t v ) noexcept
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {
@@ -33,7 +33,7 @@ BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write32le( unsigned char * p,
     }
 }
 
-BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write64le( unsigned char * p, std::uint64_t v )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write64le( unsigned char * p, std::uint64_t v ) noexcept
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {
@@ -52,7 +52,7 @@ BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void write64le( unsigned char * p,
     }
 }
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32be( unsigned char * p, std::uint32_t v )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32be( unsigned char * p, std::uint32_t v ) noexcept
 {
     p[0] = static_cast<unsigned char>( ( v >> 24 ) & 0xFF );
     p[1] = static_cast<unsigned char>( ( v >> 16 ) & 0xFF );
@@ -60,7 +60,7 @@ BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write32be( unsigned char * p, std::
     p[3] = static_cast<unsigned char>( v & 0xFF );
 }
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write64be( unsigned char * p, std::uint64_t v )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void write64be( unsigned char * p, std::uint64_t v ) noexcept
 {
     p[0] = static_cast<unsigned char>( ( v >> 56 ) & 0xFF );
     p[1] = static_cast<unsigned char>( ( v >> 48 ) & 0xFF );

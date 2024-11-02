@@ -18,7 +18,7 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t read32le( unsigned char const * p )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t read32le( unsigned char const * p ) noexcept
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {
@@ -36,7 +36,7 @@ BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t read32le( unsigned c
     }
 }
 
-BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t read64le( unsigned char const * p )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint64_t read64le( unsigned char const * p ) noexcept
 {
     if( !detail::is_constant_evaluated() && endian::native == endian::little )
     {
@@ -58,7 +58,7 @@ BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t read64le( unsigned c
     }
 }
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t read32be( unsigned char const * p )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t read32be( unsigned char const * p ) noexcept
 {
     return
         static_cast<std::uint32_t>( p[3] ) |
@@ -67,7 +67,7 @@ BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t read32be( unsigned char co
         ( static_cast<std::uint32_t>( p[0] ) << 24 );
 }
 
-BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint64_t read64be( unsigned char const * p )
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint64_t read64be( unsigned char const * p ) noexcept
 {
     return
         static_cast<std::uint64_t>( p[7] ) |

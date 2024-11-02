@@ -16,25 +16,25 @@ namespace detail
 {
 
 // k must not be 0
-BOOST_FORCEINLINE constexpr std::uint32_t rotl( std::uint32_t v, int k )
+BOOST_FORCEINLINE constexpr std::uint32_t rotl( std::uint32_t v, int k ) noexcept
 {
     return ( v << k ) | ( v >> ( 32 - k ) );
 }
 
 // k must not be 0
-BOOST_FORCEINLINE constexpr std::uint64_t rotl( std::uint64_t v, int k )
+BOOST_FORCEINLINE constexpr std::uint64_t rotl( std::uint64_t v, int k ) noexcept
 {
     return ( v << k ) | ( v >> ( 64 - k ) );
 }
 
 // k must not be 0
-BOOST_FORCEINLINE constexpr std::uint32_t rotr( std::uint32_t v, int k )
+BOOST_FORCEINLINE constexpr std::uint32_t rotr( std::uint32_t v, int k ) noexcept
 {
     return ( v >> k ) | ( v << ( 32 - k ) );
 }
 
 // k must not be 0
-BOOST_FORCEINLINE constexpr std::uint64_t rotr( std::uint64_t v, int k )
+BOOST_FORCEINLINE constexpr std::uint64_t rotr( std::uint64_t v, int k ) noexcept
 {
     return ( v >> k ) | ( v << ( 64 - k ) );
 }

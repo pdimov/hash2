@@ -16,7 +16,16 @@ namespace hash2
 namespace detail
 {
 
-BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void memcpy( unsigned char* d, unsigned char const* s, std::size_t n )
+#if defined(BOOST_NO_CXX14_CONSTEXPR)
+
+BOOST_FORCEINLINE void memcpy( unsigned char* d, unsigned char const* s, std::size_t n ) noexcept
+{
+    std::memcpy( d, s, n );
+}
+
+#else
+
+constexpr void memcpy( unsigned char* d, unsigned char const* s, std::size_t n ) noexcept
 {
     if( !detail::is_constant_evaluated() )
     {
@@ -30,6 +39,8 @@ BOOST_FORCEINLINE BOOST_HASH2_CXX14_CONSTEXPR void memcpy( unsigned char* d, uns
         }
     }
 }
+
+#endif
 
 } // namespace detail
 } // namespace hash2

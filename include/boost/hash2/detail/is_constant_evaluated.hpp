@@ -22,7 +22,7 @@ constexpr bool is_constant_evaluated() noexcept
 
 #else
 
-    return false;
+    return true;
 
 #endif
 }

@@ -6,7 +6,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/detail/memcpy.hpp>
-#include <boost/hash2/detail/config.hpp>
+#include <boost/hash2/detail/memcmp.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <string>
@@ -30,31 +30,10 @@ public:
 
     digest() = default;
 
-#if defined(BOOST_NO_CXX14_CONSTEXPR)
-
-    digest( unsigned char const (&v)[ N ] ) noexcept
-    {
-        std::memcpy( data_, v, N );
-    }
-
-#elif defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
-
     BOOST_CXX14_CONSTEXPR digest( unsigned char const (&v)[ N ] ) noexcept
     {
         detail::memcpy( data_, v, N );
     }
-
-#else
-
-    BOOST_CXX14_CONSTEXPR digest( unsigned char const (&v)[ N ] ) noexcept
-    {
-        for( std::size_t i = 0; i < N; ++i )
-        {
-            data_[ i ] = v[ i ];
-        }
-    }
-
-#endif
 
     // iteration
 
@@ -88,45 +67,10 @@ public:
 
 // comparisons
 
-#if defined(BOOST_NO_CXX14_CONSTEXPR)
-
-template<std::size_t N> bool operator==( digest<N> const& a, digest<N> const& b ) noexcept
-{
-    return std::memcmp( a.data(), b.data(), N ) == 0;
-}
-
-#elif defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
-
 template<std::size_t N> BOOST_CXX14_CONSTEXPR bool operator==( digest<N> const& a, digest<N> const& b ) noexcept
 {
-    if( !detail::is_constant_evaluated() )
-    {
-        return std::memcmp( a.data(), b.data(), N ) == 0;
-    }
-    else
-    {
-        for( std::size_t i = 0; i < N; ++i )
-        {
-            if( a[ i ] != b[ i ] ) return false;
-        }
-
-        return true;
-    }
+    return detail::memcmp( a.data(), b.data(), N ) == 0;
 }
-
-#else
-
-template<std::size_t N> BOOST_CXX14_CONSTEXPR bool operator==( digest<N> const& a, digest<N> const& b ) noexcept
-{
-    for( std::size_t i = 0; i < N; ++i )
-    {
-        if( a[ i ] != b[ i ] ) return false;
-    }
-
-    return true;
-}
-
-#endif
 
 template<std::size_t N> BOOST_CXX14_CONSTEXPR bool operator!=( digest<N> const& a, digest<N> const& b ) noexcept
 {

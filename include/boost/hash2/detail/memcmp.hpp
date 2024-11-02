@@ -1,5 +1,5 @@
-#ifndef BOOST_HASH2_DETAIL_MEMSET_HPP_INCLUDED
-#define BOOST_HASH2_DETAIL_MEMSET_HPP_INCLUDED
+#ifndef BOOST_HASH2_DETAIL_MEMCMP_HPP_INCLUDED
+#define BOOST_HASH2_DETAIL_MEMCMP_HPP_INCLUDED
 
 // Copyright 2024 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
@@ -18,25 +18,27 @@ namespace detail
 
 #if defined(BOOST_NO_CXX14_CONSTEXPR)
 
-BOOST_FORCEINLINE void memset( unsigned char* p, unsigned char v, std::size_t n ) noexcept
+BOOST_FORCEINLINE int memcmp( unsigned char const* p, unsigned char const* q, std::size_t n ) noexcept
 {
-    std::memset( p, v, n );
+    return std::memcmp( p, q, n );
 }
 
 #else
 
-constexpr void memset( unsigned char* p, unsigned char v, std::size_t n ) noexcept
+constexpr int memcmp( unsigned char const* p, unsigned char const* q, std::size_t n ) noexcept
 {
     if( !detail::is_constant_evaluated() )
     {
-        std::memset( p, v, n );
+        return std::memcmp( p, q, n );
     }
     else
     {
         for( std::size_t i = 0; i < n; ++i )
         {
-            p[ i ] = v;
+            if( p[ i ] != q[ i ] ) return p[ i ] - q[ i ];
         }
+
+        return 0;
     }
 }
 
@@ -46,4 +48,4 @@ constexpr void memset( unsigned char* p, unsigned char v, std::size_t n ) noexce
 } // namespace hash2
 } // namespace boost
 
-#endif // #ifndef BOOST_HASH2_DETAIL_MEMSET_HPP_INCLUDED
+#endif // #ifndef BOOST_HASH2_DETAIL_MEMCMP_HPP_INCLUDED
