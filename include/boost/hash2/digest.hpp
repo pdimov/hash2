@@ -135,11 +135,11 @@ template<std::size_t N> BOOST_CXX14_CONSTEXPR bool operator!=( digest<N> const& 
 
 // to_chars
 
-template<std::size_t N> BOOST_CXX14_CONSTEXPR bool to_chars( char* first, char* last, digest<N> const& v ) noexcept
+template<std::size_t N> BOOST_CXX14_CONSTEXPR char* to_chars( digest<N> const& v, char* first, char* last ) noexcept
 {
     if( last - first < static_cast<std::ptrdiff_t>( 2 * N ) )
     {
-        return false;
+        return nullptr;
     }
 
     constexpr char digits[] = "0123456789abcdef";
@@ -150,14 +150,13 @@ template<std::size_t N> BOOST_CXX14_CONSTEXPR bool to_chars( char* first, char* 
         first[ i*2 + 1 ] = digits[ v[i] & 0x0F ];
     }
 
-    return true;
+    return first + N * 2;
 }
 
 template<std::size_t N, std::size_t M> BOOST_CXX14_CONSTEXPR void to_chars( digest<N> const& v, char (&w)[ M ] ) noexcept
 {
     static_assert( M >= 2 * N + 1, "Output buffer not large enough" );
-    to_chars( w, w + M, v );
-    w[ 2*N ] = 0;
+    *to_chars( v, w, w + M ) = 0;
 }
 
 // operator<<
