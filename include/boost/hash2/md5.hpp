@@ -107,7 +107,7 @@ private:
     static constexpr int S43 = 15;
     static constexpr int S44 = 21;
 
-    BOOST_HASH2_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
+    BOOST_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t a = state_[ 0 ];
         std::uint32_t b = state_[ 1 ];
@@ -224,7 +224,7 @@ public:
         }
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
         BOOST_ASSERT( m_ == n_ % N );
 
@@ -284,7 +284,7 @@ public:
         update( p, n );
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR result_type result()
+    BOOST_CXX14_CONSTEXPR result_type result()
     {
         BOOST_ASSERT( m_ == n_ % N );
 

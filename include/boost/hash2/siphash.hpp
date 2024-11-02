@@ -38,7 +38,7 @@ private:
 
 private:
 
-    BOOST_HASH2_CXX14_CONSTEXPR void sipround()
+    BOOST_CXX14_CONSTEXPR void sipround()
     {
         v0 += v1;
         v1 = detail::rotl(v1, 13);
@@ -56,7 +56,7 @@ private:
         v2 = detail::rotl(v2, 32);
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p )
+    BOOST_CXX14_CONSTEXPR void update_( unsigned char const * p )
     {
         std::uint64_t m = detail::read64le( p );
 
@@ -101,7 +101,7 @@ public:
         }
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
         BOOST_ASSERT( m_ == n_ % 8 );
 
@@ -162,7 +162,7 @@ public:
         update( p, n );
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t result()
+    BOOST_CXX14_CONSTEXPR std::uint64_t result()
     {
         BOOST_ASSERT( m_ == n_ % 8 );
 
@@ -205,7 +205,7 @@ private:
 
 private:
 
-    BOOST_HASH2_CXX14_CONSTEXPR void sipround()
+    BOOST_CXX14_CONSTEXPR void sipround()
     {
         v0 += v1;
         v1 = detail::rotl(v1, 5);
@@ -223,7 +223,7 @@ private:
         v2 = detail::rotl(v2, 16);
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p )
+    BOOST_CXX14_CONSTEXPR void update_( unsigned char const * p )
     {
         std::uint32_t m = detail::read32le( p );
 
@@ -279,7 +279,7 @@ public:
         }
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
         BOOST_ASSERT( m_ == n_ % 4 );
 
@@ -340,7 +340,7 @@ public:
         update( p, n );
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t result()
+    BOOST_CXX14_CONSTEXPR std::uint32_t result()
     {
         BOOST_ASSERT( m_ == n_ % 4 );
 

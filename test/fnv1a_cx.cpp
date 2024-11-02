@@ -8,7 +8,7 @@
 #include <cstring>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1920
-# pragma warning(disable: 4307) // '*': integral constant overflow
+# pragma warning(disable: 4307) // integral constant overflow
 #endif
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
@@ -49,15 +49,12 @@ int main()
     STATIC_ASSERT( test<fnv1a_64>( 0, v1 ) == 12638153115695167455ull );
     STATIC_ASSERT( test<fnv1a_64>( 0, v4 ) == 4932904490461320209 );
 
-#if defined(BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
-
     STATIC_ASSERT( test<fnv1a_32>( 7, v1 ) == 1695235878 );
     STATIC_ASSERT( test<fnv1a_32>( 7, v4 ) == 4085431250 );
 
     STATIC_ASSERT( test<fnv1a_64>( 7, v1 ) == 3154070194012243846 );
     STATIC_ASSERT( test<fnv1a_64>( 7, v4 ) == 9028993744456876338 );
 
-#endif
 #endif
 
     return boost::report_errors();

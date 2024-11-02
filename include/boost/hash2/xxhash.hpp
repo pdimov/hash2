@@ -59,7 +59,7 @@ private:
         v4_ = seed - P1;
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
+    BOOST_CXX14_CONSTEXPR static std::uint32_t round( std::uint32_t seed, std::uint32_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 13 );
@@ -67,7 +67,7 @@ private:
         return seed;
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
+    BOOST_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
     {
         std::uint32_t v1 = v1_;
         std::uint32_t v2 = v2_;
@@ -119,7 +119,7 @@ public:
         }
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
         BOOST_ASSERT( m_ == n_ % 16 );
 
@@ -178,7 +178,7 @@ public:
         update( p, n );
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR std::uint32_t result()
+    BOOST_CXX14_CONSTEXPR std::uint32_t result()
     {
         BOOST_ASSERT( m_ == n_ % 16 );
 
@@ -272,7 +272,7 @@ private:
         v4_ = seed - P1;
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
+    BOOST_CXX14_CONSTEXPR static std::uint64_t round( std::uint64_t seed, std::uint64_t input )
     {
         seed += input * P2;
         seed = detail::rotl( seed, 31 );
@@ -280,7 +280,7 @@ private:
         return seed;
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR static std::uint64_t merge_round( std::uint64_t acc, std::uint64_t val )
+    BOOST_CXX14_CONSTEXPR static std::uint64_t merge_round( std::uint64_t acc, std::uint64_t val )
     {
         val = round( 0, val );
         acc ^= val;
@@ -288,7 +288,7 @@ private:
         return acc;
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
+    BOOST_CXX14_CONSTEXPR void update_( unsigned char const * p, std::size_t k )
     {
         std::uint64_t v1 = v1_;
         std::uint64_t v2 = v2_;
@@ -329,7 +329,7 @@ public:
         }
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
         BOOST_ASSERT( m_ == n_ % 32 );
 
@@ -388,7 +388,7 @@ public:
         update( p, n );
     }
 
-    BOOST_HASH2_CXX14_CONSTEXPR std::uint64_t result()
+    BOOST_CXX14_CONSTEXPR std::uint64_t result()
     {
         BOOST_ASSERT( m_ == n_ % 32 );
 
