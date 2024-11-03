@@ -81,6 +81,7 @@ run append_character_cx.cpp ;
 run append_floating_point_cx.cpp ;
 run append_vector_cx.cpp ;
 run append_string_cx.cpp ;
+run append_array_cx.cpp ;
 
 # non-cryptographic
 
