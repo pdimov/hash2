@@ -1,4 +1,4 @@
-// Copyright 2024 Peter Dimov.
+// Copyright 2024 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -9,6 +9,22 @@
 int main()
 {
     using namespace boost::hash2::detail;
+
+    {
+        std::array<unsigned char, 2> w;
+
+        write16be( w.data(), 0x0102 );
+
+        BOOST_TEST(( w == std::array<unsigned char, 2>{{ 0x01, 0x02 }} ));
+    }
+
+    {
+        std::array<unsigned char, 2> w;
+
+        write16le( w.data(), 0x0102 );
+
+        BOOST_TEST(( w == std::array<unsigned char, 2>{{ 0x02, 0x01 }} ));
+    }
 
     {
         std::array<unsigned char, 4> w;

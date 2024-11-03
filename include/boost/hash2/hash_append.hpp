@@ -16,6 +16,7 @@
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/hash2/flavor.hpp>
 #include <boost/hash2/detail/is_constant_evaluated.hpp>
+#include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/reverse.hpp>
 #include <boost/hash2/detail/has_tag_invoke.hpp>
 #include <boost/container_hash/is_range.hpp>
@@ -148,44 +149,17 @@ template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTE
 
 // do_hash_append
 
-// integral types, sizeof(T) == 1
+// integral types
 
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
-    typename std::enable_if< std::is_integral<T>::value && sizeof(T) == 1, void >::type
-    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
-{
-    unsigned char w = static_cast<unsigned char>( v );
-    h.update( &w, 1 );
-}
-
-// integral types, sizeof(T) != 1, matching endianness
-// not yet constexpr
-
-template<class Hash, class Flavor, class T>
-    BOOST_CXX14_CONSTEXPR
-    typename std::enable_if<
-        std::is_integral<T>::value && sizeof(T) != 1 && Flavor::byte_order == endian::native,
-    void>::type
-    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
-{
-    h.update( &v, sizeof(T) );
-}
-
-// integral types, sizeof(T) != 1, non-matching endianness
-// not yet constexpr
-
-template<class Hash, class Flavor, class T>
-    BOOST_CXX14_CONSTEXPR
-    typename std::enable_if<
-        std::is_integral<T>::value && sizeof(T) != 1 && Flavor::byte_order != endian::native,
-    void >::type
+    typename std::enable_if< std::is_integral<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
     constexpr auto N = sizeof(T);
 
     unsigned char tmp[ N ] = {};
-    detail::reverse( tmp, &v );
+    detail::write( v, Flavor::byte_order, tmp );
 
     h.update( tmp, N );
 }
