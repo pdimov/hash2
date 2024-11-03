@@ -175,10 +175,9 @@ template<class Hash, class Flavor, class T>
 }
 
 // pointer types
-// not constexpr
+// never constexpr
 
 template<class Hash, class Flavor, class T>
-    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< std::is_pointer<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -204,9 +203,9 @@ template<class Hash, class Flavor, class T>
 }
 
 // std::nullptr_t
+// not constexpr for consistency with T*
 
 template<class Hash, class Flavor, class T>
-    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< std::is_same<T, std::nullptr_t>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
