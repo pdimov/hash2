@@ -1,4 +1,4 @@
-// Copyright 2024 Peter Dimov.
+// Copyright 2024 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -35,7 +35,25 @@ int main()
     }
 
     {
+        bool v[ 7 ] = {};
+
+        fnv1a_32 h;
+        hash_append_range( h, {}, v + 0, v + 7 );
+
+        BOOST_TEST_EQ( h.result(), 1177189415 );
+    }
+
+    {
         std::vector<bool> v( 7 );
+
+        fnv1a_32 h;
+        hash_append_range( h, {}, v.begin(), v.end() );
+
+        BOOST_TEST_EQ( h.result(), 1177189415 );
+    }
+
+    {
+        std::vector<bool> const v( 7 );
 
         fnv1a_32 h;
         hash_append_range( h, {}, v.begin(), v.end() );
