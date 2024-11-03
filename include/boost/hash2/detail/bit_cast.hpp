@@ -20,8 +20,17 @@ namespace detail
 template<class To, class From> BOOST_CXX14_CONSTEXPR To bit_cast( From const& from ) noexcept
 {
     static_assert( sizeof(From) == sizeof(To), "Types must be the same size" );
+
+#if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 50000
+
+    // std::is_trivially_copyable doesn't exist in libstdc++ 4.x
+
+#else
+
     static_assert( std::is_trivially_copyable<From>::value, "Types must be trivially copyable" );
     static_assert( std::is_trivially_copyable<To>::value, "Types must be trivially copyable" );
+
+#endif
 
 #if defined(BOOST_HASH2_HAS_BUILTIN_BIT_CAST)
 
