@@ -211,18 +211,6 @@ template<class Hash, class Flavor, class T>
     hash2::hash_append( h, f, reinterpret_cast<std::uintptr_t>( v ) );
 }
 
-// contiguously hashable, non-scalar
-
-template<class Hash, class Flavor, class T>
-    BOOST_CXX14_CONSTEXPR
-    typename std::enable_if<
-        is_contiguously_hashable<T, Flavor::byte_order>::value && !std::is_scalar<T>::value,
-    void>::type
-    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
-{
-    h.update( &v, sizeof(T) );
-}
-
 // floating point
 
 template<class Hash, class Flavor, class T>
@@ -403,9 +391,17 @@ template<class Hash, class Flavor, class T>
 
 // hash_append
 
-template<class Hash, class Flavor = default_flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v )
+template<class Hash, class Flavor = default_flavor, class T>
+BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v )
 {
-    do_hash_append( h, f, v );
+    if( !detail::is_constant_evaluated() && is_contiguously_hashable<T, Flavor::byte_order>::value )
+    {
+        h.update( &v, sizeof(T) );
+    }
+    else
+    {
+        do_hash_append( h, f, v );
+    }
 }
 
 } // namespace hash2
