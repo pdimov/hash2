@@ -18,7 +18,7 @@ template<class Hash, class Flavor, class T>
 BOOST_CXX14_CONSTEXPR typename Hash::result_type test( T const& v )
 {
     Hash h;
-    Flavor f;
+    Flavor f{};
 
     hash_append( h, f, v );
 
