@@ -26,7 +26,7 @@ template<class T> BOOST_CXX14_CONSTEXPR std::uint32_t test()
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
-#if defined(BOOST_NO_CXX14_CONSTEXPR)
+#if defined(BOOST_NO_CXX14_CONSTEXPR) || ( defined(BOOST_GCC) && BOOST_GCC < 60000 )
 
 # define TEST_EQ(x1, x2) BOOST_TEST_EQ(x1, x2)
 

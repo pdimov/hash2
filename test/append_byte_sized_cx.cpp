@@ -12,6 +12,11 @@
 BOOST_PRAGMA_MESSAGE( "Test skipped, because BOOST_NO_CXX14_CONSTEXPR is defined" )
 int main() {}
 
+#elif defined(BOOST_GCC) && BOOST_GCC < 60000
+
+BOOST_PRAGMA_MESSAGE( "Test skipped, because BOOST_GCC is < 60000" )
+int main() {}
+
 #else
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1920
