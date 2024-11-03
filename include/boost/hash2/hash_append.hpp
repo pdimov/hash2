@@ -16,8 +16,8 @@
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/hash2/flavor.hpp>
 #include <boost/hash2/detail/is_constant_evaluated.hpp>
+#include <boost/hash2/detail/bit_cast.hpp>
 #include <boost/hash2/detail/write.hpp>
-#include <boost/hash2/detail/reverse.hpp>
 #include <boost/hash2/detail/has_tag_invoke.hpp>
 #include <boost/container_hash/is_range.hpp>
 #include <boost/container_hash/is_contiguous_range.hpp>
@@ -189,25 +189,18 @@ template<class Hash, class Flavor, class T>
 
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
-    typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order == endian::native, void >::type
-    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
+    typename std::enable_if< std::is_floating_point<T>::value && sizeof(T) == 4, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
-    T w = v + 0;
-    h.update( &w, sizeof(T) );
+    hash2::hash_append( h, f, detail::bit_cast<std::uint32_t>( v + 0 ) );
 }
 
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
-    typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order != endian::native, void >::type
-    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
+    typename std::enable_if< std::is_floating_point<T>::value && sizeof(T) == 8, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
-    T w = v + 0;
-    constexpr auto N = sizeof(T);
-
-    unsigned char tmp[ N ] = {};
-    detail::reverse( tmp, &w );
-
-    h.update( tmp, N );
+    hash2::hash_append( h, f, detail::bit_cast<std::uint64_t>( v + 0 ) );
 }
 
 // std::nullptr_t

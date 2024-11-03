@@ -7,6 +7,8 @@
 
 #include <boost/config.hpp>
 
+// __builtin_is_constant_evaluated
+
 #if defined(BOOST_MSVC) && BOOST_MSVC >= 1925
 # define BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED
 #endif
@@ -14,6 +16,18 @@
 #if defined(__has_builtin)
 # if __has_builtin(__builtin_is_constant_evaluated)
 #  define BOOST_HASH2_HAS_BUILTIN_IS_CONSTANT_EVALUATED
+# endif
+#endif
+
+// __builtin_bit_cast
+
+#if defined(BOOST_MSVC) && BOOST_MSVC >= 1927
+# define BOOST_HASH2_HAS_BUILTIN_BIT_CAST
+#endif
+
+#if defined(__has_builtin)
+# if __has_builtin(__builtin_bit_cast)
+#  define BOOST_HASH2_HAS_BUILTIN_BIT_CAST
 # endif
 #endif
 

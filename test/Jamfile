@@ -78,6 +78,7 @@ run hash_append_range_2.cpp ;
 compile append_byte_sized_cx.cpp ;
 run append_integer_cx.cpp ;
 run append_character_cx.cpp ;
+run append_floating_point_cx.cpp ;
 
 # non-cryptographic
 
