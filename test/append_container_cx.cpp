@@ -29,7 +29,7 @@ BOOST_CXX14_CONSTEXPR typename Hash::result_type test()
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
-#if BOOST_CXX_VERSION < 202002L
+#if !( defined(__cpp_lib_constexpr_vector) && __cpp_lib_constexpr_vector >= 201907L )
 
 # define TEST_EQ(x1, x2) BOOST_TEST_EQ(x1, x2)
 
