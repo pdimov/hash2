@@ -19,19 +19,19 @@ namespace hash2
 
 struct default_flavor;
 
-template<class Hash, class Flavor = default_flavor, class T> void hash_append( Hash& h, Flavor const& f, T const& v );
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_range( Hash& h, Flavor const& f, It first, It last );
-template<class Hash, class Flavor = default_flavor, class T> void hash_append_size( Hash& h, Flavor const& f, T const& v );
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last );
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor = default_flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v );
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor = default_flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append_size( Hash& h, Flavor const& f, T const& v );
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last );
 
 #else
 
-template<class Hash, class Flavor, class T> void hash_append( Hash& h, Flavor const& f, T const& v );
-template<class Hash, class Flavor, class It> void hash_append_range( Hash& h, Flavor const& f, It first, It last );
-template<class Hash, class Flavor, class T> void hash_append_size( Hash& h, Flavor const& f, T const& v );
-template<class Hash, class Flavor, class It> void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last );
-template<class Hash, class Flavor, class It> void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v );
+template<class Hash, class Flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append_size( Hash& h, Flavor const& f, T const& v );
+template<class Hash, class Flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last );
+template<class Hash, class Flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last );
 
 #endif
 

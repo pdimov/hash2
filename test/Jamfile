@@ -72,6 +72,10 @@ run hash_append_5.cpp ;
 run hash_append_range.cpp ;
 run hash_append_range_2.cpp ;
 
+# hash_append, constexpr
+
+compile append_byte_sized_cx.cpp ;
+
 # non-cryptographic
 
 run fnv1a.cpp ;

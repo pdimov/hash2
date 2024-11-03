@@ -15,6 +15,7 @@
 #include <boost/hash2/is_contiguously_hashable.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/hash2/flavor.hpp>
+#include <boost/hash2/detail/is_constant_evaluated.hpp>
 #include <boost/hash2/detail/reverse.hpp>
 #include <boost/hash2/detail/has_tag_invoke.hpp>
 #include <boost/container_hash/is_range.hpp>
@@ -43,7 +44,7 @@ namespace hash2
 namespace detail
 {
 
-template<class Hash, class Flavor, class It> void hash_append_range_( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_range_( Hash& h, Flavor const& f, It first, It last )
 {
     for( ; first != last; ++first )
     {
@@ -52,34 +53,45 @@ template<class Hash, class Flavor, class It> void hash_append_range_( Hash& h, F
     }
 }
 
-template<class Hash, class Flavor> void hash_append_range_( Hash& h, Flavor const& /*f*/, unsigned char* first, unsigned char* last )
+template<class Hash, class Flavor> BOOST_CXX14_CONSTEXPR void hash_append_range_( Hash& h, Flavor const& /*f*/, unsigned char* first, unsigned char* last )
 {
     h.update( first, last - first );
 }
 
-template<class Hash, class Flavor> void hash_append_range_( Hash& h, Flavor const& /*f*/, unsigned char const* first, unsigned char const* last )
+template<class Hash, class Flavor> BOOST_CXX14_CONSTEXPR void hash_append_range_( Hash& h, Flavor const& /*f*/, unsigned char const* first, unsigned char const* last )
 {
     h.update( first, last - first );
 }
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if<
         is_contiguously_hashable<T, Flavor::byte_order>::value, void >::type
-    hash_append_range_( Hash& h, Flavor const& /*f*/, T* first, T* last )
+    hash_append_range_( Hash& h, Flavor const& f, T* first, T* last )
 {
-    h.update( first, (last - first) * sizeof(T) );
+    if( !detail::is_constant_evaluated() )
+    {
+        h.update( first, (last - first) * sizeof(T) );
+    }
+    else
+    {
+        for( ; first != last; ++first )
+        {
+            hash2::hash_append( h, f, *first );
+        }
+    }
 }
 
 } // namespace detail
 
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_range( Hash& h, Flavor const& f, It first, It last )
 {
     detail::hash_append_range_( h, f, first, last );
 }
 
 // hash_append_size
 
-template<class Hash, class Flavor = default_flavor, class T> void hash_append_size( Hash& h, Flavor const& f, T const& v )
+template<class Hash, class Flavor = default_flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append_size( Hash& h, Flavor const& f, T const& v )
 {
     hash2::hash_append( h, f, static_cast<typename Flavor::size_type>( v ) );
 }
@@ -89,7 +101,7 @@ template<class Hash, class Flavor = default_flavor, class T> void hash_append_si
 namespace detail
 {
 
-template<class Hash, class Flavor, class It> void hash_append_sized_range_( Hash& h, Flavor const& f, It first, It last, std::input_iterator_tag )
+template<class Hash, class Flavor, class It> void BOOST_CXX14_CONSTEXPR hash_append_sized_range_( Hash& h, Flavor const& f, It first, It last, std::input_iterator_tag )
 {
     typename std::iterator_traits<It>::difference_type m = 0;
 
@@ -101,7 +113,7 @@ template<class Hash, class Flavor, class It> void hash_append_sized_range_( Hash
     hash2::hash_append_size( h, f, m );
 }
 
-template<class Hash, class Flavor, class It> void hash_append_sized_range_( Hash& h, Flavor const& f, It first, It last, std::random_access_iterator_tag )
+template<class Hash, class Flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_sized_range_( Hash& h, Flavor const& f, It first, It last, std::random_access_iterator_tag )
 {
     hash2::hash_append_range( h, f, first, last );
     hash2::hash_append_size( h, f, last - first );
@@ -109,14 +121,14 @@ template<class Hash, class Flavor, class It> void hash_append_sized_range_( Hash
 
 } // namespace detail
 
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last )
 {
     detail::hash_append_sized_range_( h, f, first, last, typename std::iterator_traits<It>::iterator_category() );
 }
 
 // hash_append_unordered_range
 
-template<class Hash, class Flavor = default_flavor, class It> void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last )
+template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTEXPR void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last )
 {
     typename std::iterator_traits<It>::difference_type m = 0;
 
@@ -136,24 +148,38 @@ template<class Hash, class Flavor = default_flavor, class It> void hash_append_u
 
 // do_hash_append
 
-// contiguously hashable (this includes unsigned char const&)
+// integral types, sizeof(T) == 1
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
+    typename std::enable_if< std::is_integral<T>::value && sizeof(T) == 1, void >::type
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
+{
+    unsigned char w = static_cast<unsigned char>( v );
+    h.update( &w, 1 );
+}
+
+// integral types, sizeof(T) != 1, matching endianness
+// not yet constexpr
+
+template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if<
-        is_contiguously_hashable<T, Flavor::byte_order>::value, void >::type
+        std::is_integral<T>::value && sizeof(T) != 1 && Flavor::byte_order == endian::native,
+    void>::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
     h.update( &v, sizeof(T) );
 }
 
-// trivially equality comparable, scalar, but not contiguously hashable (because of endianness)
+// integral types, sizeof(T) != 1, non-matching endianness
+// not yet constexpr
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if<
-        is_trivially_equality_comparable<T>::value &&
-        std::is_scalar<T>::value &&
-        Flavor::byte_order != endian::native && !is_endian_independent<T>::value
-        , void >::type
+        std::is_integral<T>::value && sizeof(T) != 1 && Flavor::byte_order != endian::native,
+    void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
     constexpr auto N = sizeof(T);
@@ -164,9 +190,43 @@ template<class Hash, class Flavor, class T>
     h.update( tmp, N );
 }
 
+// enum types
+
+template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
+    typename std::enable_if< std::is_enum<T>::value, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+{
+    hash2::hash_append( h, f, static_cast<typename std::underlying_type<T>::type>( v ) );
+}
+
+// pointer types
+// not constexpr
+
+template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
+    typename std::enable_if< std::is_pointer<T>::value, void >::type
+    do_hash_append( Hash& h, Flavor const& f, T const& v )
+{
+    hash2::hash_append( h, f, reinterpret_cast<std::uintptr_t>( v ) );
+}
+
+// contiguously hashable, non-scalar
+
+template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
+    typename std::enable_if<
+        is_contiguously_hashable<T, Flavor::byte_order>::value && !std::is_scalar<T>::value,
+    void>::type
+    do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
+{
+    h.update( &v, sizeof(T) );
+}
+
 // floating point
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order == endian::native, void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
@@ -175,6 +235,7 @@ template<class Hash, class Flavor, class T>
 }
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< std::is_floating_point<T>::value && Flavor::byte_order != endian::native, void >::type
     do_hash_append( Hash& h, Flavor const& /*f*/, T const& v )
 {
@@ -190,6 +251,7 @@ template<class Hash, class Flavor, class T>
 // std::nullptr_t
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< std::is_same<T, std::nullptr_t>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -198,7 +260,7 @@ template<class Hash, class Flavor, class T>
 
 // C arrays
 
-template<class Hash, class Flavor, class T, std::size_t N> void do_hash_append( Hash& h, Flavor const& f, T const (&v)[ N ] )
+template<class Hash, class Flavor, class T, std::size_t N> BOOST_CXX14_CONSTEXPR void do_hash_append( Hash& h, Flavor const& f, T const (&v)[ N ] )
 {
     hash2::hash_append_range( h, f, v + 0, v + N );
 }
@@ -206,6 +268,7 @@ template<class Hash, class Flavor, class T, std::size_t N> void do_hash_append( 
 // contiguous containers and ranges, w/ size
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< container_hash::is_contiguous_range<T>::value && !container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -216,6 +279,7 @@ template<class Hash, class Flavor, class T>
 // containers and ranges, w/ size
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< container_hash::is_range<T>::value && !container_hash::is_tuple_like<T>::value && !container_hash::is_contiguous_range<T>::value && !container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -225,6 +289,7 @@ template<class Hash, class Flavor, class T>
 // std::array (both range and tuple-like)
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -233,7 +298,7 @@ template<class Hash, class Flavor, class T>
 
 // boost::array (constant size, but not tuple-like)
 
-template<class Hash, class Flavor, class T, std::size_t N> void do_hash_append( Hash& h, Flavor const& f, boost::array<T, N> const& v )
+template<class Hash, class Flavor, class T, std::size_t N> BOOST_CXX14_CONSTEXPR void do_hash_append( Hash& h, Flavor const& f, boost::array<T, N> const& v )
 {
     hash2::hash_append_range( h, f, v.begin(), v.end() );
 }
@@ -241,6 +306,7 @@ template<class Hash, class Flavor, class T, std::size_t N> void do_hash_append( 
 // unordered containers (is_unordered_range implies is_range)
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< container_hash::is_unordered_range<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -252,7 +318,7 @@ template<class Hash, class Flavor, class T>
 namespace detail
 {
 
-template<class Hash, class Flavor, class T, std::size_t... J> void hash_append_tuple( Hash& h, Flavor const& f, T const& v, boost::mp11::integer_sequence<std::size_t, J...> )
+template<class Hash, class Flavor, class T, std::size_t... J> BOOST_CXX14_CONSTEXPR void hash_append_tuple( Hash& h, Flavor const& f, T const& v, boost::mp11::integer_sequence<std::size_t, J...> )
 {
     using std::get;
     int a[] = { 0, ((void)hash2::hash_append( h, f, get<J>(v) ), 0)... };
@@ -262,6 +328,7 @@ template<class Hash, class Flavor, class T, std::size_t... J> void hash_append_t
 } // namespace detail
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< !container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -279,6 +346,7 @@ template<class Hash, class Flavor, class T>
 #endif
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< container_hash::is_described_class<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -326,6 +394,7 @@ struct hash_append_tag
 };
 
 template<class Hash, class Flavor, class T>
+    BOOST_CXX14_CONSTEXPR
     typename std::enable_if< detail::has_tag_invoke<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
@@ -334,7 +403,7 @@ template<class Hash, class Flavor, class T>
 
 // hash_append
 
-template<class Hash, class Flavor = default_flavor, class T> void hash_append( Hash& h, Flavor const& f, T const& v )
+template<class Hash, class Flavor = default_flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v )
 {
     do_hash_append( h, f, v );
 }

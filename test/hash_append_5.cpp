@@ -4,6 +4,7 @@
 
 // lib1.hpp
 
+#include <boost/config.hpp>
 #include <string>
 
 // forward declarations
@@ -13,7 +14,7 @@ namespace boost
 namespace hash2
 {
 
-template<class Hash, class Flavor, class T> void hash_append( Hash& h, Flavor const& f, T const& v );
+template<class Hash, class Flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v );
 struct hash_append_tag;
 
 } // namespace hash2
