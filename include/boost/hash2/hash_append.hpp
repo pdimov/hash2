@@ -184,7 +184,7 @@ template<class Hash, class Flavor, class T>
 {
     constexpr auto N = sizeof(T);
 
-    unsigned char tmp[ N ];
+    unsigned char tmp[ N ] = {};
     detail::reverse( tmp, &v );
 
     h.update( tmp, N );
@@ -230,7 +230,7 @@ template<class Hash, class Flavor, class T>
     T w = v + 0;
     constexpr auto N = sizeof(T);
 
-    unsigned char tmp[ N ];
+    unsigned char tmp[ N ] = {};
     detail::reverse( tmp, &w );
 
     h.update( tmp, N );
