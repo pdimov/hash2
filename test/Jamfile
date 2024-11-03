@@ -80,6 +80,7 @@ run append_integer_cx.cpp ;
 run append_character_cx.cpp ;
 run append_floating_point_cx.cpp ;
 run append_container_cx.cpp ;
+run append_string_cx.cpp ;
 
 # non-cryptographic
 

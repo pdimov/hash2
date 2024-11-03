@@ -6,7 +6,7 @@
 #include <boost/hash2/fnv1a.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
-#include <vector>
+#include <string>
 #include <cstdint>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1920
@@ -17,7 +17,7 @@ template<class Hash, class Flavor, class T>
 BOOST_CXX14_CONSTEXPR typename Hash::result_type test()
 {
     unsigned char w[] = { 1, 2, 3, 4 };
-    T v( w, w + sizeof(w) / sizeof(w[0]) );
+    std::basic_string<T> v( w, w + sizeof(w) / sizeof(w[0]) );
 
     Hash h;
     Flavor f{};
@@ -43,14 +43,21 @@ int main()
 {
     using namespace boost::hash2;
 
-    TEST_EQ( (test<fnv1a_32, little_endian_flavor, std::vector<unsigned char>>()), 2227238665 );
-    TEST_EQ( (test<fnv1a_32, big_endian_flavor, std::vector<unsigned char>>()), 3245468929 );
+    TEST_EQ( (test<fnv1a_32, little_endian_flavor, char>()), 2227238665 );
+    TEST_EQ( (test<fnv1a_32, big_endian_flavor, char>()), 3245468929 );
 
-    TEST_EQ( (test<fnv1a_32, little_endian_flavor, std::vector<int>>()), 1745310485 );
-    TEST_EQ( (test<fnv1a_32, big_endian_flavor, std::vector<int>>()), 3959736277 );
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
 
-    TEST_EQ( (test<fnv1a_32, little_endian_flavor, std::vector<double>>()), 1949716516 );
-    TEST_EQ( (test<fnv1a_32, big_endian_flavor, std::vector<double>>()), 2651227990 );
+    TEST_EQ( (test<fnv1a_32, little_endian_flavor, char8_t>()), 2227238665 );
+    TEST_EQ( (test<fnv1a_32, big_endian_flavor, char8_t>()), 3245468929 );
+
+#endif
+
+    TEST_EQ( (test<fnv1a_32, little_endian_flavor, char16_t>()), 2981571797 );
+    TEST_EQ( (test<fnv1a_32, big_endian_flavor, char16_t>()), 1063054677 );
+
+    TEST_EQ( (test<fnv1a_32, little_endian_flavor, char32_t>()), 1745310485 );
+    TEST_EQ( (test<fnv1a_32, big_endian_flavor, char32_t>()), 3959736277 );
 
     return boost::report_errors();
 }
