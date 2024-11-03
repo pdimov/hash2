@@ -47,7 +47,7 @@ public:
 
     typedef T result_type;
 
-    fnv1a() = default;
+    constexpr fnv1a() = default;
 
     BOOST_CXX14_CONSTEXPR explicit fnv1a( std::uint64_t seed )
     {
@@ -106,7 +106,7 @@ class fnv1a_32: public detail::fnv1a<std::uint32_t>
 {
 public:
 
-    fnv1a_32() = default;
+    constexpr fnv1a_32() = default;
 
     BOOST_CXX14_CONSTEXPR explicit fnv1a_32( std::uint64_t seed ): detail::fnv1a<std::uint32_t>( seed )
     {
@@ -121,7 +121,7 @@ class fnv1a_64: public detail::fnv1a<std::uint64_t>
 {
 public:
 
-    fnv1a_64() = default;
+    constexpr fnv1a_64() = default;
 
     BOOST_CXX14_CONSTEXPR explicit fnv1a_64( std::uint64_t seed ): detail::fnv1a<std::uint64_t>( seed )
     {
