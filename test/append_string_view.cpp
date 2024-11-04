@@ -1,4 +1,4 @@
-// Copyright 2017, 2024 Peter Dimov.
+// Copyright 2017, 2024 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -12,28 +12,6 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 #include <string_view>
 #endif
-
-template<class Hash, class Flavor, class T, class R> void test_string_view( R r )
-{
-    unsigned char w[] = { 1, 2, 3, 4 };
-    T v( w, w + sizeof(w) / sizeof(w[0]) );
-
-    Flavor f;
-
-    {
-        Hash h;
-        boost::hash2::hash_append( h, f, v );
-
-        BOOST_TEST_EQ( h.result(), r );
-    }
-
-    {
-        Hash h;
-        boost::hash2::hash_append_sized_range( h, f, v.begin(), v.end() );
-
-        BOOST_TEST_EQ( h.result(), r );
-    }
-}
 
 template<class Hash, class Flavor, class T, class R> void test( R r )
 {
