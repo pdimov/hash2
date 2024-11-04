@@ -240,14 +240,23 @@ template<class Hash, class Flavor, class T>
     hash2::hash_append_sized_range( h, f, v.begin(), v.end() );
 }
 
-// std::array (both range and tuple-like)
+// std::array (both contiguous range and tuple-like)
 
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
-    typename std::enable_if< container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
+    typename std::enable_if< container_hash::is_contiguous_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
-    hash2::hash_append_range( h, f, v.begin(), v.end() );
+    if( v.size() == 0 )
+    {
+        // A hash_append call must always result in a call to Hash::update
+        hash2::hash_append( h, f, '\x00' );
+    }
+    else
+    {
+        // std::array<>::data() is only constexpr in C++17
+        hash2::hash_append_range( h, f, &v[ 0 ], &v[ 0 ] + v.size() );
+    }
 }
 
 // boost::array (constant size, but not tuple-like)
