@@ -9,6 +9,7 @@
 #include <boost/hash2/sha1.hpp>
 #include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
+#include <boost/hash2/digest.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <array>
@@ -29,17 +30,14 @@ template<std::size_t N> struct is_valid_result< std::array<unsigned char, N> >:
 {
 };
 
+template<std::size_t N> struct is_valid_result< boost::hash2::digest<N> >:
+    std::integral_constant<bool, N >= 8>
+{
+};
+
 template<class H> void test_result_type()
 {
     BOOST_TEST_TRAIT_TRUE((is_valid_result<typename H::result_type>));
-}
-
-template<class H> void test_size_type()
-{
-    BOOST_TEST_TRAIT_TRUE((std::is_integral<typename H::size_type>));
-
-    BOOST_TEST_EQ( std::numeric_limits<typename H::size_type>::min(), 0 );
-    BOOST_TEST_GE( std::numeric_limits<typename H::size_type>::max(), 0xFFFFFFFFu );
 }
 
 template<class H> void test_default_constructible()
@@ -356,7 +354,6 @@ template<class H> void test_assignable()
 template<class H> void test( bool is_hmac = false )
 {
     test_result_type<H>();
-    test_size_type<H>();
     test_default_constructible<H>();
     test_byte_seed_constructible<H>( is_hmac );
     test_integral_seed_constructible<H>();

@@ -17,6 +17,7 @@ target_link_libraries(boost_hash2
     Boost::assert
     Boost::config
     Boost::container_hash
+    Boost::describe
     Boost::mp11
 )
 

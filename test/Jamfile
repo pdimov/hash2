@@ -17,43 +17,101 @@ project
 
 # type traits
 
-run is_contiguously_hashable.cpp ;
 run is_range.cpp ;
 run is_contiguous_range.cpp ;
 run is_unordered_range.cpp ;
 run is_tuple_like.cpp ;
+
 run endian.cpp ;
+run flavor.cpp ;
+
+run is_contiguously_hashable.cpp ;
+run is_trivially_equality_comparable.cpp ;
+run is_endian_independent.cpp ;
+run has_constant_size.cpp ;
 
 # helpers
 
 run get_integral_result.cpp ;
+run digest.cpp ;
+
+# detail
+
+run detail_read.cpp ;
+run detail_write.cpp ;
+run detail_write_2.cpp ;
+run detail_rot.cpp ;
+run detail_reverse.cpp ;
+run detail_has_tag_invoke.cpp ;
 
 # hash_append
 
-run hash_append.cpp ;
-run hash_append_2.cpp ;
-run hash_append_3.cpp ;
-run hash_append_4.cpp ;
+run append_integer.cpp ;
+run append_bool.cpp ;
+run append_byte_sized.cpp ;
+run append_character.cpp ;
+run append_floating_point.cpp ;
+run append_pointer.cpp ;
+run append_array.cpp ;
+run append_container.cpp ;
+run append_string.cpp ;
+run append_string_view.cpp ;
+run append_tuple_like.cpp ;
+run append_set.cpp ;
+run append_map.cpp ;
+
+run append_described.cpp ;
+run append_described_2.cpp ;
+run append_described_3.cpp ;
+run append_described_4.cpp ;
+run append_described_5.cpp ;
+
+run append_tag_invoke.cpp ;
+run append_tag_invoke_2.cpp ;
+run append_tag_invoke_3.cpp ;
+
 run hash_append_5.cpp ;
 run hash_append_range.cpp ;
 run hash_append_range_2.cpp ;
-run set.cpp ;
-run map.cpp ;
+
+run append_zero_sized.cpp ;
+run append_digest.cpp ;
+
+# hash_append, constexpr
+
+compile append_byte_sized_cx.cpp ;
+run append_integer_cx.cpp ;
+run append_character_cx.cpp ;
+run append_floating_point_cx.cpp ;
+run append_vector_cx.cpp ;
+run append_string_cx.cpp ;
+run append_array_cx.cpp ;
+run append_array_cx_2.cpp ;
+run append_array_cx_3.cpp ;
+run append_string_view_cx.cpp ;
+run append_tuple_like_cx.cpp ;
 
 # non-cryptographic
 
 run fnv1a.cpp ;
+run fnv1a_cx.cpp ;
+
+run xxhash.cpp ;
+run xxhash_cx.cpp ;
+
 run siphash32.cpp ;
 run siphash64.cpp ;
-run xxhash.cpp ;
+run siphash_cx.cpp ;
 
 # cryptographic
 
 run md5.cpp ;
 run hmac_md5.cpp ;
+run md5_cx.cpp ;
 
 run sha1.cpp ;
 run hmac_sha1.cpp ;
+run sha1_cx.cpp ;
 
 run sha2.cpp ;
 run hmac_sha2.cpp ;

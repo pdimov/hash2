@@ -1,0 +1,22 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_digest]
+# <boost/hash2/digest.hpp>
+:idprefix: ref_digest_
+
+```
+namespace boost {
+namespace hash2 {
+
+class digest;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## digest
+

@@ -34,12 +34,12 @@ private:
 
     template<class = void> static void hash_append_impl( H& h, T const& v, std::false_type )
     {
-        boost::hash2::hash_append( h, v );
+        boost::hash2::hash_append( h, {}, v );
     }
 
     template<class = void> static void hash_append_impl( H& h, T const& v, std::true_type )
     {
-        boost::hash2::hash_append_range( h, v.data(), v.data() + v.size() );
+        boost::hash2::hash_append_range( h, {}, v.data(), v.data() + v.size() );
     }
 
 public:
@@ -125,12 +125,14 @@ int main()
         }
     }
 
-    test2<boost::hash2::fnv1a_32>( N, v );
-    test2<boost::hash2::fnv1a_64>( N, v );
-    test2<boost::hash2::xxhash_32>( N, v );
-    test2<boost::hash2::xxhash_64>( N, v );
-    test2<boost::hash2::siphash_32>( N, v );
-    test2<boost::hash2::siphash_64>( N, v );
+    using namespace boost::hash2;
+
+    test2<fnv1a_32>( N, v );
+    test2<fnv1a_64>( N, v );
+    test2<xxhash_32>( N, v );
+    test2<xxhash_64>( N, v );
+    test2<siphash_32>( N, v );
+    test2<siphash_64>( N, v );
 
     std::puts( "" );
 }

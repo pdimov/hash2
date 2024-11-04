@@ -17,9 +17,9 @@
 #include <cstdio>
 #include <typeinfo>
 
-template<class H> void test_( unsigned char const * p, int N, int M )
+template<class Hash> void test_( unsigned char const * p, int N, int M )
 {
-    H h;
+    Hash h;
 
     typedef std::chrono::steady_clock clock_type;
 
@@ -27,38 +27,39 @@ template<class H> void test_( unsigned char const * p, int N, int M )
 
     for( int i = 0; i < M; ++i )
     {
-        hash_append_range( h, p, p + N );
+        boost::hash2::hash_append_range( h, {}, p, p + N );
     }
 
     clock_type::time_point t2 = clock_type::now();
 
     long long ms = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
 
-    using boost::hash2::get_integral_result;
-    unsigned r = get_integral_result<unsigned>( h.result() );
+    unsigned r = boost::hash2::get_integral_result<unsigned>( h.result() );
 
-    std::printf( "%s (N=%d): %u: %lld ms, %.2f MB/s\n", boost::core::type_name<H>().c_str(), N, r, ms, 1000.0 * N * M / ms / 1048576 );
+    std::printf( "%s (N=%d): %u: %lld ms, %.2f MB/s\n", boost::core::type_name<Hash>().c_str(), N, r, ms, 1000.0 * N * M / ms / 1048576 );
 }
 
 extern unsigned char data[];
 
 void test( int N, int M )
 {
-    test_<boost::hash2::fnv1a_32>( data, N, M );
-    test_<boost::hash2::fnv1a_64>( data, N, M );
-    test_<boost::hash2::xxhash_32>( data, N, M );
-    test_<boost::hash2::xxhash_64>( data, N, M );
-    test_<boost::hash2::siphash_32>( data, N, M );
-    test_<boost::hash2::siphash_64>( data, N, M );
-    test_<boost::hash2::md5_128>( data, N, M );
-    test_<boost::hash2::sha1_160>( data, N, M );
-    test_<boost::hash2::sha2_256>( data, N, M );
-    test_<boost::hash2::sha2_224>( data, N, M );
-    test_<boost::hash2::sha2_512>( data, N, M );
-    test_<boost::hash2::sha2_384>( data, N, M );
-    test_<boost::hash2::sha2_512_224>( data, N, M );
-    test_<boost::hash2::sha2_512_256>( data, N, M );
-    test_<boost::hash2::ripemd_160>( data, N, M );
+    using namespace boost::hash2;
+
+    test_<fnv1a_32>( data, N, M );
+    test_<fnv1a_64>( data, N, M );
+    test_<xxhash_32>( data, N, M );
+    test_<xxhash_64>( data, N, M );
+    test_<siphash_32>( data, N, M );
+    test_<siphash_64>( data, N, M );
+    test_<md5_128>( data, N, M );
+    test_<sha1_160>( data, N, M );
+    test_<sha2_256>( data, N, M );
+    test_<sha2_224>( data, N, M );
+    test_<sha2_512>( data, N, M );
+    test_<sha2_384>( data, N, M );
+    test_<sha2_512_224>( data, N, M );
+    test_<sha2_512_256>( data, N, M );
+    test_<ripemd_160>( data, N, M );
 
     puts( "--" );
 }

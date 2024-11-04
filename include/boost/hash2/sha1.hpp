@@ -8,9 +8,12 @@
 // SHA1 message digest algorithm, https://tools.ietf.org/html/rfc3174
 
 #include <boost/hash2/hmac.hpp>
+#include <boost/hash2/digest.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
+#include <boost/hash2/detail/memcpy.hpp>
+#include <boost/hash2/detail/memset.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <cstdint>
@@ -27,27 +30,18 @@ class sha1_160
 {
 private:
 
-    std::uint32_t state_[ 5 ];
+    std::uint32_t state_[ 5 ] = { 0x67452301u, 0xefcdab89u, 0x98badcfeu, 0x10325476u, 0xc3d2e1f0u };
 
-    static const int N = 64;
+    static constexpr int N = 64;
 
-    unsigned char buffer_[ N ];
-    std::size_t m_; // == n_ % N
+    unsigned char buffer_[ N ] = {};
+    std::size_t m_ = 0; // == n_ % N
 
-    std::uint64_t n_;
+    std::uint64_t n_ = 0;
 
 private:
 
-    void init()
-    {
-        state_[ 0 ] = 0x67452301u;
-        state_[ 1 ] = 0xefcdab89u;
-        state_[ 2 ] = 0x98badcfeu;
-        state_[ 3 ] = 0x10325476u;
-        state_[ 4 ] = 0xc3d2e1f0u;
-    }
-
-    static BOOST_FORCEINLINE void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], unsigned char const block[ 64 ], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R1( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], unsigned char const block[ 64 ], int i )
     {
         w[ i ] = detail::read32be( block + i * 4 );
 
@@ -57,12 +51,12 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE std::uint32_t W( std::uint32_t w[], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t W( std::uint32_t w[], int i )
     {
         return w[ i ] = detail::rotl( w[ i - 3 ] ^ w[ i - 8 ] ^ w[ i - 14 ] ^ w[ i - 16 ], 1 );
     }
 
-    static BOOST_FORCEINLINE void R2( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R2( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
         std::uint32_t f = (b & c) | (~b & d);
 
@@ -70,7 +64,7 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R3( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R3( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
         std::uint32_t f = b ^ c ^ d;
 
@@ -78,7 +72,7 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R4( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R4( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
         std::uint32_t f = (b & c) | (b & d) | (c & d);
 
@@ -86,7 +80,7 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    static BOOST_FORCEINLINE void R5( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R5( std::uint32_t a, std::uint32_t & b, std::uint32_t c, std::uint32_t d, std::uint32_t & e, std::uint32_t w[], int i )
     {
         std::uint32_t f = b ^ c ^ d;
 
@@ -94,7 +88,7 @@ private:
         b = detail::rotl( b, 30 );
     }
 
-    void transform( unsigned char const block[ 64 ] )
+    BOOST_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t a = state_[ 0 ];
         std::uint32_t b = state_[ 1 ];
@@ -102,7 +96,7 @@ private:
         std::uint32_t d = state_[ 3 ];
         std::uint32_t e = state_[ 4 ];
 
-        std::uint32_t w[ 80 ];
+        std::uint32_t w[ 80 ] = {};
 
         R1( a, b, c, d, e, w, block,  0 );
         R1( e, a, b, c, d, w, block,  1 );
@@ -198,23 +192,17 @@ private:
 
 public:
 
-    typedef std::array<unsigned char, 20> result_type;
-    typedef std::uint64_t size_type;
+    typedef digest<20> result_type;
 
-    static const int block_size = 64;
+    static constexpr int block_size = 64;
 
-    sha1_160(): m_( 0 ), n_( 0 )
+    sha1_160() = default;
+
+    explicit BOOST_CXX14_CONSTEXPR sha1_160( std::uint64_t seed )
     {
-        init();
-    }
-
-    explicit sha1_160( std::uint64_t seed ): m_( 0 ), n_( 0 )
-    {
-        init();
-
         if( seed != 0 )
         {
-            unsigned char tmp[ 8 ];
+            unsigned char tmp[ 8 ] = {};
             detail::write64le( tmp, seed );
 
             update( tmp, 8 );
@@ -222,10 +210,8 @@ public:
         }
     }
 
-    sha1_160( unsigned char const * p, std::size_t n ): m_( 0 ), n_( 0 )
+    BOOST_CXX14_CONSTEXPR sha1_160( unsigned char const * p, std::size_t n )
     {
-        init();
-
         if( n != 0 )
         {
             update( p, n );
@@ -233,10 +219,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % N );
 
         if( n == 0 ) return;
@@ -252,7 +236,7 @@ public:
                 k = n;
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -265,7 +249,7 @@ public:
             transform( buffer_ );
             m_ = 0;
 
-            std::memset( buffer_, 0, N );
+            detail::memset( buffer_, 0, N );
         }
 
         BOOST_ASSERT( m_ == 0 );
@@ -282,18 +266,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = n;
         }
 
         BOOST_ASSERT( m_ == n_ % N );
     }
 
-    result_type result()
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_CXX14_CONSTEXPR result_type result()
     {
         BOOST_ASSERT( m_ == n_ % N );
 
-        unsigned char bits[ 8 ];
+        unsigned char bits[ 8 ] = {};
 
         detail::write64be( bits, n_ * 8 );
 
@@ -311,7 +301,7 @@ public:
 
         for( int i = 0; i < 5; ++i )
         {
-            detail::write32be( &digest[ i * 4 ], state_[ i ] );
+            detail::write32be( digest.data() + i * 4, state_[ i ] );
         }
 
         return digest;

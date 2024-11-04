@@ -1,21 +1,21 @@
-// Copyright 2017 Peter Dimov.
+// Copyright 2017, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
-//
-// Endian-dependent test
 
 // lib1.hpp
 
+#include <boost/config.hpp>
 #include <string>
 
-// forward declaration of boost::hash2::hash_append
+// forward declarations
 
 namespace boost
 {
 namespace hash2
 {
 
-template<class H, class T> void hash_append( H & h, T const & v );
+template<class Hash, class Flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v );
+struct hash_append_tag;
 
 } // namespace hash2
 } // namespace boost
@@ -32,12 +32,11 @@ private:
     std::string s1_;
     std::string s2_;
 
-    template<class H> friend void do_hash_append( H& h, X const& x )
+    template<class Hash, class Flavor>
+    friend void tag_invoke( boost::hash2::hash_append_tag const&, Hash& h, Flavor const& f, X const& x )
     {
-        using boost::hash2::hash_append;
-
-        hash_append( h, x.s1_ );
-        hash_append( h, x.s2_ );
+        boost::hash2::hash_append( h, f, x.s1_ );
+        boost::hash2::hash_append( h, f, x.s2_ );
     }
 
 public:
@@ -66,13 +65,12 @@ private:
 public:
 
     typedef std::uint32_t result_type;
-    typedef std::uint32_t size_type;
 
     fnv1a(): st_( 0x811C9DC5ul )
     {
     }
 
-    void update( void const * pv, std::size_t n )
+    void update( void const* pv, std::size_t n )
     {
         unsigned char const* p = static_cast<unsigned char const*>( pv );
 
@@ -107,24 +105,22 @@ public:
 #include <vector>
 #include <list>
 
-template<class H, class R> void test( R r )
+template<class Hash, class Flavor, class R> void test( R r )
 {
     {
-        H h;
+        Hash h;
+        Flavor f;
 
-        using boost::hash2::hash_append;
-
-        hash_append( h, std::vector<lib1::X>( 3 ) );
+        boost::hash2::hash_append( h, f, std::vector<lib1::X>( 3 ) );
 
         BOOST_TEST_EQ( h.result(), r );
     }
 
     {
-        H h;
+        Hash h;
+        Flavor f;
 
-        using boost::hash2::hash_append;
-
-        hash_append( h, std::list<lib1::X>( 3 ) );
+        boost::hash2::hash_append( h, f, std::list<lib1::X>( 3 ) );
 
         BOOST_TEST_EQ( h.result(), r );
     }
@@ -132,8 +128,8 @@ template<class H, class R> void test( R r )
 
 int main()
 {
-    test<boost::hash2::fnv1a_32>( 2425039999ul );
-    test<lib2::fnv1a>( 2425039999ul );
+    test<boost::hash2::fnv1a_32, boost::hash2::little_endian_flavor>( 2425039999ul );
+    test<lib2::fnv1a, boost::hash2::little_endian_flavor>( 2425039999ul );
 
     return boost::report_errors();
 }

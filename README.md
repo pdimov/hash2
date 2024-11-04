@@ -22,7 +22,6 @@ The hashing algorithms conform to the following concept:
 struct HashAlgorithm
 {
     using result_type = /*integral or array<unsigned char, N>*/; // result type
-    using size_type = /*unsigned integral*/; // how is container.size() hashed
 
     HashAlgorithm(); // default-constructible
     explicit HashAlgorithm( uint64_t seed ); // seed-constructible

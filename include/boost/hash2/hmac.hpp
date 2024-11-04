@@ -23,7 +23,6 @@ template<class H> class hmac
 public:
 
     typedef typename H::result_type result_type;
-    typedef typename H::size_type size_type;
 
     static const int block_size = H::block_size;
 

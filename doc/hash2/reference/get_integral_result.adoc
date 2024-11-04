@@ -1,0 +1,26 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_get_integral_result]
+# <boost/hash2/get_integral_result.hpp>
+:idprefix: ref_get_integral_result_
+
+```
+namespace boost {
+namespace hash2 {
+
+template<class T, class R> constexpr T get_integral_result( R const& r );
+
+} // namespace hash2
+} // namespace boost
+```
+
+## get_integral_result
+
+```
+template<class T, class R> constexpr T get_integral_result( R const& r );
+```
+

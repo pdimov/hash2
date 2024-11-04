@@ -98,9 +98,13 @@ int main()
     test<unsigned long, endian::little>( endian::native == endian::little );
     test<unsigned long, endian::big>( endian::native == endian::big );
 
-    test<unsigned short, endian::native>( true );
-    test<unsigned short, endian::little>( endian::native == endian::little );
-    test<unsigned short, endian::big>( endian::native == endian::big );
+    test<long long, endian::native>( true );
+    test<long long, endian::little>( endian::native == endian::little );
+    test<long long, endian::big>( endian::native == endian::big );
+
+    test<unsigned long long, endian::native>( true );
+    test<unsigned long long, endian::little>( endian::native == endian::little );
+    test<unsigned long long, endian::big>( endian::native == endian::big );
 
     //
 

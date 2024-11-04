@@ -1,0 +1,22 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_has_constant_size]
+# <boost/hash2/has_constant_size.hpp>
+:idprefix: ref_has_constant_size_
+
+```
+namespace boost {
+namespace hash2 {
+
+template<class T> struct has_constant_size;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## has_constant_size
+
