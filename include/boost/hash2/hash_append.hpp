@@ -261,6 +261,11 @@ template<class Hash, class Flavor, class T>
 
 // boost::array (constant size, but not tuple-like)
 
+#if defined(BOOST_MSVC)
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code
+#endif
+
 template<class Hash, class Flavor, class T, std::size_t N> BOOST_CXX14_CONSTEXPR void do_hash_append( Hash& h, Flavor const& f, boost::array<T, N> const& v )
 {
     if( v.size() == 0 )
@@ -273,6 +278,10 @@ template<class Hash, class Flavor, class T, std::size_t N> BOOST_CXX14_CONSTEXPR
         hash2::hash_append_range( h, f, &v.front(), &v.front() + v.size() );
     }
 }
+
+#if defined(BOOST_MSVC)
+# pragma warning(pop)
+#endif
 
 // unordered containers (is_unordered_range implies is_range)
 
