@@ -46,8 +46,12 @@ int main()
     TEST_EQ( (test<fnv1a_32, little_endian_flavor>( std::make_pair( 1, 2 ) )), 3738734694 );
     TEST_EQ( (test<fnv1a_32, big_endian_flavor>( std::make_tuple( 1, 2 ) )), 1396319868 );
 
+#if defined(BOOST_HASH2_HAS_BUILTIN_BIT_CAST)
+
     TEST_EQ( (test<fnv1a_32, little_endian_flavor>( std::make_pair( 1.0, 2.0 ) )), 1170904120 );
     TEST_EQ( (test<fnv1a_32, big_endian_flavor>( std::make_tuple( 1.0, 2.0 ) )), 786481930 );
+
+#endif
 
     return boost::report_errors();
 }
