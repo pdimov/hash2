@@ -160,6 +160,9 @@ static void test_element_access()
         {
             BOOST_TEST_EQ( &d[ i ], d.data() + i );
         }
+
+        BOOST_TEST_EQ( &d.front(), d.data() );
+        BOOST_TEST_EQ( &d.back(), d.data() + d.size() - 1 );
     }
 
     {
@@ -169,6 +172,9 @@ static void test_element_access()
         {
             BOOST_TEST_EQ( &d[ i ], d.data() + i );
         }
+
+        BOOST_TEST_EQ( &d.front(), d.data() );
+        BOOST_TEST_EQ( &d.back(), d.data() + d.size() - 1 );
     }
 }
 

@@ -28,6 +28,7 @@ run flavor.cpp ;
 run is_contiguously_hashable.cpp ;
 run is_trivially_equality_comparable.cpp ;
 run is_endian_independent.cpp ;
+run has_constant_size.cpp ;
 
 # helpers
 

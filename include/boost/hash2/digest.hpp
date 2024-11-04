@@ -63,6 +63,12 @@ public:
 
     BOOST_CXX14_CONSTEXPR reference operator[]( std::size_t i ) { BOOST_ASSERT( i < N ); return data_[ i ]; }
     BOOST_CXX14_CONSTEXPR const_reference operator[]( std::size_t i ) const { BOOST_ASSERT( i < N ); return data_[ i ]; }
+
+    BOOST_CXX14_CONSTEXPR reference front() noexcept { return data_[ 0 ]; }
+    constexpr const_reference front() const noexcept { return data_[ 0 ]; }
+
+    BOOST_CXX14_CONSTEXPR reference back() noexcept { return data_[ N-1 ]; }
+    constexpr const_reference back() const noexcept { return data_[ N-1 ]; }
 };
 
 // comparisons
