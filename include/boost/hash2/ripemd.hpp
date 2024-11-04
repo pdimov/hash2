@@ -9,13 +9,14 @@
 // RIPEMD-160 message digest algorithm, https://www.esat.kuleuven.be/cosic/publications/article-317.pdf
 
 #include <boost/hash2/hmac.hpp>
+#include <boost/hash2/digest.hpp>
 #include <boost/hash2/detail/read.hpp>
 #include <boost/hash2/detail/write.hpp>
 #include <boost/hash2/detail/rot.hpp>
+#include <boost/hash2/detail/memset.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <cstdint>
-#include <array>
 #include <cstring>
 #include <cstddef>
 
@@ -39,83 +40,83 @@ private:
 
 private:
 
-    static BOOST_FORCEINLINE std::uint32_t F1( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return x ^ y ^ z; }
-    static BOOST_FORCEINLINE std::uint32_t F2( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & y) | (~x & z); }
-    static BOOST_FORCEINLINE std::uint32_t F3( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x | ~y) ^ z; }
-    static BOOST_FORCEINLINE std::uint32_t F4( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & z) | (y & ~z); }
-    static BOOST_FORCEINLINE std::uint32_t F5( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return x ^ (y | ~z); }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F1( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return x ^ y ^ z; }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F2( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & y) | (~x & z); }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F3( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x | ~y) ^ z; }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F4( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & z) | (y & ~z); }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F5( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return x ^ (y | ~z); }
 
-    static BOOST_FORCEINLINE void R1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F1(b, c, d) + x;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void R2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F2(b, c, d) + x + 0x5a827999u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void R3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F3(b, c, d) + x + 0x6ed9eba1u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void R4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F4(b, c, d) + x + 0x8f1bbcdcu;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void R5( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R5( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F5(b, c, d) + x + 0xa953fd4eu;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void RR1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F5(b, c, d) + x + 0x50a28be6u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void RR2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F4(b, c, d) + x + 0x5c4dd124u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void RR3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F3(b, c, d) + x + 0x6d703ef3u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void RR4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F2(b, c, d) + x + 0x7a6d76e9u;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    static BOOST_FORCEINLINE void RR5( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR5( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t e, std::uint32_t x, std::uint32_t s )
     {
         a += F1(b, c, d) + x;
         a = detail::rotl(a, s) + e;
         c = detail::rotl(c, 10);
     }
 
-    void transform( unsigned char const block[ 64 ] )
+    BOOST_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
     {
         std::uint32_t aa = state_[ 0 ];
         std::uint32_t bb = state_[ 1 ];
@@ -129,7 +130,7 @@ private:
         std::uint32_t ddd = state_[ 3 ];
         std::uint32_t eee = state_[ 4 ];
 
-        std::uint32_t X[ 16 ];
+        std::uint32_t X[ 16 ] = {};
 
         for( int i = 0; i < 16; ++i )
         {
@@ -328,17 +329,17 @@ private:
 
 public:
 
-    typedef std::array<unsigned char, 20> result_type;
+    typedef digest<20> result_type;
 
     static constexpr int block_size = 64;
 
     ripemd_160() = default;
 
-    explicit ripemd_160( std::uint64_t seed )
+    explicit BOOST_CXX14_CONSTEXPR ripemd_160( std::uint64_t seed )
     {
         if( seed != 0 )
         {
-            unsigned char tmp[ 8 ];
+            unsigned char tmp[ 8 ] = {};
             detail::write64le( tmp, seed );
 
             update( tmp, 8 );
@@ -346,7 +347,7 @@ public:
         }
     }
 
-    ripemd_160( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR ripemd_160( unsigned char const * p, std::size_t n )
     {
         if( n != 0 )
         {
@@ -355,10 +356,8 @@ public:
         }
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
     {
-        unsigned char const* p = static_cast<unsigned char const*>( pv );
-
         BOOST_ASSERT( m_ == n_ % N );
 
         if( n == 0 ) return;
@@ -374,7 +373,7 @@ public:
                 k = n;
             }
 
-            std::memcpy( buffer_ + m_, p, k );
+            detail::memcpy( buffer_ + m_, p, k );
 
             p += k;
             n -= k;
@@ -387,7 +386,7 @@ public:
             transform( buffer_ );
             m_ = 0;
 
-            std::memset( buffer_, 0, N );
+            detail::memset( buffer_, 0, N );
         }
 
         BOOST_ASSERT( m_ == 0 );
@@ -404,18 +403,24 @@ public:
 
         if( n > 0 )
         {
-            std::memcpy( buffer_, p, n );
+            detail::memcpy( buffer_, p, n );
             m_ = n;
         }
 
         BOOST_ASSERT( m_ == n_ % N );
     }
 
-    result_type result()
+    void update( void const * pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_CXX14_CONSTEXPR result_type result()
     {
         BOOST_ASSERT( m_ == n_ % N );
 
-        unsigned char bits[ 8 ];
+        unsigned char bits[ 8 ] = {};
 
         detail::write64le( bits, n_ * 8 );
 
