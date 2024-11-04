@@ -516,14 +516,67 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#ref_ripemd_utilities_and_traits">Utilities and Traits</a>
 <ul class="sectlevel3">
-<li><a href="#ref_ripemd_boosthash2endian_hpp">&lt;boost/hash2/endian.hpp&gt;</a></li>
-<li><a href="#ref_ripemd_boosthash2is_contiguously_hashable_hpp">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</a></li>
-<li><a href="#ref_ripemd_boosthash2get_integral_result_hpp">&lt;boost/hash2/get_integral_result.hpp&gt;</a></li>
+<li><a href="#ref_digest">&lt;boost/hash2/digest.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_digest_digest">digest</a></li>
 </ul>
 </li>
-<li><a href="#ref_ripemd_hash_append">hash_append</a>
+<li><a href="#ref_endian">&lt;boost/hash2/endian.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_endian_endian">endian</a></li>
+</ul>
+</li>
+<li><a href="#ref_flavor">&lt;boost/hash2/flavor.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_flavor_default_flavor">default_flavor</a></li>
+<li><a href="#ref_flavor_little_endian_flavor">little_endian_flavor</a></li>
+<li><a href="#ref_flavor_big_endian_flavor">big_endian_flavor</a></li>
+</ul>
+</li>
+<li><a href="#ref_get_integral_result">&lt;boost/hash2/get_integral_result.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_get_integral_result_get_integral_result">get_integral_result</a></li>
+</ul>
+</li>
+<li><a href="#ref_is_trivially_equality_comparable">&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_is_trivially_equality_comparable_is_trivially_equality_comparable">is_trivially_equality_comparable</a></li>
+</ul>
+</li>
+<li><a href="#ref_is_endian_independent">&lt;boost/hash2/is_endian_independent.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_is_endian_independent_is_endian_independent">is_endian_independent</a></li>
+</ul>
+</li>
+<li><a href="#ref_is_contiguously_hashable">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_is_contiguously_hashable_is_contiguously_hashable">is_contiguously_hashable</a></li>
+</ul>
+</li>
+<li><a href="#ref_has_constant_size">&lt;boost/hash2/has_constant_size.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_has_constant_size_has_constant_size">has_constant_size</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#ref_has_constant_size_hash_append">hash_append</a>
 <ul class="sectlevel3">
-<li><a href="#ref_ripemd_boosthash2hash_append_hpp">&lt;boost/hash2/hash_append.hpp&gt;</a></li>
+<li><a href="#ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_hash_append_fwd_synopsis">Synopsis</a></li>
+</ul>
+</li>
+<li><a href="#ref_hash_append">&lt;boost/hash2/hash_append.hpp&gt;</a>
+<ul class="sectlevel4">
+<li><a href="#ref_hash_append_hash_append">hash_append</a></li>
+<li><a href="#ref_hash_append_hash_append_range">hash_append_range</a></li>
+<li><a href="#ref_hash_append_hash_append_size">hash_append_size</a></li>
+<li><a href="#ref_hash_append_hash_append_sized_range">hash_append_sized_range</a></li>
+<li><a href="#ref_hash_append_hash_append_unordered_range">hash_append_unordered_range</a></li>
+<li><a href="#ref_hash_append_hash_append_tag">hash_append_tag</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -625,21 +678,6 @@ of a list of files passed as arguments.</p>
 #include &lt;cerrno&gt;
 #include &lt;cstdio&gt;
 
-template&lt;std::size_t N&gt; std::string result_to_string( std::array&lt;unsigned char, N&gt; const &amp; v )
-{
-    std::string r;
-
-    for( std::size_t i = 0; i &lt; N; ++i )
-    {
-        char buffer[ 8 ];
-        std::snprintf( buffer, sizeof( buffer ), "%02x", static_cast&lt;int&gt;( v[ i ] ) );
-
-        r += buffer;
-    }
-
-    return r;
-}
-
 static void md5sum( std::FILE* f, char const* fn )
 {
     boost::hash2::md5_128 hash;
@@ -662,7 +700,7 @@ static void md5sum( std::FILE* f, char const* fn )
         hash.update( buffer, n );
     }
 
-    std::string digest = result_to_string( hash.result() );
+    std::string digest = to_string( hash.result() );
 
     std::printf( "%s *%s\n", digest.c_str(), fn );
 }
@@ -728,7 +766,7 @@ line argument.</p>
 #include &lt;cerrno&gt;
 #include &lt;cstdio&gt;
 
-template&lt;std::size_t N&gt; std::string result_to_string( std::array&lt;unsigned char, N&gt; const &amp; v )
+template&lt;std::size_t N&gt; std::string to_string( std::array&lt;unsigned char, N&gt; const &amp; v )
 {
     std::string r;
 
@@ -765,7 +803,7 @@ template&lt;class Hash&gt; void hash2sum( std::FILE* f, char const* fn )
         hash.update( buffer, n );
     }
 
-    std::string digest = result_to_string( hash.result() );
+    std::string digest = to_string( hash.result() );
 
     std::printf( "%s *%s\n", digest.c_str(), fn );
 }
@@ -936,15 +974,15 @@ private:
 public:
 
     using result_type = std::uint32_t;
-    using size_type = std::uint32_t;
 
-    fnv1a_32();
-    explicit fnv1a_32( std::uint64_t seed );
-    fnv1a_32( unsigned char const* p, std::size_t n );
+    constexpr fnv1a_32();
+    explicit constexpr fnv1a_32( std::uint64_t seed );
+    constexpr fnv1a_32( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };</code></pre>
 </div>
 </div>
@@ -952,7 +990,7 @@ public:
 <h6 id="ref_fnv1a_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>fnv1a_32();</code></pre>
+<pre class="highlight"><code>constexpr fnv1a_32();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -968,7 +1006,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit fnv1a_32( std::uint64_t seed );</code></pre>
+<pre class="highlight"><code>explicit constexpr fnv1a_32( std::uint64_t seed );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -988,7 +1026,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>fnv1a_32( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="highlight"><code>constexpr fnv1a_32( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1011,7 +1049,8 @@ public:
 <h6 id="ref_fnv1a_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="highlight"><code>void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1027,7 +1066,7 @@ public:
 <h6 id="ref_fnv1a_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="highlight"><code>constexpr result_type result();</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1063,15 +1102,15 @@ private:
 public:
 
     using result_type = std::uint64_t;
-    using size_type = std::uint64_t;
 
-    fnv1a_64();
-    explicit fnv1a_64( std::uint64_t seed );
-    fnv1a_64( unsigned char const* p, std::size_t n );
+    constexpr fnv1a_64();
+    explicit constexpr fnv1a_64( std::uint64_t seed );
+    constexpr fnv1a_64( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };</code></pre>
 </div>
 </div>
@@ -1079,7 +1118,7 @@ public:
 <h6 id="ref_fnv1a_constructors_2">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>fnv1a_64();</code></pre>
+<pre class="highlight"><code>constexpr fnv1a_64();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1095,7 +1134,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit fnv1a_64( std::uint64_t seed );</code></pre>
+<pre class="highlight"><code>explicit constexpr fnv1a_64( std::uint64_t seed );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1115,7 +1154,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>fnv1a_64( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="highlight"><code>constexpr fnv1a_64( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1138,7 +1177,8 @@ public:
 <h6 id="ref_fnv1a_update_2">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="highlight"><code>void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1154,7 +1194,7 @@ public:
 <h6 id="ref_fnv1a_result_2">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="highlight"><code>constexpr result_type result();</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1247,6 +1287,7 @@ template&lt;class H&gt; class hmac;
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
+#include &lt;boost/hash2/digest.hpp&gt;
 
 namespace boost {
 namespace hash2 {
@@ -1270,18 +1311,18 @@ using hmac_md5_128 = hmac&lt;md5_128&gt;;
 {
 public:
 
-    using result_type = std::array&lt;unsigned char, 16&gt;;
-    using size_type = std::uint64_t;
+    using result_type = digest&lt;16&gt;;
 
     static constexpr int block_size = 64;
 
-    md5_128();
-    explicit md5_128( std::uint64_t seed );
-    md5_128( unsigned char const* p, std::size_t n );
+    constexpr md5_128();
+    explicit constexpr md5_128( std::uint64_t seed );
+    constexpr md5_128( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };</code></pre>
 </div>
 </div>
@@ -1289,7 +1330,7 @@ public:
 <h6 id="ref_md5_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>md5_128();</code></pre>
+<pre class="highlight"><code>constexpr md5_128();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1305,7 +1346,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit md5_128( std::uint64_t seed );</code></pre>
+<pre class="highlight"><code>explicit constexpr md5_128( std::uint64_t seed );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1348,7 +1389,8 @@ public:
 <h6 id="ref_md5_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="highlight"><code>void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1368,7 +1410,7 @@ public:
 <h6 id="ref_md5_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="highlight"><code>constexpr result_type result();</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1395,6 +1437,7 @@ public:
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
+#include &lt;boost/hash2/digest.hpp&gt;
 
 namespace boost {
 namespace hash2 {
@@ -1418,18 +1461,18 @@ using hmac_sha1_160 = hmac&lt;sha1_160&gt;;
 {
 public:
 
-    using result_type = std::array&lt;unsigned char, 20&gt;;
-    using size_type = std::uint64_t;
+    using result_type = digest&lt;20&gt;;
 
     static constexpr int block_size = 64;
 
-    sha1_160();
-    explicit sha1_160( std::uint64_t seed );
-    sha1_160( unsigned char const* p, std::size_t n );
+    constexpr sha1_160();
+    explicit constexpr sha1_160( std::uint64_t seed );
+    constexpr sha1_160( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };</code></pre>
 </div>
 </div>
@@ -1437,7 +1480,7 @@ public:
 <h6 id="ref_sha1_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha1_160();</code></pre>
+<pre class="highlight"><code>constexpr sha1_160();</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1453,7 +1496,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit sha1_160( std::uint64_t seed );</code></pre>
+<pre class="highlight"><code>explicit constexpr sha1_160( std::uint64_t seed );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1473,7 +1516,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha1_160( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="highlight"><code>constexpr sha1_160( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1496,7 +1539,8 @@ public:
 <h6 id="ref_sha1_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="highlight"><code>void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1516,7 +1560,7 @@ public:
 <h6 id="ref_sha1_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="highlight"><code>constexpr result_type result();</code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1575,7 +1619,6 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <pre class="highlight"><code>class sha2_256
 {
     using result_type = std::array&lt;unsigned char, 32&gt;;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 64;
 
@@ -1720,7 +1763,6 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <pre class="highlight"><code>class sha2_512
 {
     using result_type = std::array&lt;unsigned char, 64&gt;;
-    using size_type = std::uint64_t;
 
     static constexpr int block_size = 128;
 
@@ -1925,23 +1967,258 @@ using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
 <div class="sect2">
 <h3 id="ref_ripemd_utilities_and_traits">Utilities and Traits</h3>
 <div class="sect3">
-<h4 id="ref_ripemd_boosthash2endian_hpp">&lt;boost/hash2/endian.hpp&gt;</h4>
+<h4 id="ref_digest">&lt;boost/hash2/digest.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
+
+class digest;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_digest_digest">digest</h5>
 
 </div>
-<div class="sect3">
-<h4 id="ref_ripemd_boosthash2is_contiguously_hashable_hpp">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</h4>
-
 </div>
 <div class="sect3">
-<h4 id="ref_ripemd_boosthash2get_integral_result_hpp">&lt;boost/hash2/get_integral_result.hpp&gt;</h4>
+<h4 id="ref_endian">&lt;boost/hash2/endian.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
 
+enum class endian;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_endian_endian">endian</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_flavor">&lt;boost/hash2/flavor.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>#include &lt;boost/hash2/endian.hpp&gt;
+
+namespace boost {
+namespace hash2 {
+
+struct default_flavor;
+struct little_endian_flavor;
+struct big_endian_flavor;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_flavor_default_flavor">default_flavor</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_flavor_little_endian_flavor">little_endian_flavor</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_flavor_big_endian_flavor">big_endian_flavor</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_get_integral_result">&lt;boost/hash2/get_integral_result.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
+
+template&lt;class T, class R&gt; constexpr T get_integral_result( R const&amp; r );
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_get_integral_result_get_integral_result">get_integral_result</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>template&lt;class T, class R&gt; constexpr T get_integral_result( R const&amp; r );</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_is_trivially_equality_comparable">&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
+
+template&lt;class T&gt; struct is_trivially_equality_comparable;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_is_trivially_equality_comparable_is_trivially_equality_comparable">is_trivially_equality_comparable</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_is_endian_independent">&lt;boost/hash2/is_endian_independent.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
+
+template&lt;class T&gt; struct is_endian_independent;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_is_endian_independent_is_endian_independent">is_endian_independent</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_is_contiguously_hashable">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>#include &lt;boost/hash2/endian.hpp&gt;
+#include &lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;
+#include &lt;boost/hash2/is_endian_independent.hpp&gt;
+
+namespace boost {
+namespace hash2 {
+
+template&lt;class T, endian E&gt; struct is_contiguously_hashable;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_is_contiguously_hashable_is_contiguously_hashable">is_contiguously_hashable</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_has_constant_size">&lt;boost/hash2/has_constant_size.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
+
+template&lt;class T&gt; struct has_constant_size;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_has_constant_size_has_constant_size">has_constant_size</h5>
+
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ref_ripemd_hash_append">hash_append</h3>
+<h3 id="ref_has_constant_size_hash_append">hash_append</h3>
 <div class="sect3">
-<h4 id="ref_ripemd_boosthash2hash_append_hpp">&lt;boost/hash2/hash_append.hpp&gt;</h4>
+<h4 id="ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</h4>
+<div class="sect4">
+<h5 id="ref_hash_append_fwd_synopsis">Synopsis</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>namespace boost {
+namespace hash2 {
 
+template&lt;class Hash, class Flavor, class T&gt;
+constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+
+template&lt;class Hash, class Flavor, class It&gt;
+constexpr void hash_append_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+template&lt;class Hash, class Flavor, class T&gt;
+constexpr void hash_append_size( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+
+template&lt;class Hash, class Flavor, class It&gt;
+constexpr void hash_append_sized_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+template&lt;class Hash, class Flavor, class It&gt;
+constexpr void hash_append_unordered_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+struct hash_append_tag;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ref_hash_append">&lt;boost/hash2/hash_append.hpp&gt;</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>#include &lt;boost/hash2/flavor.hpp&gt;
+
+namespace boost {
+namespace hash2 {
+
+template&lt;class Hash, class Flavor = default_flavor, class T&gt;
+constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+
+template&lt;class Hash, class Flavor = default_flavor, class It&gt;
+constexpr void hash_append_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+template&lt;class Hash, class Flavor = default_flavor, class T&gt;
+constexpr void hash_append_size( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+
+template&lt;class Hash, class Flavor = default_flavor, class It&gt;
+constexpr void hash_append_sized_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+template&lt;class Hash, class Flavor = default_flavor, class It&gt;
+constexpr void hash_append_unordered_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+
+struct hash_append_tag;
+
+} // namespace hash2
+} // namespace boost</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append">hash_append</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append_range">hash_append_range</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append_size">hash_append_size</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append_sized_range">hash_append_sized_range</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append_unordered_range">hash_append_unordered_range</h5>
+
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_hash_append_tag">hash_append_tag</h5>
+
+</div>
 </div>
 </div>
 </div>
