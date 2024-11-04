@@ -74,6 +74,7 @@ run hash_append_range.cpp ;
 run hash_append_range_2.cpp ;
 
 run append_zero_sized.cpp ;
+run append_digest.cpp ;
 
 # hash_append, constexpr
 
