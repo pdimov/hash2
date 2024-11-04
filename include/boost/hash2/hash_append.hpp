@@ -263,7 +263,15 @@ template<class Hash, class Flavor, class T>
 
 template<class Hash, class Flavor, class T, std::size_t N> BOOST_CXX14_CONSTEXPR void do_hash_append( Hash& h, Flavor const& f, boost::array<T, N> const& v )
 {
-    hash2::hash_append_range( h, f, v.begin(), v.end() );
+    if( v.size() == 0 )
+    {
+        // A hash_append call must always result in a call to Hash::update
+        hash2::hash_append( h, f, '\x00' );
+    }
+    else
+    {
+        hash2::hash_append_range( h, f, &v.front(), &v.front() + v.size() );
+    }
 }
 
 // unordered containers (is_unordered_range implies is_range)

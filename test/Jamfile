@@ -83,6 +83,7 @@ run append_vector_cx.cpp ;
 run append_string_cx.cpp ;
 run append_array_cx.cpp ;
 run append_array_cx_2.cpp ;
+run append_array_cx_3.cpp ;
 
 # non-cryptographic
 
