@@ -1,0 +1,37 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_hash_append_fwd]
+# <boost/hash2/hash_append_fwd.hpp>
+:idprefix: ref_hash_append_fwd_
+
+## Synopsis
+
+```
+namespace boost {
+namespace hash2 {
+
+template<class Hash, class Flavor, class T>
+constexpr void hash_append( Hash& h, Flavor const& f, T const& v );
+
+template<class Hash, class Flavor, class It>
+constexpr void hash_append_range( Hash& h, Flavor const& f, It first, It last );
+
+template<class Hash, class Flavor, class T>
+constexpr void hash_append_size( Hash& h, Flavor const& f, T const& v );
+
+template<class Hash, class Flavor, class It>
+constexpr void hash_append_sized_range( Hash& h, Flavor const& f, It first, It last );
+
+template<class Hash, class Flavor, class It>
+constexpr void hash_append_unordered_range( Hash& h, Flavor const& f, It first, It last );
+
+struct hash_append_tag;
+
+} // namespace hash2
+} // namespace boost
+```
+

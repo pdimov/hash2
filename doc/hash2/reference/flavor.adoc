@@ -1,0 +1,30 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_flavor]
+# <boost/hash2/flavor.hpp>
+:idprefix: ref_flavor_
+
+```
+#include <boost/hash2/endian.hpp>
+
+namespace boost {
+namespace hash2 {
+
+struct default_flavor;
+struct little_endian_flavor;
+struct big_endian_flavor;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## default_flavor
+
+## little_endian_flavor
+
+## big_endian_flavor
+

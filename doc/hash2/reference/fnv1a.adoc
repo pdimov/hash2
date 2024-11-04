@@ -34,20 +34,21 @@ public:
 
     using result_type = std::uint32_t;
 
-    fnv1a_32();
-    explicit fnv1a_32( std::uint64_t seed );
-    fnv1a_32( unsigned char const* p, std::size_t n );
+    constexpr fnv1a_32();
+    explicit constexpr fnv1a_32( std::uint64_t seed );
+    constexpr fnv1a_32( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-fnv1a_32();
+constexpr fnv1a_32();
 ```
 
 Default constructor.
@@ -56,7 +57,7 @@ Effects: ::
   Initializes `state_` to `0x811c9dc5`.
 
 ```
-explicit fnv1a_32( std::uint64_t seed );
+explicit constexpr fnv1a_32( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -68,7 +69,7 @@ Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
-fnv1a_32( unsigned char const* p, std::size_t n );
+constexpr fnv1a_32( unsigned char const* p, std::size_t n );
 ```
 
 Constructor taking a byte sequence seed.
@@ -82,7 +83,8 @@ Remarks: ::
 ### update
 
 ```
-void update( void const * p, std::size_t n );
+void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -91,7 +93,7 @@ Effects: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::
@@ -118,20 +120,21 @@ public:
 
     using result_type = std::uint64_t;
 
-    fnv1a_64();
-    explicit fnv1a_64( std::uint64_t seed );
-    fnv1a_64( unsigned char const* p, std::size_t n );
+    constexpr fnv1a_64();
+    explicit constexpr fnv1a_64( std::uint64_t seed );
+    constexpr fnv1a_64( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-fnv1a_64();
+constexpr fnv1a_64();
 ```
 
 Default constructor.
@@ -140,7 +143,7 @@ Effects: ::
   Initializes `state_` to `0xcbf29ce484222325`.
 
 ```
-explicit fnv1a_64( std::uint64_t seed );
+explicit constexpr fnv1a_64( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -152,7 +155,7 @@ Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
-fnv1a_64( unsigned char const* p, std::size_t n );
+constexpr fnv1a_64( unsigned char const* p, std::size_t n );
 ```
 
 Constructor taking a byte sequence seed.
@@ -166,7 +169,8 @@ Remarks: ::
 ### update
 
 ```
-void update( void const * p, std::size_t n );
+void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -175,7 +179,7 @@ Effects: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::

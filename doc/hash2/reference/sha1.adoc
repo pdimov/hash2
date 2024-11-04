@@ -10,6 +10,7 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ```
 #include <boost/hash2/hmac.hpp>
+#include <boost/hash2/digest.hpp>
 
 namespace boost {
 namespace hash2 {
@@ -31,24 +32,25 @@ class sha1_160
 {
 public:
 
-    using result_type = std::array<unsigned char, 20>;
+    using result_type = digest<20>;
 
     static constexpr int block_size = 64;
 
-    sha1_160();
-    explicit sha1_160( std::uint64_t seed );
-    sha1_160( unsigned char const* p, std::size_t n );
+    constexpr sha1_160();
+    explicit constexpr sha1_160( std::uint64_t seed );
+    constexpr sha1_160( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-sha1_160();
+constexpr sha1_160();
 ```
 
 Default constructor.
@@ -57,7 +59,7 @@ Effects: ::
   Initializes the internal state of the SHA-1 algorithm to its initial values.
 
 ```
-explicit sha1_160( std::uint64_t seed );
+explicit constexpr sha1_160( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -69,7 +71,7 @@ Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
-sha1_160( unsigned char const* p, std::size_t n );
+constexpr sha1_160( unsigned char const* p, std::size_t n );
 ```
 
 Constructor taking a byte sequence seed.
@@ -83,7 +85,8 @@ Remarks: ::
 ### update
 
 ```
-void update( void const * p, std::size_t n );
+void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -95,7 +98,7 @@ Remarks: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::

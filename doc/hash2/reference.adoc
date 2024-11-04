@@ -25,13 +25,25 @@ include::reference/ripemd.adoc[]
 
 ## Utilities and Traits
 
-### <boost/hash2/endian.hpp>
+:leveloffset: +2
 
-### <boost/hash2/is_contiguously_hashable.hpp>
+include::reference/digest.adoc[]
+include::reference/endian.adoc[]
+include::reference/flavor.adoc[]
+include::reference/get_integral_result.adoc[]
+include::reference/is_trivially_equality_comparable.adoc[]
+include::reference/is_endian_independent.adoc[]
+include::reference/is_contiguously_hashable.adoc[]
+include::reference/has_constant_size.adoc[]
 
-### <boost/hash2/get_integral_result.hpp>
+:leveloffset: -2
 
 ## hash_append
 
-### <boost/hash2/hash_append.hpp>
+:leveloffset: +2
+
+include::reference/hash_append_fwd.adoc[]
+include::reference/hash_append.adoc[]
+
+:leveloffset: -2
 

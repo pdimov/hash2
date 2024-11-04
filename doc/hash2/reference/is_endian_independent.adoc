@@ -1,0 +1,22 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_is_endian_independent]
+# <boost/hash2/is_endian_independent.hpp>
+:idprefix: ref_is_endian_independent_
+
+```
+namespace boost {
+namespace hash2 {
+
+template<class T> struct is_endian_independent;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## is_endian_independent
+

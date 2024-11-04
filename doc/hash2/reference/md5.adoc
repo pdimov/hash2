@@ -10,6 +10,7 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ```
 #include <boost/hash2/hmac.hpp>
+#include <boost/hash2/digest.hpp>
 
 namespace boost {
 namespace hash2 {
@@ -31,24 +32,25 @@ class md5_128
 {
 public:
 
-    using result_type = std::array<unsigned char, 16>;
+    using result_type = digest<16>;
 
     static constexpr int block_size = 64;
 
-    md5_128();
-    explicit md5_128( std::uint64_t seed );
-    md5_128( unsigned char const* p, std::size_t n );
+    constexpr md5_128();
+    explicit constexpr md5_128( std::uint64_t seed );
+    constexpr md5_128( unsigned char const* p, std::size_t n );
 
-    void update( void const * p, std::size_t n );
+    void update( void const* p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-md5_128();
+constexpr md5_128();
 ```
 
 Default constructor.
@@ -57,7 +59,7 @@ Effects: ::
   Initializes the internal state of the MD5 algorithm to its initial values.
 
 ```
-explicit md5_128( std::uint64_t seed );
+explicit constexpr md5_128( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -83,7 +85,8 @@ Remarks: ::
 ### update
 
 ```
-void update( void const * p, std::size_t n );
+void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -95,7 +98,7 @@ Remarks: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::

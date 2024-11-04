@@ -1,0 +1,26 @@
+////
+Copyright 2024 Peter Dimov
+Distributed under the Boost Software License, Version 1.0.
+https://www.boost.org/LICENSE_1_0.txt
+////
+
+[#ref_is_contiguously_hashable]
+# <boost/hash2/is_contiguously_hashable.hpp>
+:idprefix: ref_is_contiguously_hashable_
+
+```
+#include <boost/hash2/endian.hpp>
+#include <boost/hash2/is_trivially_equality_comparable.hpp>
+#include <boost/hash2/is_endian_independent.hpp>
+
+namespace boost {
+namespace hash2 {
+
+template<class T, endian E> struct is_contiguously_hashable;
+
+} // namespace hash2
+} // namespace boost
+```
+
+## is_contiguously_hashable
+
