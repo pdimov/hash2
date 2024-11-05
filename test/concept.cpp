@@ -264,47 +264,115 @@ template<class H> void test_copy_constructible()
 
 template<class H> void test_update()
 {
-    unsigned char const data[ 3 ] = {};
-
     {
-        H h1;
+        unsigned char const data[ 3 ] = { 0x01, 0x02, 0x03 };
 
-        H h2;
-        h2.update( data, 3 );
+        {
+            H h1;
 
-        BOOST_TEST( h1.result() != h2.result() );
+            H h2;
+            h2.update( data, 3 );
+
+            BOOST_TEST( h1.result() != h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2;
+            h2.update( data, 3 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2;
+            h2.update( data, 2 );
+
+            BOOST_TEST( h1.result() != h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2( h1 );
+
+            h1.update( data, 3 );
+            h2.update( data, 3 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2;
+            h2.update( data + 0, 1 );
+            h2.update( data + 1, 1 );
+            h2.update( data + 2, 1 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2;
+            h2.update( data + 0, 1 );
+            h2.update( data + 1, 1 );
+            h2.update( data + 2, 1 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
+
+        {
+            H h1;
+            h1.update( data, 3 );
+
+            H h2;
+            h2.update( data, 1 );
+            h2.update( data + 1, 2 );
+
+            BOOST_TEST( h1.result() == h2.result() );
+        }
     }
 
     {
-        H h1;
-        h1.update( data, 3 );
+        int const N = 95;
 
-        H h2;
-        h2.update( data, 3 );
+        unsigned char const data[ N ] = {};
 
-        BOOST_TEST( h1.result() == h2.result() );
-    }
+        {
+            H h1;
+            h1.update( data, N );
 
-    {
-        H h1;
-        h1.update( data, 3 );
+            H h2;
+            h2.update( data, N / 3 );
+            h2.update( data + N / 3, N - N / 3 );
 
-        H h2;
-        h2.update( data, 2 );
+            BOOST_TEST( h1.result() == h2.result() );
+        }
 
-        BOOST_TEST( h1.result() != h2.result() );
-    }
+        {
+            H h1;
+            h1.update( data, N );
 
-    {
-        H h1;
-        h1.update( data, 3 );
+            H h2;
 
-        H h2( h1 );
+            for( int i = 0; i < N / 5; ++i )
+            {
+                h2.update( data + i * 5, 5 );
+            }
 
-        h1.update( data, 3 );
-        h2.update( data, 3 );
-
-        BOOST_TEST( h1.result() == h2.result() );
+            BOOST_TEST( h1.result() == h2.result() );
+        }
     }
 }
 
