@@ -222,3 +222,7 @@ before {cpp}26.)
 
 ### RIPEMD-160
 
+## Choosing a Hash Algorithm
+
+...
+
