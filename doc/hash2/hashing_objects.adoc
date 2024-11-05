@@ -1,11 +1,11 @@
 ////
-Copyright 2020 Peter Dimov
+Copyright 2020, 2024 Peter Dimov
 Distributed under the Boost Software License, Version 1.0.
 https://www.boost.org/LICENSE_1_0.txt
 ////
 
-[#hash_append]
-# hash_append
-:idprefix: hash_append_
+[#hashing_objects]
+# Hashing {cpp} Objects
+:idprefix: hashing_objects_
 
 ...
