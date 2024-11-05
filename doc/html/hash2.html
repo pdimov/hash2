@@ -447,8 +447,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#algorithms">Hash Algorithms</a></li>
-<li><a href="#hash_append">hash_append</a></li>
+<li><a href="#hashing_bytes">Hashing Byte Sequences</a>
+<ul class="sectlevel2">
+<li><a href="#hashing_bytes_hash_algorithm_requirements">Hash Algorithm Requirements</a>
+<ul class="sectlevel3">
+<li><a href="#hashing_bytes_result_type">result_type</a></li>
+<li><a href="#hashing_bytes_block_size">block_size</a></li>
+<li><a href="#hashing_bytes_default_constructor">Default Constructor</a></li>
+<li><a href="#hashing_bytes_constructor_taking_an_integer_seed">Constructor Taking an Integer Seed</a></li>
+<li><a href="#hashing_bytes_constructor_taking_a_byte_sequence_seed">Constructor Taking a Byte Sequence Seed</a></li>
+<li><a href="#hashing_bytes_copy_constructor_copy_assignment">Copy Constructor, Copy Assignment</a></li>
+<li><a href="#hashing_bytes_update">update</a></li>
+<li><a href="#hashing_bytes_result">result</a></li>
+</ul>
+</li>
+<li><a href="#hashing_bytes_compile_time_hashing">Compile Time Hashing</a></li>
+<li><a href="#hashing_bytes_provided_hash_algorithms">Provided Hash Algorithms</a>
+<ul class="sectlevel3">
+<li><a href="#hashing_bytes_fnv_1a">FNV-1a</a></li>
+<li><a href="#hashing_bytes_xxhash">xxHash</a></li>
+<li><a href="#hashing_bytes_siphash">SipHash</a></li>
+<li><a href="#hashing_bytes_md5">MD5</a></li>
+<li><a href="#hashing_bytes_sha_1">SHA-1</a></li>
+<li><a href="#hashing_bytes_sha_2">SHA-2</a></li>
+<li><a href="#hashing_bytes_ripemd_160">RIPEMD-160</a></li>
+</ul>
+</li>
+<li><a href="#hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</a></li>
+</ul>
+</li>
+<li><a href="#hashing_objects">Hashing C&#43;&#43; Objects</a></li>
 <li><a href="#examples">Usage Examples</a>
 <ul class="sectlevel2">
 <li><a href="#example_md5sum">md5sum</a></li>
@@ -646,15 +674,305 @@ and so will all user-defined types that support <code>hash_append</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="algorithms">Hash Algorithms</h2>
+<h2 id="hashing_bytes">Hashing Byte Sequences</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This library addresses two major use cases: hashing an untyped sequence
+of bytes, and hashing C&#43;&#43; objects.</p>
+</div>
+<div class="paragraph">
+<p>Untyped byte sequences (also called <em>messages</em>) are hashed by passing
+them to a <em>hash algorithm</em>, which then produces a hash value (or a
+<em>message digest</em>).</p>
+</div>
+<div class="paragraph">
+<p>The same <em>hash algorithm</em>, when passed the same <em>message</em>, will always
+produce the same <em>digest</em>. (Published algorithms provide <em>message</em> and
+corresponding <em>digest</em> pairs, called <em>test vectors</em>, to enable
+verification of independent implementations.)</p>
+</div>
+<div class="paragraph">
+<p>(To hash a C&#43;&#43; object, it&#8217;s first converted (serialized) to a sequence
+of bytes, then passed to a <em>hash algorithm</em>.)</p>
+</div>
+<div class="sect2">
+<h3 id="hashing_bytes_hash_algorithm_requirements">Hash Algorithm Requirements</h3>
+<div class="paragraph">
+<p>A <em>hash algorithm</em> must have the following structure, and meet the
+following minimum requirements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>struct HashAlgorithm
+{
+    using result_type = /*integral or array-like*/;
+
+    static constexpr int block_size = /*...*/; // optional
+
+    HashAlgorithm();
+    explicit HashAlgorithm( std::uint64_t seed );
+    HashAlgorithm( unsigned char const* seed, std::size_t n );
+
+    HashAlgorithm( HashAlgorithm const&amp; r );
+    HashAlgorithm&amp; operator=( HashAlgorithm const&amp; r );
+
+    void update( void const* data, std::size_t n );
+
+    result_type result();
+};</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_result_type">result_type</h4>
+<div class="paragraph">
+<p>The nested type <code>result_type</code> is the type of the produced hash value. It
+can be an unsigned integer type (that is not <code>bool</code>), typically
+<code>std::uint32_t</code> or <code>std::uint64_t</code>, or a <code>std::array</code>-like type with a
+value type of <code>unsigned char</code>.</p>
+</div>
+<div class="paragraph">
+<p>Normally, non-cryptographic hash functions have an integer <code>result_type</code>,
+and cryptographic hash functions have an array-like <code>result_type</code>, but
+that&#8217;s not required.</p>
+</div>
+<div class="paragraph">
+<p>The provided utility function <code>get_integral_result_type</code> can be used to
+obtain an integer hash value from any valid <code>result_type</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_block_size">block_size</h4>
+<div class="paragraph">
+<p>Cryptographic hash functions provide a <code>block_size</code> value, which is their
+block size (e.g. 64 for MD5, 128 for SHA2-512) and is required in order
+to implement the corresponding <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a>.</p>
+</div>
+<div class="paragraph">
+<p><code>block_size</code> is an optional requirement.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_default_constructor">Default Constructor</h4>
+<div class="paragraph">
+<p>All <em>hash algorithms</em> must be default constructible. The default
+constructor initializes the internal state of the hash algorithm to its
+initial values, as published in its specification.</p>
+</div>
+<div class="paragraph">
+<p>For example, the default constructor of <code>md5_128</code> corresponds to calling
+the function <code>MD5_Init</code> of the reference implementation.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_constructor_taking_an_integer_seed">Constructor Taking an Integer Seed</h4>
+<div class="paragraph">
+<p>All <em>hash algorithms</em> must be constructible from a value of type
+<code>std::uint64_t</code>, which serves as a seed.</p>
+</div>
+<div class="paragraph">
+<p>Using a seed value of 0 is equivalent to default construction.</p>
+</div>
+<div class="paragraph">
+<p>Distinct seed values cause the internal state to be initialized differently,
+and therefore, instances of the hash algorithm initialized by different seeds
+produce different hash values when passed the same message.</p>
+</div>
+<div class="paragraph">
+<p>Seeding using random (unobservable from the outside) values is useful for
+preventing <a href="https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding">hash flooding attacks</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_constructor_taking_a_byte_sequence_seed">Constructor Taking a Byte Sequence Seed</h4>
+<div class="paragraph">
+<p>All <em>hash algorithms</em> can be constructed from a seed sequence of
+<code>unsigned char</code> values (this makes all hash algorithms
+<a href="https://en.wikipedia.org/wiki/Keyed_hash_function">keyed hash functions</a>.)</p>
+</div>
+<div class="paragraph">
+<p>A null sequence (one with length 0) produces a default-constructed instance.</p>
+</div>
+<div class="paragraph">
+<p>Different seed sequences produce differently initialized instances.</p>
+</div>
+<div class="paragraph">
+<p>While this requirement makes all hash algorithms usable as MACs
+(<a href="https://en.wikipedia.org/wiki/Message_authentication_code">Message Authentication Codes</a>),
+you should as a general rule prefer an established MAC algorithm, such as
+<a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a>. (A HMAC implementation is provided.)</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_copy_constructor_copy_assignment">Copy Constructor, Copy Assignment</h4>
+<div class="paragraph">
+<p>Hash algorithms are copy constructible and copy assignable, providing the
+usual guarantees for these operations. That is, a copy is equivalent to the
+original.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_update">update</h4>
+<div class="paragraph">
+<p>The function <code>update</code> is the mechanism by which the input message is provided
+to the hash algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Calling <code>update</code> several times is equivalent to calling it once with the
+concatenated byte sequences from the individual calls. That is, the input
+message may be provided in parts, and the way it&#8217;s split into parts does
+not matter and does not affect the final hash value.</p>
+</div>
+<div class="paragraph">
+<p>Given</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Hash hash; // some hash algorithm
+unsigned char message[6] = { /*...*/ }; // some input message</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the following <code>update</code> call</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>hash.update( message, 6 );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is equivalent to</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>hash.update( message, 4 );
+hash.update( message + 4, 2 );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and to</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>for( int i = 0; i &lt; 6; ++i ) hash.update( &amp;message[i], 1 );</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_result">result</h4>
+<div class="paragraph">
+<p>After the entire input message has been provided via calls to <code>update</code>, the
+final hash value can be obtained by calling <code>result</code>.</p>
+</div>
+<div class="paragraph">
+<p>The call to <code>result</code> finalizes the internal state, by padding the message as
+per the concrete algorithm specification, by optionally incorporating the
+length of the message into the state, and by performing finalization
+operations on the state, again as specified by the concrete algorithm.</p>
+</div>
+<div class="paragraph">
+<p>A final hash value is then obtained by transforming the internal state, and
+returned.</p>
+</div>
+<div class="paragraph">
+<p>Note that <code>result</code> is non-const, because it changes the internal state. It&#8217;s
+allowed for <code>result</code> to be called more than once; subsequent calls perform
+the state finalization again and as a result produce a pseudorandom sequence
+of <code>result_type</code> values. This can be used to effectively extend the output of
+the hash function. For example, a 256 bit result can be obtained from a hash
+algorithm whose <code>result_type</code> is 64 bit, by calling <code>result</code> four times.</p>
+</div>
+<div class="paragraph">
+<p>As a toy example, <em>not intended for production use</em>, this is how one could
+write a random number generator on top of the FNV-1a implementation provided
+by the library:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>std::uint64_t random()
+{
+    static boost::hash2::fnv1a_64 hash;
+    return hash.result();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_bytes_compile_time_hashing">Compile Time Hashing</h3>
+<div class="paragraph">
+<p>Under C&#43;&#43;14, it&#8217;s possible to invoke some hash algorithms at compile time.
+These algorithms provide the following interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>struct HashAlgorithm
+{
+    using result_type = /*integral or array-like*/;
+
+    static constexpr int block_size = /*...*/; // optional
+
+    constexpr HashAlgorithm();
+    explicit constexpr HashAlgorithm( std::uint64_t seed );
+    constexpr HashAlgorithm( unsigned char const* seed, std::size_t n );
+
+    constexpr HashAlgorithm( HashAlgorithm const&amp; r );
+    constexpr HashAlgorithm&amp; operator=( HashAlgorithm const&amp; r );
+
+    void update( void const* data, std::size_t n );
+    constexpr void update( unsigned char const* data, std::size_t n );
+
+    constexpr result_type result();
+};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Apart from the added <code>constexpr</code> qualifiers, the only difference is that
+<code>update</code> has a second overload that takes <code>unsigned char const*</code> instead
+of <code>void const*</code>. (Pointers to <code>void</code> cannot be used in <code>constexpr</code> functions
+before C&#43;&#43;26.)</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_bytes_provided_hash_algorithms">Provided Hash Algorithms</h3>
+<div class="sect3">
+<h4 id="hashing_bytes_fnv_1a">FNV-1a</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_xxhash">xxHash</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_siphash">SipHash</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_md5">MD5</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_sha_1">SHA-1</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_sha_2">SHA-2</h4>
+
+</div>
+<div class="sect3">
+<h4 id="hashing_bytes_ripemd_160">RIPEMD-160</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</h3>
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="hash_append">hash_append</h2>
+<h2 id="hashing_objects">Hashing C&#43;&#43; Objects</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
@@ -2235,7 +2553,7 @@ the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Versi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-07-03 21:11:06 +0300
+Last updated 2024-11-05 18:20:03 +0200
 </div>
 </div>
 <style>
