@@ -8,7 +8,9 @@
 // HMAC message authentication algorithm, https://tools.ietf.org/html/rfc2104
 
 #include <boost/hash2/detail/write.hpp>
+#include <boost/hash2/detail/memcpy.hpp>
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <cstdint>
 #include <cstring>
 #include <cstddef>
@@ -22,9 +24,8 @@ template<class H> class hmac
 {
 public:
 
-    typedef typename H::result_type result_type;
-
-    static const int block_size = H::block_size;
+    using result_type = typename H::result_type;
+    static constexpr int block_size = H::block_size;
 
 private:
 
@@ -33,9 +34,9 @@ private:
 
 private:
 
-    void init( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void init( unsigned char const* p, std::size_t n )
     {
-        int const m = block_size;
+        constexpr std::size_t m = block_size;
 
         unsigned char key[ m ] = {};
 
@@ -45,27 +46,26 @@ private:
         }
         else if( n <= m )
         {
-            std::memcpy( key, p, n );
+            detail::memcpy( key, p, n );
         }
         else
         {
             H h;
-
             h.update( p, n );
 
             result_type r = h.result();
 
-            std::memcpy( key, &r[0], r.size() );
+            detail::memcpy( key, &r[0], m < r.size()? m: r.size() );
         }
 
-        for( int i = 0; i < m; ++i )
+        for( std::size_t i = 0; i < m; ++i )
         {
             key[ i ] = static_cast<unsigned char>( key[ i ] ^ 0x36 );
         }
 
         inner_.update( key, m );
 
-        for( int i = 0; i < m; ++i )
+        for( std::size_t i = 0; i < m; ++i )
         {
             key[ i ] = static_cast<unsigned char>( key[ i ] ^ 0x36 ^ 0x5C );
         }
@@ -75,12 +75,12 @@ private:
 
 public:
 
-    hmac()
+    BOOST_CXX14_CONSTEXPR hmac()
     {
         init( 0, 0 );
     }
 
-    explicit hmac( std::uint64_t seed )
+    explicit BOOST_CXX14_CONSTEXPR hmac( std::uint64_t seed )
     {
         if( seed == 0 )
         {
@@ -88,24 +88,29 @@ public:
         }
         else
         {
-            unsigned char tmp[ 8 ];
+            unsigned char tmp[ 8 ] = {};
             detail::write64le( tmp, seed );
 
             init( tmp, 8 );
         }
     }
 
-    hmac( unsigned char const * p, std::size_t n )
+    BOOST_CXX14_CONSTEXPR hmac( unsigned char const* p, std::size_t n )
     {
         init( p, n );
     }
 
-    void update( void const * pv, std::size_t n )
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    {
+        inner_.update( p, n );
+    }
+
+    void update( void const* pv, std::size_t n )
     {
         inner_.update( pv, n );
     }
 
-    result_type result()
+    BOOST_CXX14_CONSTEXPR result_type result()
     {
         result_type r = inner_.result();
 
