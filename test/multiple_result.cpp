@@ -21,13 +21,16 @@ template<class H> void test()
         typename H::result_type r1 = h.result();
 
         typename H::result_type r2 = h.result();
-        BOOST_TEST( r1 != r2 );
+        BOOST_TEST( r2 != r1 );
 
         typename H::result_type r3 = h.result();
-        BOOST_TEST( r2 != r3 );
+        BOOST_TEST( r3 != r2 );
+        BOOST_TEST( r3 != r1 );
 
         typename H::result_type r4 = h.result();
-        BOOST_TEST( r3 != r4 );
+        BOOST_TEST( r4 != r3 );
+        BOOST_TEST( r4 != r2 );
+        BOOST_TEST( r4 != r1 );
     }
 
     {
