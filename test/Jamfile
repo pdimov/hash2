@@ -131,6 +131,7 @@ run concept.cpp ;
 run plaintext_leak.cpp ;
 run multiple_result.cpp ;
 run integral_result.cpp ;
+run quality.cpp ;
 
 # benchmarks
 
