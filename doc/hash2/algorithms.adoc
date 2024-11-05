@@ -1,11 +1,224 @@
 ////
-Copyright 2020 Peter Dimov
+Copyright 2020, 2024 Peter Dimov
 Distributed under the Boost Software License, Version 1.0.
 https://www.boost.org/LICENSE_1_0.txt
 ////
 
-[#algorithms]
-# Hash Algorithms
-:idprefix: algorithms_
+[#hashing_bytes]
+# Hashing Byte Sequences
+:idprefix: hashing_bytes_
 
-...
+This library addresses two major use cases: hashing an untyped sequence
+of bytes, and hashing {cpp} objects.
+
+Untyped byte sequences (also called _messages_) are hashed by passing
+them to a _hash algorithm_, which then produces a hash value (or a
+_message digest_).
+
+The same _hash algorithm_, when passed the same _message_, will always
+produce the same _digest_. (Published algorithms provide _message_ and
+corresponding _digest_ pairs, called _test vectors_, to enable
+verification of independent implementations.)
+
+(To hash a {cpp} object, it's first converted (serialized) to a sequence
+of bytes, then passed to a _hash algorithm_.)
+
+## Hash Algorithm Requirements
+
+A _hash algorithm_ must have the following structure, and meet the
+following minimum requirements:
+
+```
+struct HashAlgorithm
+{
+    using result_type = /*integral or array-like*/;
+
+    static constexpr int block_size = /*...*/; // optional
+
+    HashAlgorithm();
+    explicit HashAlgorithm( std::uint64_t seed );
+    HashAlgorithm( unsigned char const* seed, std::size_t n );
+
+    HashAlgorithm( HashAlgorithm const& r );
+    HashAlgorithm& operator=( HashAlgorithm const& r );
+
+    void update( void const* data, std::size_t n );
+
+    result_type result();
+};
+```
+
+### result_type
+
+The nested type `result_type` is the type of the produced hash value. It
+can be an unsigned integer type (that is not `bool`), typically
+`std::uint32_t` or `std::uint64_t`, or a `std::array`-like type with a
+value type of `unsigned char`.
+
+Normally, non-cryptographic hash functions have an integer `result_type`,
+and cryptographic hash functions have an array-like `result_type`, but
+that's not required.
+
+The provided utility function `get_integral_result_type` can be used to
+obtain an integer hash value from any valid `result_type`.
+
+### block_size
+
+Cryptographic hash functions provide a `block_size` value, which is their
+block size (e.g. 64 for MD5, 128 for SHA2-512) and is required in order
+to implement the corresponding https://en.wikipedia.org/wiki/HMAC[HMAC].
+
+`block_size` is an optional requirement.
+
+### Default Constructor
+
+All _hash algorithms_ must be default constructible. The default
+constructor initializes the internal state of the hash algorithm to its
+initial values, as published in its specification.
+
+For example, the default constructor of `md5_128` corresponds to calling
+the function `MD5_Init` of the reference implementation.
+
+### Constructor Taking an Integer Seed
+
+All _hash algorithms_ must be constructible from a value of type
+`std::uint64_t`, which serves as a seed.
+
+Using a seed value of 0 is equivalent to default construction.
+
+Distinct seed values cause the internal state to be initialized differently,
+and therefore, instances of the hash algorithm initialized by different seeds
+produce different hash values when passed the same message.
+
+Seeding using random (unobservable from the outside) values is useful for
+preventing https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding[hash flooding attacks].
+
+### Constructor Taking a Byte Sequence Seed
+
+All _hash algorithms_ can be constructed from a seed sequence of
+`unsigned char` values (this makes all hash algorithms
+https://en.wikipedia.org/wiki/Keyed_hash_function[keyed hash functions].)
+
+A null sequence (one with length 0) produces a default-constructed instance.
+
+Different seed sequences produce differently initialized instances.
+
+While this requirement makes all hash algorithms usable as MACs
+(https://en.wikipedia.org/wiki/Message_authentication_code[Message Authentication Codes]),
+you should as a general rule prefer an established MAC algorithm, such as
+https://en.wikipedia.org/wiki/HMAC[HMAC]. (A HMAC implementation is provided.)
+
+### Copy Constructor, Copy Assignment
+
+Hash algorithms are copy constructible and copy assignable, providing the
+usual guarantees for these operations. That is, a copy is equivalent to the
+original.
+
+### update
+
+The function `update` is the mechanism by which the input message is provided
+to the hash algorithm.
+
+Calling `update` several times is equivalent to calling it once with the
+concatenated byte sequences from the individual calls. That is, the input
+message may be provided in parts, and the way it's split into parts does
+not matter and does not affect the final hash value.
+
+Given
+```
+Hash hash; // some hash algorithm
+unsigned char message[6] = { /*...*/ }; // some input message
+```
+the following `update` call
+```
+hash.update( message, 6 );
+```
+is equivalent to
+```
+hash.update( message, 4 );
+hash.update( message + 4, 2 );
+```
+and to
+```
+for( int i = 0; i < 6; ++i ) hash.update( &message[i], 1 );
+```
+
+### result
+
+After the entire input message has been provided via calls to `update`, the
+final hash value can be obtained by calling `result`.
+
+The call to `result` finalizes the internal state, by padding the message as
+per the concrete algorithm specification, by optionally incorporating the
+length of the message into the state, and by performing finalization
+operations on the state, again as specified by the concrete algorithm.
+
+A final hash value is then obtained by transforming the internal state, and
+returned.
+
+Note that `result` is non-const, because it changes the internal state. It's
+allowed for `result` to be called more than once; subsequent calls perform
+the state finalization again and as a result produce a pseudorandom sequence
+of `result_type` values. This can be used to effectively extend the output of
+the hash function. For example, a 256 bit result can be obtained from a hash
+algorithm whose `result_type` is 64 bit, by calling `result` four times.
+
+As a toy example, _not intended for production use_, this is how one could
+write a random number generator on top of the FNV-1a implementation provided
+by the library:
+
+```
+std::uint64_t random()
+{
+    static boost::hash2::fnv1a_64 hash;
+    return hash.result();
+}
+```
+
+## Compile Time Hashing
+
+Under {cpp}14, it's possible to invoke some hash algorithms at compile time.
+These algorithms provide the following interface:
+
+```
+struct HashAlgorithm
+{
+    using result_type = /*integral or array-like*/;
+
+    static constexpr int block_size = /*...*/; // optional
+
+    constexpr HashAlgorithm();
+    explicit constexpr HashAlgorithm( std::uint64_t seed );
+    constexpr HashAlgorithm( unsigned char const* seed, std::size_t n );
+
+    constexpr HashAlgorithm( HashAlgorithm const& r );
+    constexpr HashAlgorithm& operator=( HashAlgorithm const& r );
+
+    void update( void const* data, std::size_t n );
+    constexpr void update( unsigned char const* data, std::size_t n );
+
+    constexpr result_type result();
+};
+```
+
+Apart from the added `constexpr` qualifiers, the only difference is that
+`update` has a second overload that takes `unsigned char const*` instead
+of `void const*`. (Pointers to `void` cannot be used in `constexpr` functions
+before {cpp}26.)
+
+## Provided Hash Algorithms
+
+### FNV-1a
+
+### xxHash
+
+### SipHash
+
+### MD5
+
+### SHA-1
+
+### SHA-2
+
+### RIPEMD-160
+
