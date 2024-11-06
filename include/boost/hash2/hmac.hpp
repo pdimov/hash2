@@ -16,7 +16,7 @@
 #include <cstring>
 #include <cstddef>
 
-#if !defined(BOOST_NO_CXX14_CONSTEXPR) || BOOST_WORKAROUND(BOOST_GCC, < 60000)
+#if !defined(BOOST_NO_CXX14_CONSTEXPR) && !BOOST_WORKAROUND(BOOST_GCC, < 60000)
 
 # define BOOST_HASH2_HMAC_CONSTEXPR constexpr
 
