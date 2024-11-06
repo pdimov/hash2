@@ -11,9 +11,24 @@
 #include <boost/hash2/detail/memcpy.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #include <cstdint>
 #include <cstring>
 #include <cstddef>
+
+#if !defined(BOOST_NO_CXX14_CONSTEXPR) || BOOST_WORKAROUND(BOOST_GCC, < 60000)
+
+# define BOOST_HASH2_HMAC_CONSTEXPR constexpr
+
+#else
+
+// libs/hash2/test/concept.cpp:45:7:   in constexpr expansion of 'h1.boost::hash2::hmac<H>::hmac<boost::hash2::md5_128>()'
+// ./boost/hash2/hmac.hpp:80:13:   in constexpr expansion of 'boost::hash2::hmac<H>::init<boost::hash2::md5_128>(0u, 0u)'
+// libs/hash2/test/concept.cpp:45:7: internal compiler error: in fold_binary_loc, at fold-const.c:9925
+
+# define BOOST_HASH2_HMAC_CONSTEXPR
+
+#endif
 
 namespace boost
 {
@@ -34,7 +49,7 @@ private:
 
 private:
 
-    BOOST_CXX14_CONSTEXPR void init( unsigned char const* p, std::size_t n )
+    BOOST_HASH2_HMAC_CONSTEXPR void init( unsigned char const* p, std::size_t n )
     {
         constexpr std::size_t m = block_size;
 
@@ -75,12 +90,12 @@ private:
 
 public:
 
-    BOOST_CXX14_CONSTEXPR hmac()
+    BOOST_HASH2_HMAC_CONSTEXPR hmac()
     {
         init( 0, 0 );
     }
 
-    explicit BOOST_CXX14_CONSTEXPR hmac( std::uint64_t seed )
+    explicit BOOST_HASH2_HMAC_CONSTEXPR hmac( std::uint64_t seed )
     {
         if( seed == 0 )
         {
@@ -95,7 +110,7 @@ public:
         }
     }
 
-    BOOST_CXX14_CONSTEXPR hmac( unsigned char const* p, std::size_t n )
+    BOOST_HASH2_HMAC_CONSTEXPR hmac( unsigned char const* p, std::size_t n )
     {
         init( p, n );
     }

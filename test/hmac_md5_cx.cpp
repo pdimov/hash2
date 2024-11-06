@@ -36,7 +36,7 @@ int main()
     BOOST_TEST_EQ( test<hmac_md5_128>( 0, v ), r1 );
     BOOST_TEST_EQ( test<hmac_md5_128>( 7, v ), r2 );
 
-#if !defined(BOOST_NO_CXX14_CONSTEXPR)
+#if !defined(BOOST_NO_CXX14_CONSTEXPR) && !( defined(BOOST_GCC) && BOOST_GCC < 60000 )
 
     STATIC_ASSERT( test<hmac_md5_128>( 0, v ) == r1 );
     STATIC_ASSERT( test<hmac_md5_128>( 7, v ) == r2 );
