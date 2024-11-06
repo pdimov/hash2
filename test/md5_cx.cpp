@@ -12,17 +12,27 @@
 # pragma warning(disable: 4307) // integral constant overflow
 #endif
 
-#define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
-
 template<class H, std::size_t N> BOOST_CXX14_CONSTEXPR typename H::result_type test( std::uint64_t seed, unsigned char const (&v)[ N ] )
 {
     H h( seed );
 
     h.update( v, N / 3 );
-    h.update( v, N - N / 3 );
+    h.update( v + N / 3, N - N / 3 );
 
     return h.result();
 }
+
+#define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
+
+#if defined(BOOST_NO_CXX14_CONSTEXPR)
+
+# define TEST_EQ(x1, x2) BOOST_TEST_EQ(x1, x2)
+
+#else
+
+# define TEST_EQ(x1, x2) BOOST_TEST_EQ(x1, x2); STATIC_ASSERT(x1 == x2)
+
+#endif
 
 int main()
 {
@@ -33,15 +43,8 @@ int main()
     BOOST_CXX14_CONSTEXPR digest<16> r1 = {{ 10, 29, 252, 24, 200, 200, 56, 31, 5, 248, 173, 157, 43, 69, 9, 181 }};
     BOOST_CXX14_CONSTEXPR digest<16> r2 = {{ 181, 92, 80, 91, 73, 60, 132, 154, 25, 168, 65, 211, 8, 142, 193, 207 }};
 
-    BOOST_TEST_EQ( test<md5_128>( 0, v ), r1 );
-    BOOST_TEST_EQ( test<md5_128>( 7, v ), r2 );
-
-#if !defined(BOOST_NO_CXX14_CONSTEXPR)
-
-    STATIC_ASSERT( test<md5_128>( 0, v ) == r1 );
-    STATIC_ASSERT( test<md5_128>( 7, v ) == r2 );
-
-#endif
+    TEST_EQ( test<md5_128>( 0, v ), r1 );
+    TEST_EQ( test<md5_128>( 7, v ), r2 );
 
     return boost::report_errors();
 }
