@@ -221,6 +221,11 @@ are short.
 
 ### xxHash
 
+https://xxhash.com/[xxHash] is a fast non-cryptographic hashing algorithm by Yann Collet.
+
+Its speed (~5GB/s for `xxhash_32`, ~10GB/s for `xxhash_64` on a Xeon E5-2683 v4 @ 2.10GHz)
+makes it well suited for quick generation of file or data integrity checksums.
+
 ### SipHash
 
 https://en.wikipedia.org/wiki/SipHash[SipHash] (https://eprint.iacr.org/2012/351[paper]) has been designed to thwart
@@ -248,7 +253,7 @@ It produces a 128 bit digest.
 MD5 should no longer be used in new code, except when implementing an existing
 specification or protocol that calls for its use.
 
-Prefer SHA2-512/224 (or SHA2-224 in 32 bit code) instead.
+Prefer SHA2-512/256 (or SHA2-256 in 32 bit code) instead.
 
 ### SHA-1
 
@@ -258,7 +263,7 @@ as a https://en.wikipedia.org/wiki/Federal_Information_Processing_Standards[Fede
 It produces a 160 bit digest.
 
 SHA-1 is now considered insecure against a well-funded attacker, and should no
-longer be used in new code. Prefer SHA2-512/224, SHA2-224 in 32 bit code, or, if
+longer be used in new code. Prefer SHA2-512/256, SHA2-256 in 32 bit code, or, if
 you require a digest of exactly 160 bits, RIPEMD-160 instead.
 
 ### SHA-2
@@ -272,8 +277,8 @@ The SHA-2 functions haven't been broken and are in wide use, despite the existen
 
 SHA2-256 and its truncated variant SHA2-224 use 32 bit operations and therefore do not lose performance on a 32 bit platform.
 
-SHA2-512 and its truncated variants SHA2-384, SHA2-512/224, and SHA2-512/256 use 64 bit operations and are approximately twice as fast
-as SHA2-256 on a 64 bit platform, but slower in 32 bit code.
+SHA2-512 and its truncated variants SHA2-384, SHA2-512/224, and SHA2-512/256 use 64 bit operations and are approximately 1.5 times as fast
+as SHA2-256 on a 64 bit platform, but twice as slow in 32 bit code.
 
 On 64 bit platforms, SHA2-512/256 and SHA2-512/224 should be preferred over SHA2-256 and SHA2-224 not just because of speed, but because
 they are resistant to length extension attacks as they don't expose all of the bits of their internal state in the final digest.
