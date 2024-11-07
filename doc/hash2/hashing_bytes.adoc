@@ -59,8 +59,8 @@ Normally, non-cryptographic hash functions have an integer `result_type`,
 and cryptographic hash functions have an array-like `result_type`, but
 that's not required.
 
-The provided utility function `get_integral_result_type` can be used to
-obtain an integer hash value from any valid `result_type`.
+The provided utility function `get_integral_result` can be used to obtain
+an integer hash value from any valid `result_type`.
 
 ### block_size
 

@@ -53,7 +53,6 @@ are being tested on [Github Actions](https://github.com/pdimov/hash2/actions/) a
 
 ## Planned Additions
 
-* Support for endian-independent hashing
 * A `std::hash`-compatible adaptor
 
 ## License

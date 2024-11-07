@@ -23,7 +23,7 @@ template<class H, std::size_t N> BOOST_CXX14_CONSTEXPR typename H::result_type t
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
-#if defined(BOOST_NO_CXX14_CONSTEXPR)
+#if defined(BOOST_NO_CXX14_CONSTEXPR) || ( defined(BOOST_GCC) && BOOST_GCC < 60000 )
 
 # define TEST_EQ(x1, x2) BOOST_TEST_EQ(x1, x2)
 
@@ -39,11 +39,11 @@ int main()
 
     constexpr unsigned char v[ 95 ] = {};
 
-    BOOST_CXX14_CONSTEXPR digest<16> r1 = {{ 10, 29, 252, 24, 200, 200, 56, 31, 5, 248, 173, 157, 43, 69, 9, 181 }};
-    BOOST_CXX14_CONSTEXPR digest<16> r2 = {{ 181, 92, 80, 91, 73, 60, 132, 154, 25, 168, 65, 211, 8, 142, 193, 207 }};
+    BOOST_CXX14_CONSTEXPR digest<16> r1 = {{ 0x6F, 0x37, 0xD7, 0x4E, 0xD7, 0x97, 0xC2, 0x55, 0xEA, 0x1E, 0x4A, 0x46, 0xC3, 0x52, 0x39, 0xD7 }};
+    BOOST_CXX14_CONSTEXPR digest<16> r2 = {{ 0x68, 0xD4, 0xDF, 0x36, 0x73, 0x64, 0x42, 0xC0, 0xED, 0xE2, 0xA6, 0x15, 0x85, 0x10, 0xA4, 0x5E }};
 
-    TEST_EQ( test<md5_128>( 0, v ), r1 );
-    TEST_EQ( test<md5_128>( 7, v ), r2 );
+    TEST_EQ( test<hmac_md5_128>( 0, v ), r1 );
+    TEST_EQ( test<hmac_md5_128>( 7, v ), r2 );
 
     return boost::report_errors();
 }
