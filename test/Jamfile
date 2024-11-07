@@ -97,6 +97,7 @@ run fnv1a.cpp ;
 run fnv1a_cx.cpp ;
 
 run xxhash.cpp ;
+run xxhash_2.cpp ;
 run xxhash_cx.cpp ;
 
 run siphash32.cpp ;
