@@ -736,8 +736,8 @@ and cryptographic hash functions have an array-like <code>result_type</code>, bu
 that&#8217;s not required.</p>
 </div>
 <div class="paragraph">
-<p>The provided utility function <code>get_integral_result_type</code> can be used to
-obtain an integer hash value from any valid <code>result_type</code>.</p>
+<p>The provided utility function <code>get_integral_result</code> can be used to obtain
+an integer hash value from any valid <code>result_type</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2276,9 +2276,134 @@ using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
 } // namespace boost</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This header implements the <a href="https://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/AB-9601.pdf">RIPEMD-160</a> algorithm.</p>
+</div>
 <div class="sect4">
 <h5 id="ref_ripemd_ripemd_160">ripemd_160</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>class ripemd_160
+{
+    using result_type = digest&lt;20&gt;;
 
+    static constexpr int block_size = 64;
+
+    constexpr ripemd_160();
+    explicit constexpr ripemd_160( std::uint64_t seed );
+    constexpr ripemd_160( unsigned char const* p, std::size_t n );
+
+    void update( void const * pv, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
+
+    constexpr result_type result();
+};</code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_ripemd_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>constexpr ripemd_160();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the RIPEMD-160 algorithm to its initial values.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>explicit constexpr ripemd_160( std::uint64_t seed );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integral seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>seed</code> is not zero, performs <code>update(p, 8); result();</code> where <code>p</code> points to a little-endian representation of the value of <code>seed</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>constexpr ripemd_160( unsigned char const* p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_ripemd_update">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>void update( void const* p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the RIPEMD-160 algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_ripemd_result">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>constexpr result_type result();</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Pads the accumulated message and finalizes the RIPEMD-160 digest.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The RIPEMD-160 digest of the message formed from the byte sequences of the preceding calls to <code>update</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Repeated calls to <code>result()</code> return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2553,7 +2678,7 @@ the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Versi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-05 18:20:03 +0200
+Last updated 2024-11-05 20:48:49 +0200
 </div>
 </div>
 <style>
