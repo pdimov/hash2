@@ -9,6 +9,7 @@
 #include <boost/hash2/sha1.hpp>
 #include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
+#include <boost/hash2/experimental/mulxp.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/core/type_name.hpp>
@@ -49,6 +50,7 @@ void test( int N, int M )
     test_<fnv1a_64>( data, N, M );
     test_<xxhash_32>( data, N, M );
     test_<xxhash_64>( data, N, M );
+    test_<mulxp3_64>( data, N, M );
     test_<siphash_32>( data, N, M );
     test_<siphash_64>( data, N, M );
     test_<md5_128>( data, N, M );
