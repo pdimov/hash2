@@ -78,41 +78,78 @@ BOOST_CXX14_CONSTEXPR BOOST_FORCEINLINE std::uint64_t mul32( std::uint32_t x, st
 
 } // namespace detail
 
-class mulxp3_32
+// mulxp1_64
+
+class mulxp1_64
 {
 private:
 
-    static constexpr std::uint32_t const Q = 0x9e3779b9U;
-    static constexpr std::uint32_t const K = Q * Q;
+    static constexpr std::uint64_t const Q = 0x9e3779b97f4a7c15ULL;
+    static constexpr std::uint64_t const K = Q * Q;
 
+    std::uint64_t w_;
     std::uint64_t h_;
-    std::uint32_t w_;
 
     unsigned char buffer_[ 8 ] = {};
     std::size_t m_ = 0; // == n_ % 8
 
-    std::size_t n_ = 0;
+    std::uint64_t n_ = 0;
 
 private:
 
-    /*BOOST_CXX14_CONSTEXPR*/ void init( std::uint64_t seed )
+    /*BOOST_CXX14_CONSTEXPR*/ void init( std::uint64_t seed ) noexcept
     {
-        h_ = ( seed + Q ) * K;
-        w_ = static_cast<std::uint32_t>( h_ );
+        w_ = detail::mulx( seed + Q, K );
+        h_ = w_;
     }
 
-    /*BOOST_CXX14_CONSTEXPR*/ void update_( unsigned char const * p, std::size_t k )
+    /*BOOST_CXX14_CONSTEXPR*/ void update_( unsigned char const* p, std::size_t k ) noexcept
     {
-        std::uint32_t w = w_;
-        std::uint64_t h = h_;
+        std::uint64_t w = w_;
+
+        std::uint64_t h1 = 0;
+        std::uint64_t h2 = 0;
+        std::uint64_t h3 = 0;
+
+        while( k >= 3 )
+        {
+            {
+                std::uint64_t v1 = detail::read64le( p );
+
+                w += Q;
+                h1 ^= detail::mulx( v1 + w, K );
+
+                p += 8;
+                --k;
+            }
+            {
+                std::uint64_t v1 = detail::read64le( p );
+
+                w += Q;
+                h2 ^= detail::mulx( v1 + w, K );
+
+                p += 8;
+                --k;
+            }
+            {
+                std::uint64_t v1 = detail::read64le( p );
+
+                w += Q;
+                h3 ^= detail::mulx( v1 + w, K );
+
+                p += 8;
+                --k;
+            }
+        }
+
+        std::uint64_t h = h_ ^ h1 ^ h2 ^ h3;
 
         while( k > 0 )
         {
-            std::uint32_t v1 = detail::read32le( p + 0 );
-            std::uint32_t v2 = detail::read32le( p + 4 );
+            std::uint64_t v1 = detail::read64le( p );
 
             w += Q;
-            h ^= detail::mul32( v1 + w, v2 + w + K );
+            h ^= detail::mulx( v1 + w, K );
 
             p += 8;
             --k;
@@ -120,23 +157,23 @@ private:
 
         w_ = w;
         h_ = h;
-    }
+   }
 
 public:
 
-    using result_type = std::uint32_t;
+    typedef std::uint64_t result_type;
 
-    /*BOOST_CXX14_CONSTEXPR*/ mulxp3_32() noexcept
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp1_64() noexcept
     {
         init( 0 );
     }
 
-    /*BOOST_CXX14_CONSTEXPR*/ explicit mulxp3_32( std::uint64_t seed ) noexcept
+    /*BOOST_CXX14_CONSTEXPR*/ explicit mulxp1_64( std::uint64_t seed ) noexcept
     {
         init( seed );
     }
 
-    /*BOOST_CXX14_CONSTEXPR*/ mulxp3_32( unsigned char const * p, std::size_t n )
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp1_64( unsigned char const * p, std::size_t n )
     {
         init( 0 );
 
@@ -206,7 +243,7 @@ public:
         update( p, n );
     }
 
-    /*BOOST_CXX14_CONSTEXPR*/ std::uint32_t result()
+    /*BOOST_CXX14_CONSTEXPR*/ std::uint64_t result()
     {
         BOOST_ASSERT( m_ == n_ % 8 );
 
@@ -214,15 +251,176 @@ public:
             unsigned char const* const p = buffer_;
             std::size_t const n = m_;
 
-            std::uint32_t v1 = 0;
-            std::uint32_t v2 = 0;
+            std::uint64_t v1 = 0;
 
             if( n >= 4 )
             {
-                v1 = detail::read32le( p );
-                v2 = ((std::uint64_t)detail::read32le( p + n - 4 ) << ( n - 4 ) * 8) >> 32;
+                v1 = (std::uint64_t)detail::read32le( p + n - 4 ) << ( n - 4 ) * 8 | detail::read32le( p );
             }
             else if( n >= 1 )
+            {
+                std::size_t const x1 = ( n - 1 ) & 2; // 1: 0, 2: 0, 3: 2
+                std::size_t const x2 = n >> 1;        // 1: 0, 2: 1, 3: 1
+
+                v1 = (std::uint64_t)p[ x1 ] << x1 * 8 | (std::uint64_t)p[ x2 ] << x2 * 8 | (std::uint64_t)p[ 0 ];
+            }
+
+            w_ += Q;
+            h_ ^= detail::mulx( v1 + w_, K );
+        }
+
+        h_ ^= n_;
+
+        n_ += 8 - m_;
+        m_ = 0;
+
+        // clear buffered plaintext
+        detail::memset( buffer_, 0, 8 );
+
+        return detail::mulx( h_ + w_, K );
+    }
+};
+
+// mulxp1_32
+
+class mulxp1_32
+{
+private:
+
+    static constexpr std::uint32_t const Q = 0x9e3779b9U;
+    static constexpr std::uint32_t const K = Q * Q;
+
+    std::uint64_t h_;
+    std::uint32_t w_;
+
+    unsigned char buffer_[ 4 ] = {};
+    std::size_t m_ = 0; // == n_ % 4
+
+    std::size_t n_ = 0;
+
+private:
+
+    /*BOOST_CXX14_CONSTEXPR*/ void init( std::uint64_t seed )
+    {
+        h_ = ( seed + Q ) * K;
+        w_ = static_cast<std::uint32_t>( h_ );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ void update_( unsigned char const * p, std::size_t k )
+    {
+        std::uint32_t w = w_;
+        std::uint64_t h = h_;
+
+        while( k > 0 )
+        {
+            std::uint32_t v1 = detail::read32le( p );
+
+            w += Q;
+            h ^= detail::mul32( v1 + w, K );
+
+            p += 4;
+            --k;
+        }
+
+        w_ = w;
+        h_ = h;
+    }
+
+public:
+
+    using result_type = std::uint32_t;
+
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp1_32() noexcept
+    {
+        init( 0 );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ explicit mulxp1_32( std::uint64_t seed ) noexcept
+    {
+        init( seed );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp1_32( unsigned char const * p, std::size_t n )
+    {
+        init( 0 );
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ void update( unsigned char const* p, std::size_t n )
+    {
+        BOOST_ASSERT( m_ == n_ % 4 );
+
+        if( n == 0 ) return;
+
+        n_ += n;
+
+        if( m_ > 0 )
+        {
+            std::size_t k = 4 - m_;
+
+            if( n < k )
+            {
+                k = n;
+            }
+
+            detail::memcpy( buffer_ + m_, p, k );
+
+            p += k;
+            n -= k;
+            m_ += k;
+
+            if( m_ < 4 ) return;
+
+            BOOST_ASSERT( m_ == 4 );
+
+            update_( buffer_, 1 );
+            m_ = 0;
+        }
+
+        BOOST_ASSERT( m_ == 0 );
+
+        {
+            std::size_t k = n / 4;
+
+            update_( p, k );
+
+            p += 4 * k;
+            n -= 4 * k;
+        }
+
+        BOOST_ASSERT( n < 4 );
+
+        if( n > 0 )
+        {
+            detail::memcpy( buffer_, p, n );
+            m_ = n;
+        }
+
+        BOOST_ASSERT( m_ == n_ % 4 );
+    }
+
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ std::uint32_t result()
+    {
+        BOOST_ASSERT( m_ == n_ % 4 );
+
+        {
+            unsigned char const* const p = buffer_;
+            std::size_t const n = m_;
+
+            std::uint32_t v1 = 0;
+
+            if( n >= 1 )
             {
                 std::size_t const x1 = ( n - 1 ) & 2; // 1: 0, 2: 0, 3: 2
                 std::size_t const x2 = n >> 1;        // 1: 0, 2: 1, 3: 1
@@ -231,7 +429,7 @@ public:
             }
 
             w_ += Q;
-            h_ ^= detail::mul32( v1 + w_, v2 + w_ + K );
+            h_ ^= detail::mul32( v1 + w_, K );
         }
 
         h_ ^= n_;
@@ -239,15 +437,17 @@ public:
         w_ += Q;
         h_ ^= detail::mul32( (std::uint32_t)h_ + w_, (std::uint32_t)(h_ >> 32) + w_ + K );
 
-        n_ += 8 - m_;
+        n_ += 4 - m_;
         m_ = 0;
 
         // clear buffered plaintext
-        detail::memset( buffer_, 0, 8 );
+        detail::memset( buffer_, 0, 4 );
 
         return (std::uint32_t)h_ ^ (std::uint32_t)(h_ >> 32);
     }
 };
+
+// mulxp3_64
 
 class mulxp3_64
 {
@@ -457,6 +657,179 @@ public:
         detail::memset( buffer_, 0, 16 );
 
         return detail::mulx( h_, K );
+    }
+};
+
+// mulxp3_32
+
+class mulxp3_32
+{
+private:
+
+    static constexpr std::uint32_t const Q = 0x9e3779b9U;
+    static constexpr std::uint32_t const K = Q * Q;
+
+    std::uint64_t h_;
+    std::uint32_t w_;
+
+    unsigned char buffer_[ 8 ] = {};
+    std::size_t m_ = 0; // == n_ % 8
+
+    std::size_t n_ = 0;
+
+private:
+
+    /*BOOST_CXX14_CONSTEXPR*/ void init( std::uint64_t seed )
+    {
+        h_ = ( seed + Q ) * K;
+        w_ = static_cast<std::uint32_t>( h_ );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ void update_( unsigned char const * p, std::size_t k )
+    {
+        std::uint32_t w = w_;
+        std::uint64_t h = h_;
+
+        while( k > 0 )
+        {
+            std::uint32_t v1 = detail::read32le( p + 0 );
+            std::uint32_t v2 = detail::read32le( p + 4 );
+
+            w += Q;
+            h ^= detail::mul32( v1 + w, v2 + w + K );
+
+            p += 8;
+            --k;
+        }
+
+        w_ = w;
+        h_ = h;
+    }
+
+public:
+
+    using result_type = std::uint32_t;
+
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp3_32() noexcept
+    {
+        init( 0 );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ explicit mulxp3_32( std::uint64_t seed ) noexcept
+    {
+        init( seed );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ mulxp3_32( unsigned char const * p, std::size_t n )
+    {
+        init( 0 );
+
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ void update( unsigned char const* p, std::size_t n )
+    {
+        BOOST_ASSERT( m_ == n_ % 8 );
+
+        if( n == 0 ) return;
+
+        n_ += n;
+
+        if( m_ > 0 )
+        {
+            std::size_t k = 8 - m_;
+
+            if( n < k )
+            {
+                k = n;
+            }
+
+            detail::memcpy( buffer_ + m_, p, k );
+
+            p += k;
+            n -= k;
+            m_ += k;
+
+            if( m_ < 8 ) return;
+
+            BOOST_ASSERT( m_ == 8 );
+
+            update_( buffer_, 1 );
+            m_ = 0;
+        }
+
+        BOOST_ASSERT( m_ == 0 );
+
+        {
+            std::size_t k = n / 8;
+
+            update_( p, k );
+
+            p += 8 * k;
+            n -= 8 * k;
+        }
+
+        BOOST_ASSERT( n < 8 );
+
+        if( n > 0 )
+        {
+            detail::memcpy( buffer_, p, n );
+            m_ = n;
+        }
+
+        BOOST_ASSERT( m_ == n_ % 8 );
+    }
+
+    void update( void const* pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    /*BOOST_CXX14_CONSTEXPR*/ std::uint32_t result()
+    {
+        BOOST_ASSERT( m_ == n_ % 8 );
+
+        {
+            unsigned char const* const p = buffer_;
+            std::size_t const n = m_;
+
+            std::uint32_t v1 = 0;
+            std::uint32_t v2 = 0;
+
+            if( n >= 4 )
+            {
+                v1 = detail::read32le( p );
+                v2 = ((std::uint64_t)detail::read32le( p + n - 4 ) << ( n - 4 ) * 8) >> 32;
+            }
+            else if( n >= 1 )
+            {
+                std::size_t const x1 = ( n - 1 ) & 2; // 1: 0, 2: 0, 3: 2
+                std::size_t const x2 = n >> 1;        // 1: 0, 2: 1, 3: 1
+
+                v1 = (std::uint32_t)p[ x1 ] << x1 * 8 | (std::uint32_t)p[ x2 ] << x2 * 8 | (std::uint32_t)p[ 0 ];
+            }
+
+            w_ += Q;
+            h_ ^= detail::mul32( v1 + w_, v2 + w_ + K );
+        }
+
+        h_ ^= n_;
+
+        w_ += Q;
+        h_ ^= detail::mul32( (std::uint32_t)h_ + w_, (std::uint32_t)(h_ >> 32) + w_ + K );
+
+        n_ += 8 - m_;
+        m_ = 0;
+
+        // clear buffered plaintext
+        detail::memset( buffer_, 0, 8 );
+
+        return (std::uint32_t)h_ ^ (std::uint32_t)(h_ >> 32);
     }
 };
 

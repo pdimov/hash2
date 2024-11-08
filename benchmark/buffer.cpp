@@ -50,6 +50,8 @@ void test( int N, int M )
     test_<fnv1a_64>( data, N, M );
     test_<xxhash_32>( data, N, M );
     test_<xxhash_64>( data, N, M );
+    test_<mulxp1_32>( data, N, M );
+    test_<mulxp1_64>( data, N, M );
     test_<mulxp3_32>( data, N, M );
     test_<mulxp3_64>( data, N, M );
     test_<siphash_32>( data, N, M );

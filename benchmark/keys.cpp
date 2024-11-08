@@ -132,6 +132,8 @@ int main()
     test2<fnv1a_64>( N, v );
     test2<xxhash_32>( N, v );
     test2<xxhash_64>( N, v );
+    test2<mulxp1_32>( N, v );
+    test2<mulxp1_64>( N, v );
     test2<mulxp3_32>( N, v );
     test2<mulxp3_64>( N, v );
     test2<siphash_32>( N, v );
