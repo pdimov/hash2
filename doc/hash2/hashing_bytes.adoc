@@ -292,6 +292,10 @@ but that has recently become popular because of its use in Bitcoin and other cry
 
 Even though it hasn't been broken, there's no reason to prefer its use in new code over SHA-2.
 
+### HMAC
+
+...
+
 ## Choosing a Hash Algorithm
 
 ...
