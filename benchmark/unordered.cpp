@@ -11,6 +11,7 @@
 #include <boost/hash2/sha1.hpp>
 #include <boost/hash2/sha2.hpp>
 #include <boost/hash2/ripemd.hpp>
+#include <boost/hash2/experimental/mulxp.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/unordered/unordered_flat_set.hpp>
@@ -152,6 +153,7 @@ int main()
     test2<K, boost::hash2::fnv1a_64>( N, v );
     test2<K, boost::hash2::xxhash_32>( N, v );
     test2<K, boost::hash2::xxhash_64>( N, v );
+    test2<K, boost::hash2::mulxp3_64>( N, v );
     test2<K, boost::hash2::siphash_32>( N, v );
     test2<K, boost::hash2::siphash_64>( N, v );
     test2<K, boost::hash2::md5_128>( N, v );
