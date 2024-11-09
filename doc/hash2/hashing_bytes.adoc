@@ -294,7 +294,22 @@ Even though it hasn't been broken, there's no reason to prefer its use in new co
 
 ### HMAC
 
-...
+https://en.wikipedia.org/wiki/HMAC[HMAC] (Hash-based Message Authentication Code) is an algorithm for deriving
+a _message authentication code_ by using a cryptographic hash function. It's described in https://datatracker.ietf.org/doc/html/rfc2104[RFC 2104].
+
+A message authentication code differs from a digest by the fact that it depends on both the contents of the message
+and on a secret _key_; in contrast, a message digest only depends on the contents of the message.
+
+Even though all hash algorithms provided by the library can be used to produce message authentication codes,
+by means of seeding the hash algorithm initially with a secret key by calling the constructor taking a byte
+sequence, hash algorithms have usually not been designed to be used in this manner, and such use hasn't been
+cryptographically analyzed and vetted. (SipHash is an exception; it has specifically been designed as a MAC.)
+
+The HMAC algorithm is provided in the form of a class template `hmac<H>` that adapts a cryptographic hash
+algorithm `H`. `hmac<H>` satisfies the requirements of a cryptographic hash algorithm.
+
+Convenience aliases of common HMAC instantiations are provided. For example, the `md5.hpp` header defining
+`md5_128` also defines `hmac_md5_128` as an alias to `hmac<md5_128>`.
 
 ## Choosing a Hash Algorithm
 
