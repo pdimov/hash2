@@ -216,7 +216,7 @@ their output one byte at a time. The 32 or 64 bit state is updated for each
 input character `ch` by using the operation `state = (state ^ ch) * fnv_prime`.
 
 FNV-1a is non-cryptographic, relatively weak compared to state of the art
-hash functions (but good for its class), but fast when the input strings
+hash functions (although good for its class), but fast when the input strings
 are short.
 
 ### xxHash
@@ -228,7 +228,8 @@ makes it well suited for quick generation of file or data integrity checksums.
 
 ### SipHash
 
-https://en.wikipedia.org/wiki/SipHash[SipHash] (https://eprint.iacr.org/2012/351[paper]) has been designed to thwart
+https://en.wikipedia.org/wiki/SipHash[SipHash] by Jean-Philippe Aumasson and Daniel J. Bernstein
+(https://eprint.iacr.org/2012/351[paper]) has been designed to thwart
 https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding[hash flooding attacks] against hash tables that receive
 external untrusted input (e.g. HTTP message headers, or JSON objects.)
 
@@ -250,7 +251,7 @@ to be the best known and the most widely used https://en.wikipedia.org/wiki/Cryp
 but has been broken and is no longer considered cryptographic for any purposes.
 It produces a 128 bit digest.
 
-MD5 should no longer be used in new code, except when implementing an existing
+MD5 should no longer be used in new code when cryptographic strength is required, except when implementing an existing
 specification or protocol that calls for its use.
 
 Prefer SHA2-512/256 (or SHA2-256 in 32 bit code) instead.
