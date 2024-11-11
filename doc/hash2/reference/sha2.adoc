@@ -10,6 +10,7 @@ https://www.boost.org/LICENSE_1_0.txt
 
 ```
 #include <boost/hash2/hmac.hpp>
+#include <boost/hash2/digest.hpp>
 
 namespace boost {
 namespace hash2 {
@@ -39,24 +40,25 @@ This header implements the https://csrc.nist.gov/pubs/fips/180-4/upd1/final[SHA-
 ```
 class sha2_256
 {
-    using result_type = std::array<unsigned char, 32>;
+    using result_type = digest<32>;
 
     static constexpr int block_size = 64;
 
-    sha2_256();
-    explicit sha2_256( std::uint64_t seed );
-    sha2_256( unsigned char const * p, std::size_t n );
+    constexpr sha2_256();
+    constexpr explicit sha2_256( std::uint64_t seed );
+    constexpr sha2_256( unsigned char const * p, std::size_t n );
 
     void update( void const * p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-sha2_256();
+constexpr sha2_256();
 ```
 
 Default constructor.
@@ -65,7 +67,7 @@ Effects: ::
   Initializes the internal state of the SHA-256 algorithm to its initial values.
 
 ```
-explicit sha2_256( std::uint64_t seed );
+constexpr explicit sha2_256( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -77,7 +79,7 @@ Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
-sha2_256( unsigned char const * p, std::size_t n );
+constexpr sha2_256( unsigned char const * p, std::size_t n );
 ```
 
 Constructor taking a byte sequence seed.
@@ -92,6 +94,7 @@ Remarks: ::
 
 ```
 void update( void const * p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -103,7 +106,7 @@ Remarks: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::
@@ -121,7 +124,7 @@ The SHA-224 algorithm is identical to the SHA-256 algorithm described above.
 
 The only differences are the internal state's initial values and the size of the message digest, which is:
 ```
-using result_type = std::array<unsigned char, 28>;
+using result_type = digest<28>;
 ```
 
 Otherwise, all other operations and constants are identical.
@@ -133,24 +136,25 @@ The message digest is obtained by truncating the final results of the SHA-256 al
 ```
 class sha2_512
 {
-    using result_type = std::array<unsigned char, 64>;
+    using result_type = digest<64>;
 
     static constexpr int block_size = 128;
 
-    sha2_512();
-    explicit sha2_512( std::uint64_t seed );
-    sha2_512( unsigned char const * p, std::size_t n );
+    constexpr sha2_512();
+    constexpr explicit sha2_512( std::uint64_t seed );
+    constexpr sha2_512( unsigned char const * p, std::size_t n );
 
     void update( void const * p, std::size_t n );
+    constexpr void update( unsigned char const* p, std::size_t n );
 
-    result_type result();
+    constexpr result_type result();
 };
 ```
 
 ### Constructors
 
 ```
-sha2_512();
+constexpr sha2_512();
 ```
 
 Default constructor.
@@ -159,7 +163,7 @@ Effects: ::
   Initializes the internal state of the SHA-512 algorithm to its initial values.
 
 ```
-explicit sha2_512( std::uint64_t seed );
+constexpr explicit sha2_512( std::uint64_t seed );
 ```
 
 Constructor taking an integral seed value.
@@ -171,7 +175,7 @@ Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
 
 ```
-sha2_512( unsigned char const * p, std::size_t n );
+constexpr sha2_512( unsigned char const * p, std::size_t n );
 ```
 
 Constructor taking a byte sequence seed.
@@ -186,6 +190,7 @@ Remarks: ::
 
 ```
 void update( void const * p, std::size_t n );
+constexpr void update( unsigned char const* p, std::size_t n );
 ```
 
 Effects: ::
@@ -197,7 +202,7 @@ Remarks: ::
 ### result
 
 ```
-result_type result();
+constexpr result_type result();
 ```
 
 Effects: ::
@@ -215,7 +220,7 @@ The SHA-384 algorithm is identical to the SHA-512 algorithm described above.
 
 The only differences are the internal state's initial values and the size of the message digest, which is:
 ```
-using result_type = std::array<unsigned char, 48>;
+using result_type = digest<48>;
 ```
 
 Otherwise, all other operations and constants are identical.
@@ -228,7 +233,7 @@ The SHA-512/224 algorithm is identical to the SHA-512 algorithm described above.
 
 The only differences are the internal state's initial values and the size of the message digest, which is:
 ```
-using result_type = std::array<unsigned char, 28>;
+using result_type = digest<28>;
 ```
 
 Otherwise, all other operations and constants are identical.
@@ -241,7 +246,7 @@ The SHA-512/256 algorithm is identical to the SHA-512 algorithm described above.
 
 The only differences are the internal state's initial values and the size of the message digest, which is:
 ```
-using result_type = std::array<unsigned char, 32>;
+using result_type = digest<32>;
 ```
 
 Otherwise, all other operations and constants are identical.
