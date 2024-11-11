@@ -471,6 +471,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#hashing_bytes_sha_1">SHA-1</a></li>
 <li><a href="#hashing_bytes_sha_2">SHA-2</a></li>
 <li><a href="#hashing_bytes_ripemd_160">RIPEMD-160</a></li>
+<li><a href="#hashing_bytes_hmac">HMAC</a></li>
 </ul>
 </li>
 <li><a href="#hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</a></li>
@@ -944,7 +945,7 @@ input character <code>ch</code> by using the operation <code>state = (state ^ ch
 </div>
 <div class="paragraph">
 <p>FNV-1a is non-cryptographic, relatively weak compared to state of the art
-hash functions (but good for its class), but fast when the input strings
+hash functions (although good for its class), but fast when the input strings
 are short.</p>
 </div>
 </div>
@@ -961,7 +962,8 @@ makes it well suited for quick generation of file or data integrity checksums.</
 <div class="sect3">
 <h4 id="hashing_bytes_siphash">SipHash</h4>
 <div class="paragraph">
-<p><a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a> (<a href="https://eprint.iacr.org/2012/351">paper</a>) has been designed to thwart
+<p><a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a> by Jean-Philippe Aumasson and Daniel J. Bernstein
+(<a href="https://eprint.iacr.org/2012/351">paper</a>) has been designed to thwart
 <a href="https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding">hash flooding attacks</a> against hash tables that receive
 external untrusted input (e.g. HTTP message headers, or JSON objects.)</p>
 </div>
@@ -990,7 +992,7 @@ but has been broken and is no longer considered cryptographic for any purposes.
 It produces a 128 bit digest.</p>
 </div>
 <div class="paragraph">
-<p>MD5 should no longer be used in new code, except when implementing an existing
+<p>MD5 should no longer be used in new code when cryptographic strength is required, except when implementing an existing
 specification or protocol that calls for its use.</p>
 </div>
 <div class="paragraph">
@@ -1000,9 +1002,9 @@ specification or protocol that calls for its use.</p>
 <div class="sect3">
 <h4 id="hashing_bytes_sha_1">SHA-1</h4>
 <div class="paragraph">
-<p><a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a> is a cryptographic hash function that was designed by NSA and published
-by <a href="https://en.wikipedia.org/wiki/NIST">NIST</a>
-as a <a href="https://en.wikipedia.org/wiki/Federal_Information_Processing_Standards">Federal Information Processing Standard</a> (FIPS).
+<p><a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a> is a cryptographic hash function that was designed by NSA and
+<a href="https://csrc.nist.gov/pubs/fips/180-1/final">published</a> in 1995 by <a href="https://en.wikipedia.org/wiki/NIST">NIST</a>
+as a <a href="https://en.wikipedia.org/wiki/Federal_Information_Processing_Standard">Federal Information Processing Standard</a> (FIPS).
 It produces a 160 bit digest.</p>
 </div>
 <div class="paragraph">
@@ -1014,7 +1016,9 @@ you require a digest of exactly 160 bits, RIPEMD-160 instead.</p>
 <div class="sect3">
 <h4 id="hashing_bytes_sha_2">SHA-2</h4>
 <div class="paragraph">
-<p><a href="https://en.wikipedia.org/wiki/SHA-2">SHA-2</a> is a family of cryptographic hash functions, also designed by NSA and published by NIST in 2001.
+<p><a href="https://en.wikipedia.org/wiki/SHA-2">SHA-2</a> is a family of cryptographic hash functions, also designed by NSA,
+<a href="https://csrc.nist.gov/pubs/fips/180-2/upd1/final">initially published</a> by NIST in 2002,
+and <a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">updated</a> in 2015.
 It includes SHA2-224, SHA2-256, SHA2-384, SHA2-512, SHA2-512/224, and SHA2-512/256, each producing a digest with the corresponding bit length.</p>
 </div>
 <div class="paragraph">
@@ -1045,6 +1049,31 @@ but that has recently become popular because of its use in Bitcoin and other cry
 <p>Even though it hasn&#8217;t been broken, there&#8217;s no reason to prefer its use in new code over SHA-2.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="hashing_bytes_hmac">HMAC</h4>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> (Hash-based Message Authentication Code) is an algorithm for deriving
+a <em>message authentication code</em> by using a cryptographic hash function. It&#8217;s described in <a href="https://datatracker.ietf.org/doc/html/rfc2104">RFC 2104</a>.</p>
+</div>
+<div class="paragraph">
+<p>A message authentication code differs from a digest by the fact that it depends on both the contents of the message
+and on a secret <em>key</em>; in contrast, a message digest only depends on the contents of the message.</p>
+</div>
+<div class="paragraph">
+<p>Even though all hash algorithms provided by the library can be used to produce message authentication codes,
+by means of seeding the hash algorithm initially with a secret key by calling the constructor taking a byte
+sequence, hash algorithms have usually not been designed to be used in this manner, and such use hasn&#8217;t been
+cryptographically analyzed and vetted. (SipHash is an exception; it has specifically been designed as a MAC.)</p>
+</div>
+<div class="paragraph">
+<p>The HMAC algorithm is provided in the form of a class template <code>hmac&lt;H&gt;</code> that adapts a cryptographic hash
+algorithm <code>H</code>. <code>hmac&lt;H&gt;</code> satisfies the requirements of a cryptographic hash algorithm.</p>
+</div>
+<div class="paragraph">
+<p>Convenience aliases of common HMAC instantiations are provided. For example, the <code>md5.hpp</code> header defining
+<code>md5_128</code> also defines <code>hmac_md5_128</code> as an alias to <code>hmac&lt;md5_128&gt;</code>.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</h3>
@@ -1058,7 +1087,167 @@ but that has recently become popular because of its use in Bitcoin and other cry
 <h2 id="hashing_objects">Hashing C&#43;&#43; Objects</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>&#8230;&#8203;</p>
+<p>The traditional approach to hashing C&#43;&#43; objects is to make
+them responsible for providing a hash value. The standard,
+for instance, follows this by making it the responsibility
+of each type <code>T</code> to implement a specialization of <code>std::hash&lt;T&gt;</code>,
+which when invoked with a value returns its <code>size_t</code> hash.</p>
+</div>
+<div class="paragraph">
+<p>This, of course, means that the specific hash algorithm varies
+per type and is, in the general case, completely opaque.</p>
+</div>
+<div class="paragraph">
+<p>This library takes a different approach; the hash algorithm
+is known and chosen by the user. A C&#43;&#43; object is hashed by
+first being converted to a sequence of bytes representing its
+value (a <em>message</em>) which is then passed to the hash algorithm.</p>
+</div>
+<div class="paragraph">
+<p>The conversion must obey the following requirements:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Equal objects must produce the same message;</p>
+</li>
+<li>
+<p>Different objects should produce different messages;</p>
+</li>
+<li>
+<p>An object should always produce a non-empty message.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The first two requirements follow directly from the hash value
+requirements, whereas the third one is a bit more subtle and
+is intended to prevent things like the distinct sequences
+<code>[[1], [], []]</code> and <code>[[], [1], []]</code> producing the same message.
+(This is similar to the requirement that all C&#43;&#43; objects have
+<code>sizeof</code> that is not zero, including empty ones.)</p>
+</div>
+<div class="paragraph">
+<p>In this library, the conversion is performed by the function
+<code>hash_append</code>. It&#8217;s declared as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>template&lt;class Hash, class Flavor = default_flavor, class T&gt;
+constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the effect of invoking <code>hash_append(h, f, v)</code> is to call
+<code>h.update(p, n)</code> one or more times (but never zero times.) The
+combined result of these calls forms the message corresponding
+to <code>v</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>hash_append</code> handles natively the following types <code>T</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Integral types (signed and unsigned integers, character types, <code>bool</code>);</p>
+</li>
+<li>
+<p>Floating point types (<code>float</code> and <code>double</code>);</p>
+</li>
+<li>
+<p>Enumeration types;</p>
+</li>
+<li>
+<p>Pointer types (object and function, but not pointer to member types);</p>
+</li>
+<li>
+<p>C arrays;</p>
+</li>
+<li>
+<p>Containers and ranges (types that provide <code>begin()</code> and <code>end()</code>;</p>
+</li>
+<li>
+<p>Unordered containers and ranges;</p>
+</li>
+<li>
+<p>Constant size containers (<code>std::array</code>, <code>boost::array</code>);</p>
+</li>
+<li>
+<p>Tuple-like types (<code>std::pair</code>, <code>std::tuple</code>);</p>
+</li>
+<li>
+<p>Described classes (using Boost.Describe).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>User-defined types that aren&#8217;t in the above categories can provide
+support for <code>hash_append</code> by declaring an overload of the <code>tag_invoke</code>
+function with the appropriate parameters.</p>
+</div>
+<div class="paragraph">
+<p>The second argument to <code>hash_append</code>, the <em>flavor</em>, is used to control
+the serialization process in cases where more than one behavior is
+possible and desirable. It currently contains the following members:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>static constexpr endian byte_order; // native, little, or big</code></p>
+</li>
+<li>
+<p><code>using size_type = std::uint64_t; // or std::uint32_t</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>byte_order</code> member of the flavor affects how scalar C&#43;&#43; objects
+are serialized into bytes. For example, the <code>uint32_t</code> integer <code>0x01020304</code>
+can be serialized into <code>{ 0x01, 0x02, 0x03, 0x04 }</code> when <code>byte_order</code> is
+<code>endian::big</code>, and into <code>{ 0x04, 0x03, 0x02, 0x01 }</code> when <code>byte_order</code>
+is <code>endian::little</code>.</p>
+</div>
+<div class="paragraph">
+<p>The value <code>endian::native</code> means to use the byte order of the current
+platform. This typically results in higher performance, because it allows
+<code>hash_append</code> to pass the underlying object bytes directly to the hash
+algorithm, without any processing.</p>
+</div>
+<div class="paragraph">
+<p>The <code>size_type</code> member type of the flavor affects how container and range
+sizes (typically of type <code>size_t</code>) are serialized. Since the size of
+<code>size_t</code> in bytes can vary, serializing the type directly results in
+different hash values when the code is compiled for 64 bit or for 32 bit.
+Using a fixed width type avoids this.</p>
+</div>
+<div class="paragraph">
+<p>There are three predefined flavors, defined in <code>boost/hash2/flavor.hpp</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>struct default_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::native;
+};
+
+struct little_endian_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::little;
+};
+
+struct big_endian_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::big;
+};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The default one is used when <code>hash_append</code> is invoked without passing
+a flavor: <code>hash_append(h, {}, v);</code>. It results in higher performance,
+but the hash values are endianness dependent.</p>
 </div>
 </div>
 </div>
@@ -2761,7 +2950,7 @@ the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Versi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-05 20:48:49 +0200
+Last updated 2024-11-09 21:25:12 +0200
 </div>
 </div>
 <style>
