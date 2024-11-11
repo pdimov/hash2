@@ -216,7 +216,7 @@ their output one byte at a time. The 32 or 64 bit state is updated for each
 input character `ch` by using the operation `state = (state ^ ch) * fnv_prime`.
 
 FNV-1a is non-cryptographic, relatively weak compared to state of the art
-hash functions (but good for its class), but fast when the input strings
+hash functions (although good for its class), but fast when the input strings
 are short.
 
 ### xxHash
@@ -228,7 +228,8 @@ makes it well suited for quick generation of file or data integrity checksums.
 
 ### SipHash
 
-https://en.wikipedia.org/wiki/SipHash[SipHash] (https://eprint.iacr.org/2012/351[paper]) has been designed to thwart
+https://en.wikipedia.org/wiki/SipHash[SipHash] by Jean-Philippe Aumasson and Daniel J. Bernstein
+(https://eprint.iacr.org/2012/351[paper]) has been designed to thwart
 https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding[hash flooding attacks] against hash tables that receive
 external untrusted input (e.g. HTTP message headers, or JSON objects.)
 
@@ -250,16 +251,16 @@ to be the best known and the most widely used https://en.wikipedia.org/wiki/Cryp
 but has been broken and is no longer considered cryptographic for any purposes.
 It produces a 128 bit digest.
 
-MD5 should no longer be used in new code, except when implementing an existing
+MD5 should no longer be used in new code when cryptographic strength is required, except when implementing an existing
 specification or protocol that calls for its use.
 
 Prefer SHA2-512/256 (or SHA2-256 in 32 bit code) instead.
 
 ### SHA-1
 
-https://en.wikipedia.org/wiki/SHA-1[SHA-1] is a cryptographic hash function that was designed by NSA and published
-by https://en.wikipedia.org/wiki/NIST[NIST]
-as a https://en.wikipedia.org/wiki/Federal_Information_Processing_Standards[Federal Information Processing Standard] (FIPS).
+https://en.wikipedia.org/wiki/SHA-1[SHA-1] is a cryptographic hash function that was designed by NSA and
+https://csrc.nist.gov/pubs/fips/180-1/final[published] in 1995 by https://en.wikipedia.org/wiki/NIST[NIST]
+as a https://en.wikipedia.org/wiki/Federal_Information_Processing_Standard[Federal Information Processing Standard] (FIPS).
 It produces a 160 bit digest.
 
 SHA-1 is now considered insecure against a well-funded attacker, and should no
@@ -268,7 +269,9 @@ you require a digest of exactly 160 bits, RIPEMD-160 instead.
 
 ### SHA-2
 
-https://en.wikipedia.org/wiki/SHA-2[SHA-2] is a family of cryptographic hash functions, also designed by NSA and published by NIST in 2001.
+https://en.wikipedia.org/wiki/SHA-2[SHA-2] is a family of cryptographic hash functions, also designed by NSA,
+https://csrc.nist.gov/pubs/fips/180-2/upd1/final[initially published] by NIST in 2002,
+and https://csrc.nist.gov/pubs/fips/180-4/upd1/final[updated] in 2015.
 It includes SHA2-224, SHA2-256, SHA2-384, SHA2-512, SHA2-512/224, and SHA2-512/256, each producing a digest with the corresponding bit length.
 
 Of these, SHA2-256 and SHA2-512 are the basis ones, and the rest are variants with the digest truncated.
@@ -289,6 +292,25 @@ Designed in 1996, https://en.wikipedia.org/wiki/RIPEMD[RIPEMD-160] is a cryptogr
 but that has recently become popular because of its use in Bitcoin and other cryptocurrencies.
 
 Even though it hasn't been broken, there's no reason to prefer its use in new code over SHA-2.
+
+### HMAC
+
+https://en.wikipedia.org/wiki/HMAC[HMAC] (Hash-based Message Authentication Code) is an algorithm for deriving
+a _message authentication code_ by using a cryptographic hash function. It's described in https://datatracker.ietf.org/doc/html/rfc2104[RFC 2104].
+
+A message authentication code differs from a digest by the fact that it depends on both the contents of the message
+and on a secret _key_; in contrast, a message digest only depends on the contents of the message.
+
+Even though all hash algorithms provided by the library can be used to produce message authentication codes,
+by means of seeding the hash algorithm initially with a secret key by calling the constructor taking a byte
+sequence, hash algorithms have usually not been designed to be used in this manner, and such use hasn't been
+cryptographically analyzed and vetted. (SipHash is an exception; it has specifically been designed as a MAC.)
+
+The HMAC algorithm is provided in the form of a class template `hmac<H>` that adapts a cryptographic hash
+algorithm `H`. `hmac<H>` satisfies the requirements of a cryptographic hash algorithm.
+
+Convenience aliases of common HMAC instantiations are provided. For example, the `md5.hpp` header defining
+`md5_128` also defines `hmac_md5_128` as an alias to `hmac<md5_128>`.
 
 ## Choosing a Hash Algorithm
 

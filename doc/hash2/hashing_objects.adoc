@@ -8,4 +8,110 @@ https://www.boost.org/LICENSE_1_0.txt
 # Hashing {cpp} Objects
 :idprefix: hashing_objects_
 
-...
+The traditional approach to hashing {cpp} objects is to make
+them responsible for providing a hash value. The standard,
+for instance, follows this by making it the responsibility
+of each type `T` to implement a specialization of `std::hash<T>`,
+which when invoked with a value returns its `size_t` hash.
+
+This, of course, means that the specific hash algorithm varies
+per type and is, in the general case, completely opaque.
+
+This library takes a different approach; the hash algorithm
+is known and chosen by the user. A {cpp} object is hashed by
+first being converted to a sequence of bytes representing its
+value (a _message_) which is then passed to the hash algorithm.
+
+The conversion must obey the following requirements:
+
+* Equal objects must produce the same message;
+* Different objects should produce different messages;
+* An object should always produce a non-empty message.
+
+The first two requirements follow directly from the hash value
+requirements, whereas the third one is a bit more subtle and
+is intended to prevent things like the distinct sequences
+`[[1], [], []]` and `[[], [1], []]` producing the same message.
+(This is similar to the requirement that all {cpp} objects have
+`sizeof` that is not zero, including empty ones.)
+
+In this library, the conversion is performed by the function
+`hash_append`. It's declared as follows:
+
+```
+template<class Hash, class Flavor = default_flavor, class T>
+constexpr void hash_append( Hash& h, Flavor const& f, T const& v );
+```
+
+and the effect of invoking `hash_append(h, f, v)` is to call
+`h.update(p, n)` one or more times (but never zero times.) The
+combined result of these calls forms the message corresponding
+to `v`.
+
+`hash_append` handles natively the following types `T`:
+
+* Integral types (signed and unsigned integers, character types, `bool`);
+* Floating point types (`float` and `double`);
+* Enumeration types;
+* Pointer types (object and function, but not pointer to member types);
+* C arrays;
+* Containers and ranges (types that provide `begin()` and `end()`;
+* Unordered containers and ranges;
+* Constant size containers (`std::array`, `boost::array`);
+* Tuple-like types (`std::pair`, `std::tuple`);
+* Described classes (using Boost.Describe).
+
+User-defined types that aren't in the above categories can provide
+support for `hash_append` by declaring an overload of the `tag_invoke`
+function with the appropriate parameters.
+
+The second argument to `hash_append`, the _flavor_, is used to control
+the serialization process in cases where more than one behavior is
+possible and desirable. It currently contains the following members:
+
+* `static constexpr endian byte_order; // native, little, or big`
+* `using size_type = std::uint64_t; // or std::uint32_t`
+
+The `byte_order` member of the flavor affects how scalar {cpp} objects
+are serialized into bytes. For example, the `uint32_t` integer `0x01020304`
+can be serialized into `{ 0x01, 0x02, 0x03, 0x04 }` when `byte_order` is
+`endian::big`, and into `{ 0x04, 0x03, 0x02, 0x01 }` when `byte_order`
+is `endian::little`.
+
+The value `endian::native` means to use the byte order of the current
+platform. This typically results in higher performance, because it allows
+`hash_append` to pass the underlying object bytes directly to the hash
+algorithm, without any processing.
+
+The `size_type` member type of the flavor affects how container and range
+sizes (typically of type `size_t`) are serialized. Since the size of
+`size_t` in bytes can vary, serializing the type directly results in
+different hash values when the code is compiled for 64 bit or for 32 bit.
+Using a fixed width type avoids this.
+
+There are three predefined flavors, defined in `boost/hash2/flavor.hpp`:
+
+```
+struct default_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::native;
+};
+
+struct little_endian_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::little;
+};
+
+struct big_endian_flavor
+{
+    using size_type = std::uint64_t;
+    static constexpr auto byte_order = endian::big;
+};
+```
+
+The default one is used when `hash_append` is invoked without passing
+a flavor: `hash_append(h, {}, v);`. It results in higher performance,
+but the hash values are endianness dependent.
+
