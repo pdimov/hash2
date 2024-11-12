@@ -117,6 +117,7 @@ run sha1_cx.cpp ;
 
 run sha2.cpp ;
 run hmac_sha2.cpp ;
+run sha2_cx.cpp ;
 
 run ripemd.cpp ;
 run hmac_ripemd.cpp ;

@@ -10,20 +10,6 @@
 #include <string>
 #include <vector>
 
-template<std::size_t N> std::string to_string( std::array<unsigned char, N> const & v )
-{
-    std::string r;
-
-    for( std::size_t i = 0; i < N; ++i )
-    {
-        char buffer[ 4 ];
-        std::snprintf( buffer, sizeof( buffer ), "%02x", v[ i ] );
-        r += buffer;
-    }
-
-    return r;
-}
-
 std::string from_hex( char const* str )
 {
     auto f = []( char c ) { return ( c >= 'a' ? c - 'a' + 10 : c - '0' ); };
