@@ -76,3 +76,12 @@ This example demonstrates calculating the MD5 digest of a data array, embedded i
 include::../../example/compile_time.cpp[lines=5..-1]
 ----
 
+Since the `constexpr` overload of `update` takes `unsigned char const*` (`void const*` is not allowed in `constexpr` functions), if the
+data to be hashed is a character array of type `char const[]`, passing it directly to `update` will not compile. In that case, we can
+use `hash_append_range` instead of calling `update`, as in the following example.
+
+[source]
+----
+include::../../example/compile_time_2.cpp[lines=5..-1]
+----
+
