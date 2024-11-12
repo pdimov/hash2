@@ -27,8 +27,16 @@ template<class H, std::size_t N> BOOST_CXX14_CONSTEXPR typename H::result_type t
 
     std::size_t const M = N - 1; // strip off null-terminator
 
-    boost::hash2::hash_append_range( h, boost::hash2::default_flavor{}, str, str + M / 3 );
-    boost::hash2::hash_append_range( h, boost::hash2::default_flavor{}, str + M / 3, str + M );
+    #if BOOST_WORKAROUND(BOOST_GCC, >= 50000 && BOOST_GCC < 60000)
+        unsigned char buf[M] = {};
+        for( unsigned i = 0; i < M; ++i ) buf[ i ] = str[ i ];
+
+        h.update( buf, M / 3 );
+        h.update( buf + M / 3, M - M / 3 );
+    #else
+        boost::hash2::hash_append_range( h, boost::hash2::default_flavor{}, str, str + M / 3 );
+        boost::hash2::hash_append_range( h, boost::hash2::default_flavor{}, str + M / 3, str + M );
+    #endif
 
     return h.result();
 }
