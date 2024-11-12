@@ -2,6 +2,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/config.hpp>
+
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1920
+# pragma warning(disable: 4307) // integral constant overflow
+#endif
+
 #include <boost/hash2/md5.hpp>
 #include <iostream>
 
