@@ -43,6 +43,8 @@ of a list of files, using a specified hash algorithm.
 The hash algorithm is passed as the first command
 line argument.
 
+This example requires {cpp}14.
+
 [source]
 ----
 include::../../example/hash2sum.cpp[lines=7..-1]
@@ -64,3 +66,13 @@ b07e42587d10ec323a25fd8fc3eef2213fb0997beb7950350f4e8a4b *canada.json
 4ceee5a83ad320fedb0dfddfb6f80af50b99677e87158e2d039aa168 *citm_catalog.json
 854ebe0da98cadd426ea0fa3218d60bb52cf6494e435d2f385a37d48 *twitter.json
 ----
+
+## Compile Time Hashing
+
+This example demonstrates calculating the MD5 digest of a data array, embedded in the program source, at compile time. It requires {cpp}14.
+
+[source]
+----
+include::../../example/compile_time.cpp[lines=5..-1]
+----
+
