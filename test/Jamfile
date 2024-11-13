@@ -128,6 +128,7 @@ run sha2_cx.cpp ;
 run ripemd.cpp ;
 run hmac_ripemd.cpp ;
 run ripemd_cx.cpp ;
+run ripemd_cx_2.cpp ;
 
 # legacy
 
