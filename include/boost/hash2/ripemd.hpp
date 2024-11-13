@@ -7,6 +7,11 @@
 // https://www.boost.org/LICENSE_1_0.txt
 //
 // RIPEMD-160 message digest algorithm, https://www.esat.kuleuven.be/cosic/publications/article-317.pdf
+//                                      https://homes.esat.kuleuven.be/~bosselae/ripemd/rmd160.c
+//                                      https://homes.esat.kuleuven.be/~bosselae/ripemd/rmd160.h
+// RIPEMD-128 message digest algorithm, https://homes.esat.kuleuven.be/~bosselae/ripemd/rmd128.txt
+//                                      https://homes.esat.kuleuven.be/~bosselae/ripemd/rmd128.c
+//                                      https://homes.esat.kuleuven.be/~bosselae/ripemd/rmd128.h
 
 #include <boost/hash2/hmac.hpp>
 #include <boost/hash2/digest.hpp>
@@ -24,6 +29,355 @@ namespace boost
 {
 namespace hash2
 {
+
+class ripemd_128
+{
+private:
+
+    std::uint32_t state_[ 4 ] = { 0x67452301u, 0xEFCDAB89u, 0x98BADCFEu, 0x10325476u };
+
+    static constexpr int N = 64;
+
+    unsigned char buffer_[ N ] = {};
+    std::size_t m_ = 0; // == n_ % N
+
+    std::uint64_t n_ = 0;
+
+private:
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F1( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return x ^ y ^ z; }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F2( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & y) | (~x & z); }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F3( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x | ~y) ^ z; }
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR std::uint32_t F4( std::uint32_t x, std::uint32_t y, std::uint32_t z) { return (x & z) | (y & ~z); }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F1(b, c, d) + x;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F2(b, c, d) + x + 0x5a827999u;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F3(b, c, d) + x + 0x6ed9eba1u;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void R4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F4(b, c, d) + x + 0x8f1bbcdcu;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR1( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F4(b, c, d) + x + 0x50a28be6u;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR2( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F3(b, c, d) + x + 0x5c4dd124u;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR3( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F2(b, c, d) + x + 0x6d703ef3u;
+        a = detail::rotl(a, s);
+    }
+
+    static BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void RR4( std::uint32_t & a, std::uint32_t b, std::uint32_t & c, std::uint32_t d, std::uint32_t x, std::uint32_t s )
+    {
+        a += F1(b, c, d) + x;
+        a = detail::rotl(a, s);
+    }
+
+    BOOST_CXX14_CONSTEXPR void transform( unsigned char const block[ 64 ] )
+    {
+        std::uint32_t aa = state_[ 0 ];
+        std::uint32_t bb = state_[ 1 ];
+        std::uint32_t cc = state_[ 2 ];
+        std::uint32_t dd = state_[ 3 ];
+
+        std::uint32_t aaa = state_[ 0 ];
+        std::uint32_t bbb = state_[ 1 ];
+        std::uint32_t ccc = state_[ 2 ];
+        std::uint32_t ddd = state_[ 3 ];
+
+        std::uint32_t X[ 16 ] = {};
+
+        for( int i = 0; i < 16; ++i )
+        {
+            X[ i ] = detail::read32le( block + i * 4 );
+        }
+
+        //  A   B   C   D
+        R1(aa, bb, cc, dd, X[ 0], 11);
+        R1(dd, aa, bb, cc, X[ 1], 14);
+        R1(cc, dd, aa, bb, X[ 2], 15);
+        R1(bb, cc, dd, aa, X[ 3], 12);
+        R1(aa, bb, cc, dd, X[ 4],  5);
+        R1(dd, aa, bb, cc, X[ 5],  8);
+        R1(cc, dd, aa, bb, X[ 6],  7);
+        R1(bb, cc, dd, aa, X[ 7],  9);
+        R1(aa, bb, cc, dd, X[ 8], 11);
+        R1(dd, aa, bb, cc, X[ 9], 13);
+        R1(cc, dd, aa, bb, X[10], 14);
+        R1(bb, cc, dd, aa, X[11], 15);
+        R1(aa, bb, cc, dd, X[12],  6);
+        R1(dd, aa, bb, cc, X[13],  7);
+        R1(cc, dd, aa, bb, X[14],  9);
+        R1(bb, cc, dd, aa, X[15],  8);
+
+        RR1(aaa, bbb, ccc, ddd, X[ 5],  8);
+        RR1(ddd, aaa, bbb, ccc, X[14],  9);
+        RR1(ccc, ddd, aaa, bbb, X[ 7],  9);
+        RR1(bbb, ccc, ddd, aaa, X[ 0], 11);
+        RR1(aaa, bbb, ccc, ddd, X[ 9], 13);
+        RR1(ddd, aaa, bbb, ccc, X[ 2], 15);
+        RR1(ccc, ddd, aaa, bbb, X[11], 15);
+        RR1(bbb, ccc, ddd, aaa, X[ 4],  5);
+        RR1(aaa, bbb, ccc, ddd, X[13],  7);
+        RR1(ddd, aaa, bbb, ccc, X[ 6],  7);
+        RR1(ccc, ddd, aaa, bbb, X[15],  8);
+        RR1(bbb, ccc, ddd, aaa, X[ 8], 11);
+        RR1(aaa, bbb, ccc, ddd, X[ 1], 14);
+        RR1(ddd, aaa, bbb, ccc, X[10], 14);
+        RR1(ccc, ddd, aaa, bbb, X[ 3], 12);
+        RR1(bbb, ccc, ddd, aaa, X[12],  6);
+
+        R2(aa, bb, cc, dd, X[ 7],  7);
+        R2(dd, aa, bb, cc, X[ 4],  6);
+        R2(cc, dd, aa, bb, X[13],  8);
+        R2(bb, cc, dd, aa, X[ 1], 13);
+        R2(aa, bb, cc, dd, X[10], 11);
+        R2(dd, aa, bb, cc, X[ 6],  9);
+        R2(cc, dd, aa, bb, X[15],  7);
+        R2(bb, cc, dd, aa, X[ 3], 15);
+        R2(aa, bb, cc, dd, X[12],  7);
+        R2(dd, aa, bb, cc, X[ 0], 12);
+        R2(cc, dd, aa, bb, X[ 9], 15);
+        R2(bb, cc, dd, aa, X[ 5],  9);
+        R2(aa, bb, cc, dd, X[ 2], 11);
+        R2(dd, aa, bb, cc, X[14],  7);
+        R2(cc, dd, aa, bb, X[11], 13);
+        R2(bb, cc, dd, aa, X[ 8], 12);
+
+        RR2(aaa, bbb, ccc, ddd, X[ 6],  9);
+        RR2(ddd, aaa, bbb, ccc, X[11], 13);
+        RR2(ccc, ddd, aaa, bbb, X[ 3], 15);
+        RR2(bbb, ccc, ddd, aaa, X[ 7],  7);
+        RR2(aaa, bbb, ccc, ddd, X[ 0], 12);
+        RR2(ddd, aaa, bbb, ccc, X[13],  8);
+        RR2(ccc, ddd, aaa, bbb, X[ 5],  9);
+        RR2(bbb, ccc, ddd, aaa, X[10], 11);
+        RR2(aaa, bbb, ccc, ddd, X[14],  7);
+        RR2(ddd, aaa, bbb, ccc, X[15],  7);
+        RR2(ccc, ddd, aaa, bbb, X[ 8], 12);
+        RR2(bbb, ccc, ddd, aaa, X[12],  7);
+        RR2(aaa, bbb, ccc, ddd, X[ 4],  6);
+        RR2(ddd, aaa, bbb, ccc, X[ 9], 15);
+        RR2(ccc, ddd, aaa, bbb, X[ 1], 13);
+        RR2(bbb, ccc, ddd, aaa, X[ 2], 11);
+
+        R3(aa, bb, cc, dd, X[ 3], 11);
+        R3(dd, aa, bb, cc, X[10], 13);
+        R3(cc, dd, aa, bb, X[14],  6);
+        R3(bb, cc, dd, aa, X[ 4],  7);
+        R3(aa, bb, cc, dd, X[ 9], 14);
+        R3(dd, aa, bb, cc, X[15],  9);
+        R3(cc, dd, aa, bb, X[ 8], 13);
+        R3(bb, cc, dd, aa, X[ 1], 15);
+        R3(aa, bb, cc, dd, X[ 2], 14);
+        R3(dd, aa, bb, cc, X[ 7],  8);
+        R3(cc, dd, aa, bb, X[ 0], 13);
+        R3(bb, cc, dd, aa, X[ 6],  6);
+        R3(aa, bb, cc, dd, X[13],  5);
+        R3(dd, aa, bb, cc, X[11], 12);
+        R3(cc, dd, aa, bb, X[ 5],  7);
+        R3(bb, cc, dd, aa, X[12],  5);
+
+        RR3(aaa, bbb, ccc, ddd, X[15],  9);
+        RR3(ddd, aaa, bbb, ccc, X[ 5],  7);
+        RR3(ccc, ddd, aaa, bbb, X[ 1], 15);
+        RR3(bbb, ccc, ddd, aaa, X[ 3], 11);
+        RR3(aaa, bbb, ccc, ddd, X[ 7],  8);
+        RR3(ddd, aaa, bbb, ccc, X[14],  6);
+        RR3(ccc, ddd, aaa, bbb, X[ 6],  6);
+        RR3(bbb, ccc, ddd, aaa, X[ 9], 14);
+        RR3(aaa, bbb, ccc, ddd, X[11], 12);
+        RR3(ddd, aaa, bbb, ccc, X[ 8], 13);
+        RR3(ccc, ddd, aaa, bbb, X[12],  5);
+        RR3(bbb, ccc, ddd, aaa, X[ 2], 14);
+        RR3(aaa, bbb, ccc, ddd, X[10], 13);
+        RR3(ddd, aaa, bbb, ccc, X[ 0], 13);
+        RR3(ccc, ddd, aaa, bbb, X[ 4],  7);
+        RR3(bbb, ccc, ddd, aaa, X[13],  5);
+
+        R4(aa, bb, cc, dd, X[ 1], 11);
+        R4(dd, aa, bb, cc, X[ 9], 12);
+        R4(cc, dd, aa, bb, X[11], 14);
+        R4(bb, cc, dd, aa, X[10], 15);
+        R4(aa, bb, cc, dd, X[ 0], 14);
+        R4(dd, aa, bb, cc, X[ 8], 15);
+        R4(cc, dd, aa, bb, X[12],  9);
+        R4(bb, cc, dd, aa, X[ 4],  8);
+        R4(aa, bb, cc, dd, X[13],  9);
+        R4(dd, aa, bb, cc, X[ 3], 14);
+        R4(cc, dd, aa, bb, X[ 7],  5);
+        R4(bb, cc, dd, aa, X[15],  6);
+        R4(aa, bb, cc, dd, X[14],  8);
+        R4(dd, aa, bb, cc, X[ 5],  6);
+        R4(cc, dd, aa, bb, X[ 6],  5);
+        R4(bb, cc, dd, aa, X[ 2], 12);
+
+        RR4(aaa, bbb, ccc, ddd, X[ 8], 15);
+        RR4(ddd, aaa, bbb, ccc, X[ 6],  5);
+        RR4(ccc, ddd, aaa, bbb, X[ 4],  8);
+        RR4(bbb, ccc, ddd, aaa, X[ 1], 11);
+        RR4(aaa, bbb, ccc, ddd, X[ 3], 14);
+        RR4(ddd, aaa, bbb, ccc, X[11], 14);
+        RR4(ccc, ddd, aaa, bbb, X[15],  6);
+        RR4(bbb, ccc, ddd, aaa, X[ 0], 14);
+        RR4(aaa, bbb, ccc, ddd, X[ 5],  6);
+        RR4(ddd, aaa, bbb, ccc, X[12],  9);
+        RR4(ccc, ddd, aaa, bbb, X[ 2], 12);
+        RR4(bbb, ccc, ddd, aaa, X[13],  9);
+        RR4(aaa, bbb, ccc, ddd, X[ 9], 12);
+        RR4(ddd, aaa, bbb, ccc, X[ 7],  5);
+        RR4(ccc, ddd, aaa, bbb, X[10], 15);
+        RR4(bbb, ccc, ddd, aaa, X[14],  8);
+
+        ddd += cc + state_[ 1 ];
+        state_[ 1 ] = state_[ 2 ] + dd + aaa;
+        state_[ 2 ] = state_[ 3 ] + aa + bbb;
+        state_[ 3 ] = state_[ 0 ] + bb + ccc;
+        state_[ 0 ] = ddd;
+    }
+
+public:
+
+    typedef digest<16> result_type;
+
+    static constexpr int block_size = 64;
+
+    ripemd_128() = default;
+
+    explicit BOOST_CXX14_CONSTEXPR ripemd_128( std::uint64_t seed )
+    {
+        if( seed != 0 )
+        {
+            unsigned char tmp[ 8 ] = {};
+            detail::write64le( tmp, seed );
+
+            update( tmp, 8 );
+            result();
+        }
+    }
+
+    BOOST_CXX14_CONSTEXPR ripemd_128( unsigned char const * p, std::size_t n )
+    {
+        if( n != 0 )
+        {
+            update( p, n );
+            result();
+        }
+    }
+
+    BOOST_CXX14_CONSTEXPR void update( unsigned char const* p, std::size_t n )
+    {
+        BOOST_ASSERT( m_ == n_ % N );
+
+        if( n == 0 ) return;
+
+        n_ += n;
+
+        if( m_ > 0 )
+        {
+            std::size_t k = N - m_;
+
+            if( n < k )
+            {
+                k = n;
+            }
+
+            detail::memcpy( buffer_ + m_, p, k );
+
+            p += k;
+            n -= k;
+            m_ += k;
+
+            if( m_ < N ) return;
+
+            BOOST_ASSERT( m_ == N );
+
+            transform( buffer_ );
+            m_ = 0;
+
+            detail::memset( buffer_, 0, N );
+        }
+
+        BOOST_ASSERT( m_ == 0 );
+
+        while( n >= N )
+        {
+            transform( p );
+
+            p += N;
+            n -= N;
+        }
+
+        BOOST_ASSERT( n < N );
+
+        if( n > 0 )
+        {
+            detail::memcpy( buffer_, p, n );
+            m_ = n;
+        }
+
+        BOOST_ASSERT( m_ == n_ % N );
+    }
+
+    void update( void const * pv, std::size_t n )
+    {
+        unsigned char const* p = static_cast<unsigned char const*>( pv );
+        update( p, n );
+    }
+
+    BOOST_CXX14_CONSTEXPR result_type result()
+    {
+        BOOST_ASSERT( m_ == n_ % N );
+
+        unsigned char bits[ 8 ] = {};
+
+        detail::write64le( bits, n_ * 8 );
+
+        std::size_t k = m_ < 56? 56 - m_: 120 - m_;
+
+        unsigned char padding[ 64 ] = { 0x80 };
+
+        update( padding, k );
+
+        update( bits, 8 );
+
+        BOOST_ASSERT( m_ == 0 );
+
+        result_type digest;
+
+        for( int i = 0; i < 4; ++i )
+        {
+            detail::write32le( &digest[ i * 4 ], state_[ i ] );
+        }
+
+        return digest;
+    }
+};
 
 class ripemd_160
 {
@@ -446,6 +800,7 @@ public:
 };
 
 using hmac_ripemd_160 = hmac<ripemd_160>;
+using hmac_ripemd_128 = hmac<ripemd_128>;
 
 } // namespace hash2
 } // namespace boost

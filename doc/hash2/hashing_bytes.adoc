@@ -256,6 +256,9 @@ specification or protocol that calls for its use.
 
 Prefer SHA2-512/256 (or SHA2-256 in 32 bit code) instead.
 
+If you require a digest of exactly 128 bits, use RIPEMD-128 instead.
+Do note that 128 bit digests are no longer considered cryptographic, because attacks with a complexity of 2^64^ are within the capabilities of well-funded attackers.
+
 ### SHA-1
 
 https://en.wikipedia.org/wiki/SHA-1[SHA-1] is a cryptographic hash function that was designed by NSA and
@@ -286,12 +289,14 @@ as SHA2-256 on a 64 bit platform, but twice as slow in 32 bit code.
 On 64 bit platforms, SHA2-512/256 and SHA2-512/224 should be preferred over SHA2-256 and SHA2-224 not just because of speed, but because
 they are resistant to length extension attacks as they don't expose all of the bits of their internal state in the final digest.
 
-### RIPEMD-160
+### RIPEMD-160, RIPEMD-128
 
 Designed in 1996, https://en.wikipedia.org/wiki/RIPEMD[RIPEMD-160] is a cryptographic hash function that was less well known than MD5 and SHA-1,
 but that has recently become popular because of its use in Bitcoin and other cryptocurrencies.
 
 Even though it hasn't been broken, there's no reason to prefer its use in new code over SHA-2.
+
+RIPEMD-128 is a truncated variant of RIPEMD-160. (Do note that 128 bit digests are no longer considered cryptographic, because attacks with a complexity of 2^64^ are within the capabilities of well-funded attackers.)
 
 ### HMAC
 
