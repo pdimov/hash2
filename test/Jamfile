@@ -112,6 +112,7 @@ run siphash_cx_2.cpp ;
 run md5.cpp ;
 run hmac_md5.cpp ;
 run md5_cx.cpp ;
+run md5_cx_2.cpp ;
 run hmac_md5_cx.cpp ;
 
 run sha1.cpp ;
