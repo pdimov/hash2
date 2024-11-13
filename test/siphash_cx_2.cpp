@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/xxhash.hpp>
+#include <boost/hash2/siphash.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
 #include <cstring>
@@ -28,19 +28,19 @@ int main()
     using namespace boost::hash2;
 
     {
-        constexpr auto r = 46947589;
+        constexpr auto r = 95563134;
 
-        TEST_EQ( xxhash_32().result(), r );
-        TEST_EQ( xxhash_32(0).result(), r );
-        TEST_EQ( xxhash_32(nullptr, 0).result(), r );
+        TEST_EQ( siphash_32().result(), r );
+        TEST_EQ( siphash_32(0).result(), r );
+        TEST_EQ( siphash_32(nullptr, 0).result(), r );
     }
 
     {
-        constexpr auto r = 17241709254077376921ull;
+        constexpr auto r = 2202906307356721367ull;
 
-        TEST_EQ( xxhash_64().result(), r );
-        TEST_EQ( xxhash_64(0).result(), r );
-        TEST_EQ( xxhash_64(nullptr, 0).result(), r );
+        TEST_EQ( siphash_64().result(), r );
+        TEST_EQ( siphash_64(0).result(), r );
+        TEST_EQ( siphash_64(nullptr, 0).result(), r );
     }
 
     return boost::report_errors();

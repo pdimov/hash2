@@ -105,6 +105,7 @@ run xxhash_cx_2.cpp ;
 run siphash32.cpp ;
 run siphash64.cpp ;
 run siphash_cx.cpp ;
+run siphash_cx_2.cpp ;
 
 # cryptographic
 
