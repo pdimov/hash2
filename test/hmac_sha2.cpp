@@ -30,22 +30,6 @@ std::string from_hex( char const* str )
     return s;
 }
 
-template<std::size_t N> std::string to_string( std::array<unsigned char, N> const & v )
-{
-    std::string r;
-
-    for( std::size_t i = 0; i < N; ++i )
-    {
-        char buffer[ 8 ];
-
-        std::snprintf( buffer, sizeof( buffer ), "%02x", static_cast<int>( v[ i ] ) );
-
-        r += buffer;
-    }
-
-    return r;
-}
-
 template<class H> std::string digest( std::string const & k, std::string const & s )
 {
     H h( reinterpret_cast<unsigned char const*>( k.data() ), k.size() );
