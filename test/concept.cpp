@@ -325,9 +325,8 @@ template<class H> void test_update()
             h1.update( data, 3 );
 
             H h2;
-            h2.update( data + 0, 1 );
-            h2.update( data + 1, 1 );
-            h2.update( data + 2, 1 );
+            h2.update( data, 1 );
+            h2.update( data + 1, 2 );
 
             BOOST_TEST( h1.result() == h2.result() );
         }
@@ -337,25 +336,27 @@ template<class H> void test_update()
             h1.update( data, 3 );
 
             H h2;
-            h2.update( data, 1 );
-            h2.update( data + 1, 2 );
+            h2.update( data, 2 );
+            h2.update( data + 2, 1 );
 
             BOOST_TEST( h1.result() == h2.result() );
         }
     }
 
     {
-        int const N = 95;
+        int const N = 255;
 
         unsigned char const data[ N ] = {};
 
+        for( int i = 0; i <= N; ++i )
         {
             H h1;
             h1.update( data, N );
 
             H h2;
-            h2.update( data, N / 3 );
-            h2.update( data + N / 3, N - N / 3 );
+
+            h2.update( data, i );
+            h2.update( data + i, N - i );
 
             BOOST_TEST( h1.result() == h2.result() );
         }
