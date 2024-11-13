@@ -449,6 +449,7 @@ int main()
     test<boost::hash2::sha2_512_224>();
     test<boost::hash2::sha2_512_256>();
     test<boost::hash2::ripemd_160>();
+    test<boost::hash2::ripemd_128>();
 
     test<boost::hash2::hmac_md5_128>( true );
     test<boost::hash2::hmac_sha1_160>( true );
@@ -459,6 +460,7 @@ int main()
     test<boost::hash2::hmac_sha2_512_224>( true );
     test<boost::hash2::hmac_sha2_512_256>( true );
     test<boost::hash2::hmac_ripemd_160>( true );
+    test<boost::hash2::hmac_ripemd_128>( true );
 
     return boost::report_errors();
 }
