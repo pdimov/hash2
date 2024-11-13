@@ -69,7 +69,8 @@ using hashes = mp_list<
     sha2_384,
     sha2_512_256,
     sha2_512_224,
-    ripemd_160
+    ripemd_160,
+    ripemd_128
 
 >;
 
@@ -83,7 +84,8 @@ constexpr char const* names[] = {
     "sha2_384",
     "sha2_512_256",
     "sha2_512_224",
-    "ripemd_160"
+    "ripemd_160",
+    "ripemd_128"
 
 };
 
@@ -116,7 +118,13 @@ int main( int argc, char const* argv[] )
 
     if( !found )
     {
-        std::fprintf( stderr, "hash2sum: unknown hash name '%s'\n", hash.c_str() );
+        std::fprintf( stderr, "hash2sum: unknown hash algorithm name '%s'; use one of the following:\n\n", hash.c_str() );
+
+        for( char const* name: names )
+        {
+            std::fprintf( stderr, "   %s\n", name );
+        }
+
         return 1;
     }
 }
