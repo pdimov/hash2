@@ -95,6 +95,7 @@ run append_tuple_like_cx.cpp ;
 
 run fnv1a.cpp ;
 run fnv1a_cx.cpp ;
+run fnv1a_cx_2.cpp ;
 
 run xxhash.cpp ;
 run xxhash_2.cpp ;
