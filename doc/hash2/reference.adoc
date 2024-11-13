@@ -8,6 +8,7 @@ https://www.boost.org/LICENSE_1_0.txt
 # Reference
 :idprefix: ref_
 
+[#ref_hash_algorithms]
 ## Hash Algorithms
 
 :leveloffset: +2
@@ -23,6 +24,7 @@ include::reference/ripemd.adoc[]
 
 :leveloffset: -2
 
+[#ref_utilities_and_traits]
 ## Utilities and Traits
 
 :leveloffset: +2
@@ -38,7 +40,8 @@ include::reference/has_constant_size.adoc[]
 
 :leveloffset: -2
 
-## hash_append
+[#ref_hashing_cpp_objects]
+## Hashing {cpp} Objects
 
 :leveloffset: +2
 
