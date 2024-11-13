@@ -436,6 +436,221 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge .cm {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cp {
+  color: #999999;
+  font-weight: bold;
+}
+pre.rouge .c1 {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+pre.rouge .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+pre.rouge .ge {
+  color: #000000;
+  font-style: italic;
+}
+pre.rouge .gr {
+  color: #aa0000;
+}
+pre.rouge .gh {
+  color: #999999;
+}
+pre.rouge .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+pre.rouge .go {
+  color: #888888;
+}
+pre.rouge .gp {
+  color: #555555;
+}
+pre.rouge .gs {
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #aaaaaa;
+}
+pre.rouge .gt {
+  color: #aa0000;
+}
+pre.rouge .kc {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kd {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kn {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kp {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kr {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kt {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .k, pre.rouge .kv {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .mf {
+  color: #009999;
+}
+pre.rouge .mh {
+  color: #009999;
+}
+pre.rouge .il {
+  color: #009999;
+}
+pre.rouge .mi {
+  color: #009999;
+}
+pre.rouge .mo {
+  color: #009999;
+}
+pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
+  color: #009999;
+}
+pre.rouge .sa {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .sb {
+  color: #d14;
+}
+pre.rouge .sc {
+  color: #d14;
+}
+pre.rouge .sd {
+  color: #d14;
+}
+pre.rouge .s2 {
+  color: #d14;
+}
+pre.rouge .se {
+  color: #d14;
+}
+pre.rouge .sh {
+  color: #d14;
+}
+pre.rouge .si {
+  color: #d14;
+}
+pre.rouge .sx {
+  color: #d14;
+}
+pre.rouge .sr {
+  color: #009926;
+}
+pre.rouge .s1 {
+  color: #d14;
+}
+pre.rouge .ss {
+  color: #990073;
+}
+pre.rouge .s, pre.rouge .dl {
+  color: #d14;
+}
+pre.rouge .na {
+  color: #008080;
+}
+pre.rouge .bp {
+  color: #999999;
+}
+pre.rouge .nb {
+  color: #0086B3;
+}
+pre.rouge .nc {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .no {
+  color: #008080;
+}
+pre.rouge .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+pre.rouge .ni {
+  color: #800080;
+}
+pre.rouge .ne {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nl {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nn {
+  color: #555555;
+}
+pre.rouge .nt {
+  color: #000080;
+}
+pre.rouge .vc {
+  color: #008080;
+}
+pre.rouge .vg {
+  color: #008080;
+}
+pre.rouge .vi {
+  color: #008080;
+}
+pre.rouge .nv, pre.rouge .vm {
+  color: #008080;
+}
+pre.rouge .ow {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .o {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .w {
+  color: #bbbbbb;
+}
+pre.rouge {
+  background-color: #f8f8f8;
+}
+</style>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -470,7 +685,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#hashing_bytes_md5">MD5</a></li>
 <li><a href="#hashing_bytes_sha_1">SHA-1</a></li>
 <li><a href="#hashing_bytes_sha_2">SHA-2</a></li>
-<li><a href="#hashing_bytes_ripemd_160">RIPEMD-160</a></li>
+<li><a href="#hashing_bytes_ripemd_160_ripemd_128">RIPEMD-160, RIPEMD-128</a></li>
 <li><a href="#hashing_bytes_hmac">HMAC</a></li>
 </ul>
 </li>
@@ -482,6 +697,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#example_md5sum">md5sum</a></li>
 <li><a href="#example_hash2sum">hash2sum</a></li>
+<li><a href="#example_compile_time_hashing">Compile Time Hashing</a></li>
 </ul>
 </li>
 <li><a href="#implementation">Implementation Features</a>
@@ -539,11 +755,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ref_ripemd">&lt;boost/hash2/ripemd.hpp&gt;</a>
 <ul class="sectlevel4">
 <li><a href="#ref_ripemd_ripemd_160">ripemd_160</a></li>
+<li><a href="#ref_ripemd_ripemd_128">ripemd_128</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#ref_ripemd_utilities_and_traits">Utilities and Traits</a>
+<li><a href="#ref_utilities_and_traits">Utilities and Traits</a>
 <ul class="sectlevel3">
 <li><a href="#ref_digest">&lt;boost/hash2/digest.hpp&gt;</a>
 <ul class="sectlevel4">
@@ -589,7 +806,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#ref_has_constant_size_hash_append">hash_append</a>
+<li><a href="#ref_hashing_cpp_objects">Hashing C&#43;&#43; Objects</a>
 <ul class="sectlevel3">
 <li><a href="#ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</a>
 <ul class="sectlevel4">
@@ -704,23 +921,23 @@ following minimum requirements:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>struct HashAlgorithm
-{
-    using result_type = /*integral or array-like*/;
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">HashAlgorithm</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="cm">/*integral or array-like*/</span><span class="p">;</span>
 
-    static constexpr int block_size = /*...*/; // optional
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="cm">/*...*/</span><span class="p">;</span> <span class="c1">// optional</span>
 
-    HashAlgorithm();
-    explicit HashAlgorithm( std::uint64_t seed );
-    HashAlgorithm( unsigned char const* seed, std::size_t n );
+    <span class="n">HashAlgorithm</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">seed</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    HashAlgorithm( HashAlgorithm const&amp; r );
-    HashAlgorithm&amp; operator=( HashAlgorithm const&amp; r );
+    <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="n">HashAlgorithm</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
+    <span class="n">HashAlgorithm</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span> <span class="n">HashAlgorithm</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
 
-    void update( void const* data, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    result_type result();
-};</code></pre>
+    <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -828,8 +1045,8 @@ not matter and does not affect the final hash value.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>Hash hash; // some hash algorithm
-unsigned char message[6] = { /*...*/ }; // some input message</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">Hash</span> <span class="n">hash</span><span class="p">;</span> <span class="c1">// some hash algorithm</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">message</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="cm">/*...*/</span> <span class="p">};</span> <span class="c1">// some input message</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -837,7 +1054,7 @@ unsigned char message[6] = { /*...*/ }; // some input message</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>hash.update( message, 6 );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">message</span><span class="p">,</span> <span class="mi">6</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -845,8 +1062,8 @@ unsigned char message[6] = { /*...*/ }; // some input message</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>hash.update( message, 4 );
-hash.update( message + 4, 2 );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">message</span><span class="p">,</span> <span class="mi">4</span> <span class="p">);</span>
+<span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">message</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -854,7 +1071,7 @@ hash.update( message + 4, 2 );</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>for( int i = 0; i &lt; 6; ++i ) hash.update( &amp;message[i], 1 );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span> <span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -889,11 +1106,11 @@ by the library:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>std::uint64_t random()
-{
-    static boost::hash2::fnv1a_64 hash;
-    return hash.result();
-}</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="nf">random</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_64</span> <span class="n">hash</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -906,24 +1123,24 @@ These algorithms provide the following interface:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>struct HashAlgorithm
-{
-    using result_type = /*integral or array-like*/;
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">HashAlgorithm</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="cm">/*integral or array-like*/</span><span class="p">;</span>
 
-    static constexpr int block_size = /*...*/; // optional
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="cm">/*...*/</span><span class="p">;</span> <span class="c1">// optional</span>
 
-    constexpr HashAlgorithm();
-    explicit constexpr HashAlgorithm( std::uint64_t seed );
-    constexpr HashAlgorithm( unsigned char const* seed, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">HashAlgorithm</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">seed</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr HashAlgorithm( HashAlgorithm const&amp; r );
-    constexpr HashAlgorithm&amp; operator=( HashAlgorithm const&amp; r );
+    <span class="k">constexpr</span> <span class="n">HashAlgorithm</span><span class="p">(</span> <span class="n">HashAlgorithm</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">HashAlgorithm</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span> <span class="n">HashAlgorithm</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
 
-    void update( void const* data, std::size_t n );
-    constexpr void update( unsigned char const* data, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -998,6 +1215,10 @@ specification or protocol that calls for its use.</p>
 <div class="paragraph">
 <p>Prefer SHA2-512/256 (or SHA2-256 in 32 bit code) instead.</p>
 </div>
+<div class="paragraph">
+<p>If you require a digest of exactly 128 bits, use RIPEMD-128 instead.
+Do note that 128 bit digests are no longer considered cryptographic, because attacks with a complexity of 2<sup>64</sup> are within the capabilities of well-funded attackers.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="hashing_bytes_sha_1">SHA-1</h4>
@@ -1040,13 +1261,16 @@ they are resistant to length extension attacks as they don&#8217;t expose all of
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_ripemd_160">RIPEMD-160</h4>
+<h4 id="hashing_bytes_ripemd_160_ripemd_128">RIPEMD-160, RIPEMD-128</h4>
 <div class="paragraph">
 <p>Designed in 1996, <a href="https://en.wikipedia.org/wiki/RIPEMD">RIPEMD-160</a> is a cryptographic hash function that was less well known than MD5 and SHA-1,
 but that has recently become popular because of its use in Bitcoin and other cryptocurrencies.</p>
 </div>
 <div class="paragraph">
 <p>Even though it hasn&#8217;t been broken, there&#8217;s no reason to prefer its use in new code over SHA-2.</p>
+</div>
+<div class="paragraph">
+<p>RIPEMD-128 is a truncated variant of RIPEMD-160. (Do note that 128 bit digests are no longer considered cryptographic, because attacks with a complexity of 2<sup>64</sup> are within the capabilities of well-funded attackers.)</p>
 </div>
 </div>
 <div class="sect3">
@@ -1133,8 +1357,8 @@ is intended to prevent things like the distinct sequences
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>template&lt;class Hash, class Flavor = default_flavor, class T&gt;
-constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1225,23 +1449,23 @@ Using a fixed width type avoids this.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>struct default_flavor
-{
-    using size_type = std::uint64_t;
-    static constexpr auto byte_order = endian::native;
-};
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">default_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">native</span><span class="p">;</span>
+<span class="p">};</span>
 
-struct little_endian_flavor
-{
-    using size_type = std::uint64_t;
-    static constexpr auto byte_order = endian::little;
-};
+<span class="k">struct</span> <span class="nc">little_endian_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">little</span><span class="p">;</span>
+<span class="p">};</span>
 
-struct big_endian_flavor
-{
-    using size_type = std::uint64_t;
-    static constexpr auto byte_order = endian::big;
-};</code></pre>
+<span class="k">struct</span> <span class="nc">big_endian_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">big</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1262,56 +1486,56 @@ of a list of files passed as arguments.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/md5.hpp&gt;
-#include &lt;array&gt;
-#include &lt;string&gt;
-#include &lt;cerrno&gt;
-#include &lt;cstdio&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/md5.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;array&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cerrno&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">md5sum</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">fn</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">md5_128</span> <span class="n">hash</span><span class="p">;</span>
 
-static void md5sum( std::FILE* f, char const* fn )
-{
-    boost::hash2::md5_128 hash;
+    <span class="kt">int</span> <span class="k">const</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span> <span class="n">N</span> <span class="p">];</span>
 
-    int const N = 4096;
-    unsigned char buffer[ N ];
+    <span class="k">for</span><span class="p">(</span> <span class="p">;;</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">fread</span><span class="p">(</span> <span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span> <span class="p">);</span>
 
-    for( ;; )
-    {
-        std::size_t n = std::fread( buffer, 1, N, f );
+        <span class="k">if</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">ferror</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"'%s': read error: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span> <span class="n">errno</span> <span class="p">)</span> <span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        if( std::ferror( f ) )
-        {
-            std::fprintf( stderr, "'%s': read error: %s\n", fn, std::strerror( errno ) );
-            return;
-        }
+        <span class="k">if</span><span class="p">(</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">break</span><span class="p">;</span>
 
-        if( n == 0 ) break;
+        <span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="p">}</span>
 
-        hash.update( buffer, n );
-    }
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">digest</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 
-    std::string digest = to_string( hash.result() );
+    <span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span> <span class="s">"%s *%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">digest</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">fn</span> <span class="p">);</span>
+<span class="p">}</span>
 
-    std::printf( "%s *%s\n", digest.c_str(), fn );
-}
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">fopen</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"rb"</span> <span class="p">);</span>
 
-int main( int argc, char const* argv[] )
-{
-    for( int i = 1; i &lt; argc; ++i )
-    {
-        std::FILE* f = std::fopen( argv[i], "rb" );
+        <span class="k">if</span><span class="p">(</span> <span class="n">f</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"'%s': open error: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span> <span class="n">errno</span> <span class="p">)</span> <span class="p">);</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        if( f == 0 )
-        {
-            std::fprintf( stderr, "'%s': open error: %s\n", argv[i], std::strerror( errno ) );
-            continue;
-        }
+        <span class="n">md5sum</span><span class="p">(</span> <span class="n">f</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
 
-        md5sum( f, argv[i] );
-
-        std::fclose( f );
-    }
-}</code></pre>
+        <span class="n">std</span><span class="o">::</span><span class="n">fclose</span><span class="p">(</span> <span class="n">f</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1344,139 +1568,135 @@ of a list of files, using a specified hash algorithm.</p>
 <p>The hash algorithm is passed as the first command
 line argument.</p>
 </div>
+<div class="paragraph">
+<p>This example requires C&#43;&#43;14.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/md5.hpp&gt;
-#include &lt;boost/hash2/sha1.hpp&gt;
-#include &lt;boost/hash2/sha2.hpp&gt;
-#include &lt;boost/hash2/ripemd.hpp&gt;
-#include &lt;boost/mp11.hpp&gt;
-#include &lt;array&gt;
-#include &lt;string&gt;
-#include &lt;cerrno&gt;
-#include &lt;cstdio&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/md5.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/sha1.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/sha2.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/ripemd.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/mp11.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;array&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cerrno&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">&gt;</span> <span class="kt">void</span> <span class="nf">hash2sum</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">fn</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Hash</span> <span class="n">hash</span><span class="p">;</span>
 
-template&lt;std::size_t N&gt; std::string to_string( std::array&lt;unsigned char, N&gt; const &amp; v )
-{
-    std::string r;
+    <span class="kt">int</span> <span class="k">const</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span> <span class="n">N</span> <span class="p">];</span>
 
-    for( std::size_t i = 0; i &lt; N; ++i )
-    {
-        char buffer[ 8 ];
-        std::snprintf( buffer, sizeof( buffer ), "%02x", static_cast&lt;int&gt;( v[ i ] ) );
+    <span class="k">for</span><span class="p">(</span> <span class="p">;;</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">fread</span><span class="p">(</span> <span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span> <span class="p">);</span>
 
-        r += buffer;
-    }
+        <span class="k">if</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">ferror</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"'%s': read error: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span> <span class="n">errno</span> <span class="p">)</span> <span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    return r;
-}
+        <span class="k">if</span><span class="p">(</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">break</span><span class="p">;</span>
 
-template&lt;class Hash&gt; void hash2sum( std::FILE* f, char const* fn )
-{
-    Hash hash;
+        <span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="p">}</span>
 
-    int const N = 4096;
-    unsigned char buffer[ N ];
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">digest</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 
-    for( ;; )
-    {
-        std::size_t n = std::fread( buffer, 1, N, f );
+    <span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span> <span class="s">"%s *%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">digest</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">fn</span> <span class="p">);</span>
+<span class="p">}</span>
 
-        if( std::ferror( f ) )
-        {
-            std::fprintf( stderr, "'%s': read error: %s\n", fn, std::strerror( errno ) );
-            return;
-        }
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">&gt;</span> <span class="kt">void</span> <span class="n">hash2sum</span><span class="p">(</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">fn</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">fopen</span><span class="p">(</span> <span class="n">fn</span><span class="p">,</span> <span class="s">"rb"</span> <span class="p">);</span>
 
-        if( n == 0 ) break;
+    <span class="k">if</span><span class="p">(</span> <span class="n">f</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"'%s': open error: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">strerror</span><span class="p">(</span> <span class="n">errno</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">hash2sum</span><span class="o">&lt;</span><span class="n">Hash</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">f</span><span class="p">,</span> <span class="n">fn</span> <span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">fclose</span><span class="p">(</span> <span class="n">f</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-        hash.update( buffer, n );
-    }
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="o">::</span><span class="n">mp11</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="p">;</span>
 
-    std::string digest = to_string( hash.result() );
+<span class="k">using</span> <span class="n">hashes</span> <span class="o">=</span> <span class="n">mp_list</span><span class="o">&lt;</span>
 
-    std::printf( "%s *%s\n", digest.c_str(), fn );
-}
+    <span class="n">md5_128</span><span class="p">,</span>
+    <span class="n">sha1_160</span><span class="p">,</span>
+    <span class="n">sha2_256</span><span class="p">,</span>
+    <span class="n">sha2_224</span><span class="p">,</span>
+    <span class="n">sha2_512</span><span class="p">,</span>
+    <span class="n">sha2_384</span><span class="p">,</span>
+    <span class="n">sha2_512_256</span><span class="p">,</span>
+    <span class="n">sha2_512_224</span><span class="p">,</span>
+    <span class="n">ripemd_160</span><span class="p">,</span>
+    <span class="n">ripemd_128</span>
 
-template&lt;class Hash&gt; void hash2sum( char const* fn )
-{
-    std::FILE* f = std::fopen( fn, "rb" );
+<span class="o">&gt;</span><span class="p">;</span>
 
-    if( f == 0 )
-    {
-        std::fprintf( stderr, "'%s': open error: %s\n", fn, std::strerror( errno ) );
-    }
-    else
-    {
-        hash2sum&lt;Hash&gt;( f, fn );
-        std::fclose( f );
-    }
-}
+<span class="k">constexpr</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">names</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
 
-using namespace boost::mp11;
-using namespace boost::hash2;
+    <span class="s">"md5_128"</span><span class="p">,</span>
+    <span class="s">"sha1_160"</span><span class="p">,</span>
+    <span class="s">"sha2_256"</span><span class="p">,</span>
+    <span class="s">"sha2_224"</span><span class="p">,</span>
+    <span class="s">"sha2_512"</span><span class="p">,</span>
+    <span class="s">"sha2_384"</span><span class="p">,</span>
+    <span class="s">"sha2_512_256"</span><span class="p">,</span>
+    <span class="s">"sha2_512_224"</span><span class="p">,</span>
+    <span class="s">"ripemd_160"</span><span class="p">,</span>
+    <span class="s">"ripemd_128"</span>
 
-using hashes = mp_list&lt;
+<span class="p">};</span>
 
-    md5_128,
-    sha1_160,
-    sha2_256,
-    sha2_224,
-    sha2_512,
-    sha2_384,
-    sha2_512_256,
-    sha2_512_224,
-    ripemd_160
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">fputs</span><span class="p">(</span> <span class="s">"usage: hash2sum &lt;hash&gt; &lt;files...&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">stderr</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
 
-&gt;;
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">hash</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+    <span class="kt">bool</span> <span class="n">found</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
-constexpr char const* names[] = {
+    <span class="n">mp_for_each</span><span class="o">&lt;</span> <span class="n">mp_iota</span><span class="o">&lt;</span><span class="n">mp_size</span><span class="o">&lt;</span><span class="n">hashes</span><span class="o">&gt;&gt;</span> <span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="n">I</span><span class="p">){</span>
 
-    "md5_128",
-    "sha1_160",
-    "sha2_256",
-    "sha2_224",
-    "sha2_512",
-    "sha2_384",
-    "sha2_512_256",
-    "sha2_512_224",
-    "ripemd_160"
+        <span class="k">if</span><span class="p">(</span> <span class="n">hash</span> <span class="o">==</span> <span class="n">names</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="n">Hash</span> <span class="o">=</span> <span class="n">mp_at_c</span><span class="o">&lt;</span><span class="n">hashes</span><span class="p">,</span> <span class="n">I</span><span class="o">&gt;</span><span class="p">;</span>
 
-};
+            <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">hash2sum</span><span class="o">&lt;</span><span class="n">Hash</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
+            <span class="p">}</span>
 
-int main( int argc, char const* argv[] )
-{
-    if( argc &lt; 2 )
-    {
-        std::fputs( "usage: hash2sum &lt;hash&gt; &lt;files...&gt;\n", stderr );
-        return 2;
-    }
+            <span class="n">found</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    std::string hash( argv[1] );
-    bool found = false;
+    <span class="p">});</span>
 
-    mp_for_each&lt; mp_iota&lt;mp_size&lt;hashes&gt;&gt; &gt;([&amp;](auto I){
+    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">found</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"hash2sum: unknown hash algorithm name '%s'; use one of the following:</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="n">hash</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span> <span class="p">);</span>
 
-        if( hash == names[I] )
-        {
-            using Hash = mp_at_c&lt;hashes, I&gt;;
+        <span class="k">for</span><span class="p">(</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">name</span><span class="o">:</span> <span class="n">names</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">"   %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">name</span> <span class="p">);</span>
+        <span class="p">}</span>
 
-            for( int i = 2; i &lt; argc; ++i )
-            {
-                hash2sum&lt;Hash&gt;( argv[i] );
-            }
-
-            found = true;
-        }
-
-    });
-
-    if( !found )
-    {
-        std::fprintf( stderr, "hash2sum: unknown hash name '%s'\n", hash.c_str() );
-        return 1;
-    }
-}</code></pre>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1496,6 +1716,124 @@ int main( int argc, char const* argv[] )
 b07e42587d10ec323a25fd8fc3eef2213fb0997beb7950350f4e8a4b *canada.json
 4ceee5a83ad320fedb0dfddfb6f80af50b99677e87158e2d039aa168 *citm_catalog.json
 854ebe0da98cadd426ea0fa3218d60bb52cf6494e435d2f385a37d48 *twitter.json</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example_compile_time_hashing">Compile Time Hashing</h3>
+<div class="paragraph">
+<p>This example demonstrates calculating the MD5 digest of a data array, embedded in the program source, at compile time. It requires C&#43;&#43;14.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/md5.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="c1">// xxd -i resource</span>
+<span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">resource</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="mh">0x1f</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x6d</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">,</span>
+  <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x6e</span><span class="p">,</span> <span class="mh">0x83</span><span class="p">,</span> <span class="mh">0x30</span><span class="p">,</span> <span class="mh">0x0c</span><span class="p">,</span> <span class="mh">0xc6</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0xea</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x9c</span><span class="p">,</span>
+  <span class="mh">0x4b</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x3d</span><span class="p">,</span> <span class="mh">0x6e</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x1c</span><span class="p">,</span> <span class="mh">0x26</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x14</span><span class="p">,</span>
+  <span class="mh">0x6d</span><span class="p">,</span> <span class="mh">0xd7</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x95</span><span class="p">,</span> <span class="mh">0x84</span><span class="p">,</span> <span class="mh">0x25</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x8c</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span>
+  <span class="mh">0xda</span><span class="p">,</span> <span class="mh">0x5b</span><span class="p">,</span> <span class="mh">0x2e</span><span class="p">,</span> <span class="mh">0x91</span><span class="p">,</span> <span class="mh">0xd6</span><span class="p">,</span> <span class="mh">0xcb</span><span class="p">,</span> <span class="mh">0xd4</span><span class="p">,</span> <span class="mh">0x93</span><span class="p">,</span> <span class="mh">0x2d</span><span class="p">,</span> <span class="mh">0xdb</span><span class="p">,</span> <span class="mh">0xdf</span><span class="p">,</span> <span class="mh">0xef</span><span class="p">,</span>
+  <span class="mh">0xb3</span><span class="p">,</span> <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x1a</span><span class="p">,</span> <span class="mh">0x6e</span><span class="p">,</span> <span class="mh">0xbb</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x6d</span><span class="p">,</span> <span class="mh">0x8c</span><span class="p">,</span>
+  <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x92</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x34</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0xf8</span><span class="p">,</span> <span class="mh">0x39</span><span class="p">,</span> <span class="mh">0xe9</span><span class="p">,</span> <span class="mh">0xaf</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span>
+  <span class="mh">0xd8</span><span class="p">,</span> <span class="mh">0x39</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x0d</span><span class="p">,</span> <span class="mh">0xa1</span><span class="p">,</span> <span class="mh">0xa1</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0xcd</span><span class="p">,</span> <span class="mh">0x5f</span><span class="p">,</span>
+  <span class="mh">0xe0</span><span class="p">,</span> <span class="mh">0xfd</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x2b</span><span class="p">,</span> <span class="mh">0x79</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x25</span><span class="p">,</span> <span class="mh">0xbc</span><span class="p">,</span> <span class="mh">0xda</span><span class="p">,</span>
+  <span class="mh">0xb2</span><span class="p">,</span> <span class="mh">0x98</span><span class="p">,</span> <span class="mh">0xa6</span><span class="p">,</span> <span class="mh">0x91</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0xef</span><span class="p">,</span> <span class="mh">0xa8</span><span class="p">,</span> <span class="mh">0xc6</span><span class="p">,</span> <span class="mh">0xb6</span><span class="p">,</span> <span class="mh">0x4b</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0x17</span><span class="p">,</span>
+  <span class="mh">0x6c</span><span class="p">,</span> <span class="mh">0xb5</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0x49</span><span class="p">,</span> <span class="mh">0xda</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0xca</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x0f</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">,</span>
+  <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x7d</span><span class="p">,</span> <span class="mh">0xa8</span><span class="p">,</span> <span class="mh">0x7f</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span> <span class="mh">0xb9</span><span class="p">,</span> <span class="mh">0xd8</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0xc6</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0xf9</span><span class="p">,</span>
+  <span class="mh">0x8f</span><span class="p">,</span> <span class="mh">0x58</span><span class="p">,</span> <span class="mh">0xf2</span><span class="p">,</span> <span class="mh">0xfb</span><span class="p">,</span> <span class="mh">0xd6</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x59</span><span class="p">,</span> <span class="mh">0xb6</span><span class="p">,</span> <span class="mh">0x4e</span><span class="p">,</span> <span class="mh">0x56</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="mh">0x70</span><span class="p">,</span>
+  <span class="mh">0xb0</span><span class="p">,</span> <span class="mh">0xe3</span><span class="p">,</span> <span class="mh">0xe2</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0xaf</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0xf6</span><span class="p">,</span> <span class="mh">0x38</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span>
+  <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0xdf</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0x36</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="mh">0x6a</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x4e</span><span class="p">,</span> <span class="mh">0x37</span><span class="p">,</span>
+  <span class="mh">0x13</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span> <span class="mh">0x0b</span><span class="p">,</span> <span class="mh">0x93</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0xd1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">,</span> <span class="mh">0x84</span><span class="p">,</span> <span class="mh">0xbd</span><span class="p">,</span> <span class="mh">0xb5</span><span class="p">,</span> <span class="mh">0x9e</span><span class="p">,</span>
+  <span class="mh">0xa0</span><span class="p">,</span> <span class="mh">0xb6</span><span class="p">,</span> <span class="mh">0x1d</span><span class="p">,</span> <span class="mh">0xcd</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0x21</span><span class="p">,</span> <span class="mh">0x9c</span><span class="p">,</span> <span class="mh">0xb5</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0xe3</span><span class="p">,</span> <span class="mh">0x71</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span>
+  <span class="mh">0x1f</span><span class="p">,</span> <span class="mh">0xe8</span><span class="p">,</span> <span class="mh">0xbc</span><span class="p">,</span> <span class="mh">0xb6</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x0a</span><span class="p">,</span> <span class="mh">0x96</span><span class="p">,</span> <span class="mh">0x07</span><span class="p">,</span> <span class="mh">0xd3</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x8d</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span>
+  <span class="mh">0x42</span><span class="p">,</span> <span class="mh">0x4a</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x8c</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span> <span class="mh">0xf1</span><span class="p">,</span> <span class="mh">0x86</span><span class="p">,</span> <span class="mh">0x4e</span><span class="p">,</span> <span class="mh">0xdf</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span>
+  <span class="mh">0xeb</span><span class="p">,</span> <span class="mh">0xe1</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x56</span><span class="p">,</span> <span class="mh">0x9f</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xc5</span><span class="p">,</span> <span class="mh">0x35</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x4d</span><span class="p">,</span> <span class="mh">0x60</span><span class="p">,</span>
+  <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0xf8</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0xb8</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xa0</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span> <span class="mh">0xef</span><span class="p">,</span> <span class="mh">0x7b</span><span class="p">,</span> <span class="mh">0xe6</span><span class="p">,</span> <span class="mh">0x7c</span><span class="p">,</span>
+  <span class="mh">0x9e</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0xd6</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x13</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">,</span> <span class="mh">0xd6</span><span class="p">,</span> <span class="mh">0x49</span><span class="p">,</span>
+  <span class="mh">0x96</span><span class="p">,</span> <span class="mh">0x85</span><span class="p">,</span> <span class="mh">0x0b</span><span class="p">,</span> <span class="mh">0x7e</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x36</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x95</span><span class="p">,</span> <span class="mh">0x6b</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span>
+  <span class="mh">0x00</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">md5</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">)[</span> <span class="n">N</span> <span class="p">]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">md5_128</span> <span class="n">hash</span><span class="p">;</span>
+    <span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">N</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">resource_digest</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span> <span class="n">resource</span> <span class="p">);</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource digest: "</span> <span class="o">&lt;&lt;</span> <span class="n">resource_digest</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since the <code>constexpr</code> overload of <code>update</code> takes <code>unsigned char const*</code> (<code>void const*</code> is not allowed in <code>constexpr</code> functions), if the
+data to be hashed is a character array of type <code>char const[]</code>, passing it directly to <code>update</code> will not compile. In that case, we can
+use <code>hash_append_range</code> instead of calling <code>update</code>, as in the following example.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/sha2.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="k">extern</span> <span class="k">constexpr</span> <span class="kt">char</span> <span class="k">const</span> <span class="n">license</span><span class="p">[]</span> <span class="o">=</span>
+
+<span class="s">"Boost Software License - Version 1.0 - August 17th, 2003</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"Permission is hereby granted, free of charge, to any person or organization</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"obtaining a copy of the software and accompanying documentation covered by</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"this license (the </span><span class="se">\"</span><span class="s">Software</span><span class="se">\"</span><span class="s">) to use, reproduce, display, distribute,</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"execute, and transmit the Software, and to prepare derivative works of the</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"Software, and to permit third-parties to whom the Software is furnished to</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"do so, all subject to the following:</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"The copyright notices in the Software and this entire statement, including</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"the above license grant, this restriction and the following disclaimer,</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"must be included in all copies of the Software, in whole or in part, and</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"all derivative works of the Software, unless such copies or derivative</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"works are solely in the form of machine-executable object code generated by</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"a source language processor.</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"THE SOFTWARE IS PROVIDED </span><span class="se">\"</span><span class="s">AS IS</span><span class="se">\"</span><span class="s">, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span><span class="se">\n</span><span class="s">"</span>
+<span class="s">"DEALINGS IN THE SOFTWARE.</span><span class="se">\n</span><span class="s">"</span>
+
+<span class="p">;</span>
+
+<span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">secret</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mh">0xA4</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0x0E</span><span class="p">,</span> <span class="mh">0xE8</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x0B</span><span class="p">,</span> <span class="mh">0x7C</span><span class="p">,</span> <span class="mh">0x9A</span><span class="p">,</span>
+    <span class="mh">0xF1</span><span class="p">,</span> <span class="mh">0x3E</span><span class="p">,</span> <span class="mh">0x3D</span><span class="p">,</span> <span class="mh">0xEC</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x4F</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0xCA</span><span class="p">,</span>
+    <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xCC</span><span class="p">,</span> <span class="mh">0x84</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x34</span><span class="p">,</span> <span class="mh">0xE3</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0xAE</span><span class="p">,</span>
+    <span class="mh">0x92</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span> <span class="mh">0xEB</span><span class="p">,</span> <span class="mh">0xD0</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span> <span class="mh">0x39</span><span class="p">,</span> <span class="mh">0x87</span><span class="p">,</span> <span class="mh">0xD8</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">hmac_sha2_256</span><span class="p">(</span> <span class="kt">char</span> <span class="k">const</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="p">)[</span> <span class="n">N</span> <span class="p">]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hmac_sha2_256</span> <span class="n">hmac</span><span class="p">(</span> <span class="n">secret</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span> <span class="p">);</span>
+
+    <span class="c1">// N-1, in order to not include the null terminator</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">hmac</span><span class="p">,</span> <span class="p">{},</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span> <span class="o">+</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">hmac</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">license_mac</span> <span class="o">=</span> <span class="n">hmac_sha2_256</span><span class="p">(</span> <span class="n">license</span> <span class="p">);</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"License authentication code: "</span> <span class="o">&lt;&lt;</span> <span class="n">license_mac</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -1538,14 +1876,14 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 <h4 id="ref_fnv1a">&lt;boost/hash2/fnv1a.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-class fnv1a_32;
-class fnv1a_64;
+<span class="k">class</span> <span class="nc">fnv1a_32</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">fnv1a_64</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1555,32 +1893,32 @@ class fnv1a_64;
 <h5 id="ref_fnv1a_fnv1a_32">fnv1a_32</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class fnv1a_32
-{
-private:
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">fnv1a_32</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
 
-    std::uint32_t state_; // exposition only
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">state_</span><span class="p">;</span> <span class="c1">// exposition only</span>
 
-public:
+<span class="nl">public:</span>
 
-    using result_type = std::uint32_t;
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="p">;</span>
 
-    constexpr fnv1a_32();
-    explicit constexpr fnv1a_32( std::uint64_t seed );
-    constexpr fnv1a_32( unsigned char const* p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">fnv1a_32</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">fnv1a_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">fnv1a_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const* p, std::size_t n );
-    constexpr void update( unsigned char const* p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_fnv1a_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr fnv1a_32();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_32</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1596,7 +1934,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit constexpr fnv1a_32( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">fnv1a_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1616,7 +1954,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr fnv1a_32( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1639,8 +1977,8 @@ public:
 <h6 id="ref_fnv1a_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const* p, std::size_t n );
-constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1656,7 +1994,7 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h6 id="ref_fnv1a_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1683,32 +2021,32 @@ the output.</p>
 <h5 id="ref_fnv1a_fnv1a_64">fnv1a_64</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class fnv1a_64
-{
-private:
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">fnv1a_64</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
 
-    std::uint64_t state_; // exposition only
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">state_</span><span class="p">;</span> <span class="c1">// exposition only</span>
 
-public:
+<span class="nl">public:</span>
 
-    using result_type = std::uint64_t;
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
 
-    constexpr fnv1a_64();
-    explicit constexpr fnv1a_64( std::uint64_t seed );
-    constexpr fnv1a_64( unsigned char const* p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">fnv1a_64</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">fnv1a_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">fnv1a_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const* p, std::size_t n );
-    constexpr void update( unsigned char const* p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_fnv1a_constructors_2">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr fnv1a_64();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_64</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1724,7 +2062,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit constexpr fnv1a_64( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">fnv1a_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1744,7 +2082,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr fnv1a_64( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1767,8 +2105,8 @@ public:
 <h6 id="ref_fnv1a_update_2">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const* p, std::size_t n );
-constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1784,7 +2122,7 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h6 id="ref_fnv1a_result_2">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -1812,14 +2150,14 @@ the output.</p>
 <h4 id="ref_xxhash">&lt;boost/hash2/xxhash.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-class xxhash_32;
-class xxhash_64;
+<span class="k">class</span> <span class="nc">xxhash_32</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">xxhash_64</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1835,14 +2173,14 @@ class xxhash_64;
 <h4 id="ref_siphash">&lt;boost/hash2/siphash.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-class siphash_32;
-class siphash_64;
+<span class="k">class</span> <span class="nc">siphash_32</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">siphash_64</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1858,13 +2196,13 @@ class siphash_64;
 <h4 id="ref_hmac">&lt;boost/hash2/hmac.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class H&gt; class hmac;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hmac</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1876,18 +2214,18 @@ template&lt;class H&gt; class hmac;
 <h4 id="ref_md5">&lt;boost/hash2/md5.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
-#include &lt;boost/hash2/digest.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/digest.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">class</span> <span class="nc">md5_128</span><span class="p">;</span>
 
-class md5_128;
+<span class="k">using</span> <span class="n">hmac_md5_128</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">md5_128</span><span class="o">&gt;</span><span class="p">;</span>
 
-using hmac_md5_128 = hmac&lt;md5_128&gt;;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1897,30 +2235,30 @@ using hmac_md5_128 = hmac&lt;md5_128&gt;;
 <h5 id="ref_md5_md5_128">md5_128</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class md5_128
-{
-public:
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">md5_128</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
-    using result_type = digest&lt;16&gt;;
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">16</span><span class="o">&gt;</span><span class="p">;</span>
 
-    static constexpr int block_size = 64;
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
 
-    constexpr md5_128();
-    explicit constexpr md5_128( std::uint64_t seed );
-    constexpr md5_128( unsigned char const* p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">md5_128</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">md5_128</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">md5_128</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const* p, std::size_t n );
-    constexpr void update( unsigned char const* p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_md5_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr md5_128();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">md5_128</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1936,7 +2274,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit constexpr md5_128( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">md5_128</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1956,7 +2294,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>md5_128( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">md5_128</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1979,8 +2317,8 @@ public:
 <h6 id="ref_md5_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const* p, std::size_t n );
-constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2000,7 +2338,7 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h6 id="ref_md5_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2026,18 +2364,18 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h4 id="ref_sha1">&lt;boost/hash2/sha1.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
-#include &lt;boost/hash2/digest.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/digest.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">class</span> <span class="nc">sha1_160</span><span class="p">;</span>
 
-class sha1_160;
+<span class="k">using</span> <span class="n">hmac_sha1_160</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha1_160</span><span class="o">&gt;</span><span class="p">;</span>
 
-using hmac_sha1_160 = hmac&lt;sha1_160&gt;;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2047,30 +2385,30 @@ using hmac_sha1_160 = hmac&lt;sha1_160&gt;;
 <h5 id="ref_sha1_sha1_160">sha1_160</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class sha1_160
-{
-public:
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha1_160</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
-    using result_type = digest&lt;20&gt;;
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">20</span><span class="o">&gt;</span><span class="p">;</span>
 
-    static constexpr int block_size = 64;
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
 
-    constexpr sha1_160();
-    explicit constexpr sha1_160( std::uint64_t seed );
-    constexpr sha1_160( unsigned char const* p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">sha1_160</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">sha1_160</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">sha1_160</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const* p, std::size_t n );
-    constexpr void update( unsigned char const* p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_sha1_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr sha1_160();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha1_160</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2086,7 +2424,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit constexpr sha1_160( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">sha1_160</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2106,7 +2444,7 @@ public:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr sha1_160( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha1_160</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2129,8 +2467,8 @@ public:
 <h6 id="ref_sha1_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const* p, std::size_t n );
-constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2150,7 +2488,7 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h6 id="ref_sha1_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2176,27 +2514,28 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h4 id="ref_sha2">&lt;boost/hash2/sha2.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/digest.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">class</span> <span class="nc">sha2_256</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">sha2_224</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">sha2_512</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">sha2_384</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">sha2_512_256</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">sha2_512_224</span><span class="p">;</span>
 
-class sha2_256;
-class sha2_224;
-class sha2_512;
-class sha2_384;
-class sha2_512_256;
-class sha2_512_224;
+<span class="k">using</span> <span class="n">hmac_sha2_256</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_256</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_sha2_224</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_224</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_sha2_512</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_512</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_sha2_384</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_384</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_sha2_512_256</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_512_256</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_sha2_512_224</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">sha2_512_224</span><span class="o">&gt;</span><span class="p">;</span>
 
-using hmac_sha2_256 = hmac&lt;sha2_256&gt;;
-using hmac_sha2_224 = hmac&lt;sha2_224&gt;;
-using hmac_sha2_512 = hmac&lt;sha2_512&gt;;
-using hmac_sha2_384 = hmac&lt;sha2_384&gt;;
-using hmac_sha2_512_256 = hmac&lt;sha2_512_256&gt;;
-using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2206,27 +2545,28 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h5 id="ref_sha2_sha2_256">sha2_256</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class sha2_256
-{
-    using result_type = std::array&lt;unsigned char, 32&gt;;
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha2_256</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">32</span><span class="o">&gt;</span><span class="p">;</span>
 
-    static constexpr int block_size = 64;
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
 
-    sha2_256();
-    explicit sha2_256( std::uint64_t seed );
-    sha2_256( unsigned char const * p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">sha2_256</span><span class="p">();</span>
+    <span class="k">constexpr</span> <span class="k">explicit</span> <span class="n">sha2_256</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">sha2_256</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const * p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_sha2_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha2_256();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_256</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2242,7 +2582,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit sha2_256( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="k">explicit</span> <span class="nf">sha2_256</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2262,7 +2602,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha2_256( unsigned char const * p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_256</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2285,7 +2625,8 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h6 id="ref_sha2_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2305,7 +2646,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h6 id="ref_sha2_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2336,7 +2677,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 28&gt;;</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">28</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2350,27 +2691,28 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h5 id="ref_sha2_sha2_512">sha2_512</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class sha2_512
-{
-    using result_type = std::array&lt;unsigned char, 64&gt;;
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha2_512</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">;</span>
 
-    static constexpr int block_size = 128;
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span>
 
-    sha2_512();
-    explicit sha2_512( std::uint64_t seed );
-    sha2_512( unsigned char const * p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">sha2_512</span><span class="p">();</span>
+    <span class="k">constexpr</span> <span class="k">explicit</span> <span class="n">sha2_512</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">sha2_512</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const * p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_sha2_constructors_2">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha2_512();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_512</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2386,7 +2728,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit sha2_512( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="k">explicit</span> <span class="nf">sha2_512</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2406,7 +2748,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>sha2_512( unsigned char const * p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_512</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2429,7 +2771,8 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h6 id="ref_sha2_update_2">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const * p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2449,7 +2792,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h6 id="ref_sha2_result_2">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2480,7 +2823,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 48&gt;;</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">48</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2500,7 +2843,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 28&gt;;</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">28</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2520,7 +2863,7 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>using result_type = std::array&lt;unsigned char, 32&gt;;</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">32</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2535,48 +2878,51 @@ using hmac_sha2_512_224 = hmac&lt;sha2_512_224&gt;;
 <h4 id="ref_ripemd">&lt;boost/hash2/ripemd.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/hmac.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/digest.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">class</span> <span class="nc">ripemd_160</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ripemd_128</span><span class="p">;</span>
 
-class ripemd_160;
+<span class="k">using</span> <span class="n">hmac_ripemd_160</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">ripemd_160</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">hmac_ripemd_128</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">&lt;</span><span class="n">ripemd_128</span><span class="o">&gt;</span><span class="p">;</span>
 
-using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This header implements the <a href="https://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/AB-9601.pdf">RIPEMD-160</a> algorithm.</p>
+<p>This header implements the <a href="https://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/AB-9601.pdf">RIPEMD-160 and RIPEMD-128</a> algorithms.</p>
 </div>
 <div class="sect4">
 <h5 id="ref_ripemd_ripemd_160">ripemd_160</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>class ripemd_160
-{
-    using result_type = digest&lt;20&gt;;
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">ripemd_160</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">20</span><span class="o">&gt;</span><span class="p">;</span>
 
-    static constexpr int block_size = 64;
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
 
-    constexpr ripemd_160();
-    explicit constexpr ripemd_160( std::uint64_t seed );
-    constexpr ripemd_160( unsigned char const* p, std::size_t n );
+    <span class="k">constexpr</span> <span class="n">ripemd_160</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">ripemd_160</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">ripemd_160</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    void update( void const * pv, std::size_t n );
-    constexpr void update( unsigned char const* p, std::size_t n );
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">pv</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
 
-    constexpr result_type result();
-};</code></pre>
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="sect5">
 <h6 id="ref_ripemd_constructors">Constructors</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr ripemd_160();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">ripemd_160</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2592,7 +2938,7 @@ using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>explicit constexpr ripemd_160( std::uint64_t seed );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">ripemd_160</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2612,7 +2958,7 @@ using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr ripemd_160( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">ripemd_160</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2635,8 +2981,8 @@ using hmac_ripemd_160 = hmac&lt;ripemd_160&gt;;
 <h6 id="ref_ripemd_update">update</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>void update( void const* p, std::size_t n );
-constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2656,7 +3002,7 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 <h6 id="ref_ripemd_result">result</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>constexpr result_type result();</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="dlist">
@@ -2677,21 +3023,38 @@ constexpr void update( unsigned char const* p, std::size_t n );</code></pre>
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="ref_ripemd_ripemd_128">ripemd_128</h5>
+<div class="paragraph">
+<p>The RIPEMD-128 algorithm is identical to the RIPEMD-160 algorithm described above.</p>
+</div>
+<div class="paragraph">
+<p>The only differences are the number of rounds used and the size of the message digest, which is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">digest</span><span class="o">&lt;</span><span class="mi">16</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, all other operations and constants are identical.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ref_ripemd_utilities_and_traits">Utilities and Traits</h3>
+<h3 id="ref_utilities_and_traits">Utilities and Traits</h3>
 <div class="sect3">
 <h4 id="ref_digest">&lt;boost/hash2/digest.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-class digest;
+<span class="k">class</span> <span class="nc">digest</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2703,13 +3066,13 @@ class digest;
 <h4 id="ref_endian">&lt;boost/hash2/endian.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-enum class endian;
+<span class="k">enum</span> <span class="k">class</span> <span class="nc">endian</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2721,17 +3084,17 @@ enum class endian;
 <h4 id="ref_flavor">&lt;boost/hash2/flavor.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/endian.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/endian.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">struct</span> <span class="nc">default_flavor</span><span class="p">;</span>
+<span class="k">struct</span> <span class="nc">little_endian_flavor</span><span class="p">;</span>
+<span class="k">struct</span> <span class="nc">big_endian_flavor</span><span class="p">;</span>
 
-struct default_flavor;
-struct little_endian_flavor;
-struct big_endian_flavor;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2751,20 +3114,20 @@ struct big_endian_flavor;
 <h4 id="ref_get_integral_result">&lt;boost/hash2/get_integral_result.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class T, class R&gt; constexpr T get_integral_result( R const&amp; r );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="n">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
 <h5 id="ref_get_integral_result_get_integral_result">get_integral_result</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>template&lt;class T, class R&gt; constexpr T get_integral_result( R const&amp; r );</code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="nf">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -2773,13 +3136,13 @@ template&lt;class T, class R&gt; constexpr T get_integral_result( R const&amp; r
 <h4 id="ref_is_trivially_equality_comparable">&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class T&gt; struct is_trivially_equality_comparable;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_trivially_equality_comparable</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2791,13 +3154,13 @@ template&lt;class T&gt; struct is_trivially_equality_comparable;
 <h4 id="ref_is_endian_independent">&lt;boost/hash2/is_endian_independent.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class T&gt; struct is_endian_independent;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_endian_independent</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2809,17 +3172,17 @@ template&lt;class T&gt; struct is_endian_independent;
 <h4 id="ref_is_contiguously_hashable">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/endian.hpp&gt;
-#include &lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;
-#include &lt;boost/hash2/is_endian_independent.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/endian.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/is_endian_independent.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">endian</span> <span class="n">E</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_contiguously_hashable</span><span class="p">;</span>
 
-template&lt;class T, endian E&gt; struct is_contiguously_hashable;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2831,13 +3194,13 @@ template&lt;class T, endian E&gt; struct is_contiguously_hashable;
 <h4 id="ref_has_constant_size">&lt;boost/hash2/has_constant_size.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class T&gt; struct has_constant_size;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">has_constant_size</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2847,35 +3210,35 @@ template&lt;class T&gt; struct has_constant_size;
 </div>
 </div>
 <div class="sect2">
-<h3 id="ref_has_constant_size_hash_append">hash_append</h3>
+<h3 id="ref_hashing_cpp_objects">Hashing C&#43;&#43; Objects</h3>
 <div class="sect3">
 <h4 id="ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</h4>
 <div class="sect4">
 <h5 id="ref_hash_append_fwd_synopsis">Synopsis</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>namespace boost {
-namespace hash2 {
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-template&lt;class Hash, class Flavor, class T&gt;
-constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor, class It&gt;
-constexpr void hash_append_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor, class T&gt;
-constexpr void hash_append_size( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_size</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor, class It&gt;
-constexpr void hash_append_sized_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_sized_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor, class It&gt;
-constexpr void hash_append_unordered_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_unordered_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-struct hash_append_tag;
+<span class="k">struct</span> <span class="nc">hash_append_tag</span><span class="p">;</span>
 
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 </div>
@@ -2884,30 +3247,30 @@ struct hash_append_tag;
 <h4 id="ref_hash_append">&lt;boost/hash2/hash_append.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code>#include &lt;boost/hash2/flavor.hpp&gt;
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/flavor.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-namespace boost {
-namespace hash2 {
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor = default_flavor, class T&gt;
-constexpr void hash_append( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor = default_flavor, class It&gt;
-constexpr void hash_append_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_size</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor = default_flavor, class T&gt;
-constexpr void hash_append_size( Hash&amp; h, Flavor const&amp; f, T const&amp; v );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_sized_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor = default_flavor, class It&gt;
-constexpr void hash_append_sized_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">hash_append_unordered_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span>
 
-template&lt;class Hash, class Flavor = default_flavor, class It&gt;
-constexpr void hash_append_unordered_range( Hash&amp; h, Flavor const&amp; f, It first, It last );
+<span class="k">struct</span> <span class="nc">hash_append_tag</span><span class="p">;</span>
 
-struct hash_append_tag;
-
-} // namespace hash2
-} // namespace boost</code></pre>
+<span class="p">}</span> <span class="c1">// namespace hash2</span>
+<span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2942,15 +3305,15 @@ struct hash_append_tag;
 <h2 id="copyright">Copyright and License</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This documentation is copyright 2020, 2024 Peter Dimov and is distributed under
-the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Version 1.0</a>.</p>
+<p>This documentation is copyright 2020, 2024 Peter Dimov and Christian Mazakas
+and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Version 1.0</a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-09 21:25:12 +0200
+Last updated 2024-11-13 06:59:17 +0200
 </div>
 </div>
 <style>
