@@ -1938,7 +1938,7 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2066,7 +2066,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2160,13 +2160,260 @@ the output.</p>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This header implements the <a href="https://xxhash.com/">XXH32 and XXH64 algorithms</a>.</p>
+</div>
 <div class="sect4">
 <h5 id="ref_xxhash_xxhash_32">xxhash_32</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">xxhash_32</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">xxhash_32</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">xxhash_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">xxhash_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">xxhash_32</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the XXH32 algorithm to its initial values.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">xxhash_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integer seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the XXH32 algorithm using the low 32 bits of <code>seed</code> as the seed, then if the high 32 bits of <code>seed</code> aren&#8217;t zero, mixes them into the state.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">xxhash_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_update">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the XXH32 algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_result">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Obtains a 32 bit hash value from the state as specified by XXH32, then updates the state.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The obtained hash value.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>The state is updated to allow repeated calls to <code>result()</code> to return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_xxhash_xxhash_64">xxhash_64</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">xxhash_64</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">xxhash_64</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">xxhash_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">xxhash_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_constructors_2">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">xxhash_64</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the XXH64 algorithm to its initial values.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">xxhash_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integer seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the XXH64 algorithm using <code>seed</code> as the seed.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">xxhash_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_update_2">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the XXH64 algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_xxhash_result_2">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Obtains a 64 bit hash value from the state as specified by XXH64, then updates the state.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The obtained hash value.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>The state is updated to allow repeated calls to <code>result()</code> to return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -2183,13 +2430,260 @@ the output.</p>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This header implements the <a href="https://github.com/veorq/SipHash">SipHash and HalfSipHash algorithms</a>.</p>
+</div>
 <div class="sect4">
 <h5 id="ref_siphash_siphash_32">siphash_32</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">siphash_32</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">siphash_32</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">siphash_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">siphash_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">siphash_32</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the HalfSipHash algorithm as if using a sequence of 8 zero bytes as the key.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">siphash_32</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integer seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the HalfSipHash algorithm using <code>seed</code> as the key, as if it were a sequence of its 8 constituent bytes, in little-endian order.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">siphash_32</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>If <code>n</code> is 8, initializes the state as specified by the algorithm; otherwise, initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_update">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the HalfSipHash algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_result">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Obtains a 32 bit hash value from the state as specified by HalfSipHash.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The obtained hash value.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>The state is updated, which allows repeated calls to <code>result()</code> to return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_siphash_siphash_64">siphash_64</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">siphash_64</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">siphash_64</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">siphash_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">siphash_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_constructors_2">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">siphash_64</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the SipHash algorithm as if using a sequence of 16 zero bytes as the key.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">siphash_64</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integer seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state of the SipHash algorithm using <code>seed</code> as the key, as if it were a sequence of its 8 constituent bytes, in little-endian order, followed by 8 zero bytes.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">siphash_64</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>If <code>n</code> is 16, initializes the state as specified by the algorithm; otherwise, initializes the state as if by default construction, then if <code>n</code> is not zero, performs <code>update(p, n); result()</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_update_2">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the SipHash algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_siphash_result_2">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Obtains a 64 bit hash value from the state as specified by SipHash, then updates the state.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The obtained hash value.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>The state is updated, which allows repeated calls to <code>result()</code> to return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -2205,9 +2699,143 @@ the output.</p>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This header implements the <a href="https://tools.ietf.org/html/rfc2104">HMAC algorithm</a>.</p>
+</div>
 <div class="sect4">
 <h5 id="ref_hmac_hmac">hmac</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hmac</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
 
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">H</span><span class="o">::</span><span class="n">result_type</span><span class="p">;</span>
+
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">block_size</span> <span class="o">=</span> <span class="n">H</span><span class="o">::</span><span class="n">block_size</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">hmac</span><span class="p">();</span>
+    <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">hmac</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">hmac</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+
+    <span class="k">constexpr</span> <span class="n">result_type</span> <span class="n">result</span><span class="p">();</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The class template <code>hmac</code> takes as a parameter a cryptographic <em>hash algorithm</em> <code>H</code>
+and implements the corresponding <em>hash-based message authentication code</em> (HMAC) algorithm.</p>
+</div>
+<div class="paragraph">
+<p>For example, HMAC-SHA2-256 is implemented by <code>hmac&lt;sha2_256&gt;</code>.</p>
+</div>
+<div class="sect5">
+<h6 id="ref_hmac_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">hmac</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Default constructor.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the internal state using an empty byte sequence as the secret key.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">explicit</span> <span class="k">constexpr</span> <span class="nf">hmac</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking an integer seed value.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>If <code>seed</code> is zero, initializes the state as if by default construction, otherwise, initializes it using the 8 bytes of the little-endian representation of <code>seed</code> as the secret key.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>seed</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">hmac</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructor taking a byte sequence seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the state as specified by the HMAC algorithm using <code>[p, p+n)</code> as the secret key.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>By convention, if <code>n</code> is zero, the effect of this constructor is the same as default construction.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_hmac_update">update</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Updates the internal state of the HMAC algorithm from the byte sequence <code>[p, p+n)</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Consecutive calls to <code>update</code> are equivalent to a single call with the concatenated byte sequences of the individual calls.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_hmac_result">result</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Pads the accumulated message and finalizes the HMAC digest.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>The HMAC digest of the message formed from the byte sequences of the preceding calls to <code>update</code>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>Repeated calls to <code>result()</code> return a pseudorandom sequence of <code>result_type</code> values, effectively extending the output.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -2278,7 +2906,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2428,7 +3056,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2586,7 +3214,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2732,7 +3360,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -2942,7 +3570,7 @@ the output.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Constructor taking an integral seed value.</p>
+<p>Constructor taking an integer seed value.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -3313,7 +3941,7 @@ and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boos
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-13 06:59:17 +0200
+Last updated 2024-11-13 12:47:41 +0200
 </div>
 </div>
 <style>
