@@ -37,13 +37,11 @@ struct sha2_base
     static constexpr int N = M;
 
     unsigned char buffer_[ N ] = {};
-    std::size_t m_; // == n_ % N
+    std::size_t m_ = 0; // == n_ % N
 
-    std::uint64_t n_;
+    std::uint64_t n_ = 0;
 
-    BOOST_CXX14_CONSTEXPR sha2_base(): m_( 0 ), n_( 0 )
-    {
-    }
+    constexpr sha2_base() = default;
 
     void update( void const* pv, std::size_t n )
     {
@@ -539,7 +537,6 @@ public:
             result();
         }
     }
-
 
     BOOST_CXX14_CONSTEXPR result_type result()
     {

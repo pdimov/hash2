@@ -223,11 +223,11 @@ public:
         // clear buffered plaintext
         detail::memset( buffer_, 0, 16 );
 
-        // advance state
-        v1_ = round( v1_, h );
-        v2_ = round( v2_, h );
-        v3_ = round( v3_, h );
-        v4_ = round( v4_, h );
+        // perturb state
+        v1_ += h;
+        v2_ += h;
+        v3_ -= h;
+        v4_ -= h;
 
         // apply final mix
         h ^= h >> 15;
@@ -449,11 +449,11 @@ public:
         // clear buffered plaintext
         detail::memset( buffer_, 0, 32 );
 
-        // advance state
-        v1_ = round( v1_, h );
-        v2_ = round( v2_, h );
-        v3_ = round( v3_, h );
-        v4_ = round( v4_, h );
+        // perturb state
+        v1_ += h;
+        v2_ += h;
+        v3_ -= h;
+        v4_ -= h;
 
         // apply final mix
         h ^= h >> 33;

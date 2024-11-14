@@ -60,6 +60,7 @@ void test( int N, int M )
     test_<sha2_512_224>( data, N, M );
     test_<sha2_512_256>( data, N, M );
     test_<ripemd_160>( data, N, M );
+    test_<ripemd_128>( data, N, M );
 
     puts( "--" );
 }

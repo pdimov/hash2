@@ -70,6 +70,7 @@ template<class R> void test( int N )
     test_<R, boost::hash2::sha2_512_224>( N );
     test_<R, boost::hash2::sha2_512_256>( N );
     test_<R, boost::hash2::ripemd_160>( N );
+    test_<R, boost::hash2::ripemd_128>( N );
 
     puts( "" );
 }
