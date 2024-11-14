@@ -56,7 +56,7 @@ Effects: ::
 explicit constexpr xxhash_32( std::uint64_t seed );
 ```
 
-Constructor taking an integral seed value.
+Constructor taking an integer seed value.
 
 Effects: ::
   Initializes the internal state of the XXH32 algorithm using the low 32 bits of `seed` as the seed, then if the high 32 bits of `seed` aren't zero, mixes them into the state.
@@ -139,7 +139,7 @@ Effects: ::
 explicit constexpr xxhash_64( std::uint64_t seed );
 ```
 
-Constructor taking an integral seed value.
+Constructor taking an integer seed value.
 
 Effects: ::
   Initializes the internal state of the XXH64 algorithm using `seed` as the seed.

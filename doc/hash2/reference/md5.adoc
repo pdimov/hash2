@@ -62,7 +62,7 @@ Effects: ::
 explicit constexpr md5_128( std::uint64_t seed );
 ```
 
-Constructor taking an integral seed value.
+Constructor taking an integer seed value.
 
 Effects: ::
   Initializes the state as if by default construction, then if `seed` is not zero, performs `update(p, 8); result();` where `p` points to a little-endian representation of the value of `seed`.
