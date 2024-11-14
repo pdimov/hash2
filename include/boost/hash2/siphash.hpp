@@ -74,12 +74,10 @@ public:
 
     siphash_64() = default;
 
-    BOOST_CXX14_CONSTEXPR explicit siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 )
+    BOOST_CXX14_CONSTEXPR explicit siphash_64( std::uint64_t seed )
     {
-        v0 ^= k0;
-        v1 ^= k1;
-        v2 ^= k0;
-        v3 ^= k1;
+        v0 ^= seed;
+        v2 ^= seed;
     }
 
     BOOST_CXX14_CONSTEXPR siphash_64( unsigned char const * p, std::size_t n )
@@ -246,14 +244,6 @@ public:
         std::uint32_t k0 = static_cast<std::uint32_t>( seed );
         std::uint32_t k1 = static_cast<std::uint32_t>( seed >> 32 );
 
-        v0 ^= k0;
-        v1 ^= k1;
-        v2 ^= k0;
-        v3 ^= k1;
-    }
-
-    BOOST_CXX14_CONSTEXPR siphash_32( std::uint32_t k0, std::uint32_t k1 )
-    {
         v0 ^= k0;
         v1 ^= k1;
         v2 ^= k0;
