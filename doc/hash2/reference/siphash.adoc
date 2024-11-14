@@ -114,7 +114,7 @@ public:
     using result_type = std::uint64_t;
 
     constexpr siphash_64();
-    explicit constexpr siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 );
+    explicit constexpr siphash_64( std::uint64_t seed );
     constexpr siphash_64( unsigned char const* p, std::size_t n );
 
     void update( void const* p, std::size_t n );
@@ -136,13 +136,13 @@ Effects: ::
   Initializes the internal state of the SipHash algorithm as if using a sequence of 16 zero bytes as the key.
 
 ```
-explicit constexpr siphash_64( std::uint64_t k0, std::uint64_t k1 = 0 );
+explicit constexpr siphash_64( std::uint64_t seed );
 ```
 
-Constructor taking integer seed values.
+Constructor taking an integer seed value.
 
 Effects: ::
-  Initializes the internal state of the SipHash algorithm using `k0` and `k1` as the key, as if they were a sequence of 16 bytes, in little-endian order, the 8 bytes of `k0` followed by those of `kl`.
+  Initializes the internal state of the SipHash algorithm using `seed` as the key, as if it were a sequence of its 8 constituent bytes, in little-endian order, followed by 8 zero bytes.
 
 Remarks: ::
   By convention, if `seed` is zero, the effect of this constructor is the same as default construction.
