@@ -31,6 +31,7 @@ template<class T> struct has_constant_size<T const>: has_constant_size<T>
 ```
 
 The trait `has_constant_size` is used by the library to detect container and range types that have a constant size.
+This allows `hash_append` to not include the size in the _message_, as it doesn't contribute to the object state.
 
 A container or range type has constant size if for all values `v` of that type, `v.size()` has the same value.
 
