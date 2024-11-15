@@ -3705,7 +3705,29 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_endian_endian">endian</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">enum</span> <span class="k">class</span> <span class="nc">endian</span>
+<span class="p">{</span>
+    <span class="n">little</span> <span class="o">=</span> <span class="cm">/*...*/</span><span class="p">,</span>
+    <span class="n">big</span> <span class="o">=</span> <span class="cm">/*...*/</span><span class="p">,</span>
+    <span class="n">native</span> <span class="o">=</span> <span class="cm">/*little or big*/</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The enumeration type <code>endian</code> corresponds to the standard
+<code>std::endian</code> type from C&#43;&#43;20. Its values are <code>little</code>,
+signifying little-endian byte order, <code>big</code>, signifying
+big-endian byte order, and <code>native</code>, which equals either
+<code>little</code> or <code>big</code> depending on whether the current platform
+is little- or big-endian.</p>
+</div>
+<div class="paragraph">
+<p>Unlike <code>std::endian</code>, platforms where <code>little</code> equals <code>big</code>,
+or where <code>native</code> equals neither <code>little</code> or <code>big</code>, aren&#8217;t
+supported.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3745,7 +3767,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
 <span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="n">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="n">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
 
 <span class="p">}</span> <span class="c1">// namespace hash2</span>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
@@ -3755,8 +3777,41 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <h5 id="ref_get_integral_result_get_integral_result">get_integral_result</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="nf">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="n">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
 </div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>T</code> must be an integral type that is not <code>bool</code>.
+<code>R</code> must be a valid <em>hash algorithm</em> result type; that is, it must be an unsigned integer type, or an array-like type with a <code>value_type</code> of <code>unsigned char</code> (<code>std::array&lt;unsigned char, N&gt;</code> or <code>digest&lt;N&gt;</code>) and size of at least 8.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>A value that is derived from <code>r</code> in a way that is approximately uniformly distributed over the possible values of <code>T</code>. <code>r</code> is assumed to have been produced by a <code>result()</code> invocation of a <em>hash algorithm</em>.</p>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>When <code>R</code> is an array-like type, <code>get_integral_result</code> is allowed to assume that <code>r</code> has been produced by a high quality hash algorithm and that therefore its values are uniformly distributed over the entire domain of <code>R</code>.</p>
+</dd>
+<dt class="hdlist1">Example: </dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Hash</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">my_hash</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">st</span> <span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span>
+    <span class="p">{</span>
+        <span class="n">Hash</span> <span class="n">hash</span><span class="p">;</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">hash</span><span class="p">,</span> <span class="p">{},</span> <span class="n">st</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -3775,7 +3830,93 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_is_trivially_equality_comparable_is_trivially_equality_comparable">is_trivially_equality_comparable</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_trivially_equality_comparable</span><span class="o">:</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span> <span class="kt">bool</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">std</span><span class="o">::</span><span class="n">is_enum</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">std</span><span class="o">::</span><span class="n">is_pointer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span>
 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span> <span class="k">const</span><span class="o">&gt;:</span>
+  <span class="n">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The trait <code>is_trivially_equality_comparable</code> is used by the library to detect types that are <em>trivially equality comparable</em>.</p>
+</div>
+<div class="paragraph">
+<p>A type is <em>trivially equality comparable</em> if, for two values <code>x</code> and <code>y</code> of that type, <code>x == y</code> is equivalent to <code>std::memcmp( &amp;x, &amp;y, sizeof(x) ) == 0</code>.</p>
+</div>
+<div class="paragraph">
+<p>That is, for trivially equality comparable types, comparing their values is the same as comparing their storage byte representations.</p>
+</div>
+<div class="paragraph">
+<p>This allows <code>hash_append</code> to assume that the <em>message</em> identifying an object&#8217;s value is the same as the storage bytes of the object.</p>
+</div>
+<div class="paragraph">
+<p><code>is_trivially_equality_comparable</code> can be specialized for user-defined types if the default implementation does not give the correct result.</p>
+</div>
+<div class="paragraph">
+<p>For example, for the following type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">X</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x1</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x2</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">x1</span><span class="p">.</span><span class="n">v</span> <span class="o">==</span> <span class="n">x2</span><span class="p">.</span><span class="n">v</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(under the assumption that it has no padding bytes, that is, <code>sizeof(X) == sizeof(int)</code>)
+<code>is_trivially_equality_comparable&lt;X&gt;::value</code> will be <code>false</code> by default, but the type meets the requirements for being trivially equality comparable, so a specialization can be added:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or, if you want to be on the safe side,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;:</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On the other hand, the following type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">enum</span> <span class="n">E</span><span class="o">:</span> <span class="kt">unsigned</span> <span class="p">{};</span>
+
+<span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">E</span> <span class="n">e1</span><span class="p">,</span> <span class="n">E</span> <span class="n">e2</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">e1</span> <span class="o">%</span> <span class="mi">256</span> <span class="o">==</span> <span class="n">e2</span> <span class="o">%</span> <span class="mi">256</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is not trivially equality comparable (because <code>(E)0x204 == (E)0x704</code>, but <code>memcmp</code> will give a nonzero result), but <code>is_trivially_equality_comparable&lt;E&gt;::value</code> will be <code>true</code> by default.</p>
+</div>
+<div class="paragraph">
+<p>In this (quite rare) case, a specialization can be added to report <code>false</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">false_type</span> <span class="p">{};</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3793,7 +3934,52 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_is_endian_independent_is_endian_independent">is_endian_independent</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_endian_independent</span><span class="o">:</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span> <span class="kt">bool</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span>
 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_endian_independent</span><span class="o">&lt;</span><span class="n">T</span> <span class="k">const</span><span class="o">&gt;:</span>
+    <span class="n">is_endian_independent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The trait <code>is_endian_independent</code> is used by the library to detect <em>endian-independent</em> types.</p>
+</div>
+<div class="paragraph">
+<p>A type is <em>endian-independent</em> if its memory representation is the same on little-endian and big-endian platforms.</p>
+</div>
+<div class="paragraph">
+<p>This includes all single byte types (with a <code>sizeof</code> of 1) and all types whose constituent members are also endian-independent.</p>
+</div>
+<div class="paragraph">
+<p>The default implementation of the trait only reports <code>true</code> for single byte types. It can be specialized for endian independent user-defined types.</p>
+</div>
+<div class="paragraph">
+<p>For example, the following type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">X</span>
+<span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is endian-independent, and <code>is_endian_independent</code> can be specialized appropriately for it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">is_endian_independent</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3815,7 +4001,33 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_is_contiguously_hashable_is_contiguously_hashable">is_contiguously_hashable</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">endian</span> <span class="n">E</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_contiguously_hashable</span><span class="o">:</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span>
+    <span class="n">is_trivially_equality_comparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span>
+      <span class="p">(</span><span class="n">E</span> <span class="o">==</span> <span class="n">endian</span><span class="o">::</span><span class="n">native</span> <span class="o">||</span> <span class="n">is_endian_independent</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span>
 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">,</span> <span class="n">endian</span> <span class="n">E</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_contiguously_hashable</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">E</span><span class="o">&gt;:</span>
+  <span class="n">is_contiguously_hashable</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">E</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The trait <code>is_contiguously_hashable</code> is used by the library to detect <em>contiguously hashable</em> types.</p>
+</div>
+<div class="paragraph">
+<p>A type is <em>contiguously hashable</em> under a particular byte order <code>E</code> if the <em>message</em> that would have been produced for the type if it weren&#8217;t considered <em>contiguously hashable</em> is the same as its underlying storage byte representation.</p>
+</div>
+<div class="paragraph">
+<p><code>hash_append(hash, flavor, value)</code>, when the type of <code>value</code> is <em>contiguously hashable</em> under the byte order requested by <code>flavor</code> (<code>decltype(flavor)::byte_order</code>), issues a single call to <code>hash.update(&amp;value, sizeof(value))</code> as an optimization.</p>
+</div>
+<div class="paragraph">
+<p><code>is_contiguously_hashable</code> is not intended to be specialized for user-defined types. Its implementation relies on <code>is_trivially_equality_comparable</code> and <code>is_endian_independent</code>, and is correct as long as those underlying traits are correct.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3833,7 +4045,38 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_has_constant_size_has_constant_size">has_constant_size</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">has_constant_size</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="cm">/*see below*/</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span>
 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">has_constant_size</span><span class="o">&lt;</span><span class="n">T</span> <span class="k">const</span><span class="o">&gt;:</span> <span class="n">has_constant_size</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The trait <code>has_constant_size</code> is used by the library to detect container and range types that have a constant size.
+This allows <code>hash_append</code> to not include the size in the <em>message</em>, as it doesn&#8217;t contribute to the object state.</p>
+</div>
+<div class="paragraph">
+<p>A container or range type has constant size if for all values <code>v</code> of that type, <code>v.size()</code> has the same value.</p>
+</div>
+<div class="paragraph">
+<p>The default implementation reports <code>true</code> for tuple-like types (those for which <code>std::tuple_size</code> is specialized), such as <code>std::array</code>, for <code>boost::array</code>, and for <code>digest</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>has_constant_size</code> can be specialized for user-defined container and range types that have constant size.</p>
+</div>
+<div class="paragraph">
+<p>For example, <code>boost::uuids::uuid</code> has a constant size of 16, so a specialization can be added appropriately:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">has_constant_size</span><span class="o">&lt;</span><span class="n">boost</span><span class="o">::</span><span class="n">uuids</span><span class="o">::</span><span class="n">uuid</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
