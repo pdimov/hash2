@@ -20,3 +20,22 @@ enum class endian;
 
 ## endian
 
+```
+enum class endian
+{
+    little = /*...*/,
+    big = /*...*/,
+    native = /*little or big*/
+};
+```
+
+The enumeration type `endian` corresponds to the standard
+`std::endian` type from {cpp}20. Its values are `little`,
+signifying little-endian byte order, `big`, signifying
+big-endian byte order, and `native`, which equals either
+`little` or `big` depending on whether the current platform
+is little- or big-endian.
+
+Unlike `std::endian`, platforms where `little` equals `big`,
+or where `native` equals neither `little` or `big`, aren't
+supported.
