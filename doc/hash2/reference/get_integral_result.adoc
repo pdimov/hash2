@@ -24,3 +24,27 @@ template<class T, class R> constexpr T get_integral_result( R const& r );
 template<class T, class R> constexpr T get_integral_result( R const& r );
 ```
 
+Requires: ::
+  `T` must be an integral type that is not `bool`.
+  `R` must be a valid _hash algorithm_ result type; that is, it must be an unsigned integer type, or an array-like type with a `value_type` of `unsigned char` (`std::array<unsigned char, N>` or `digest<N>`.)
+
+Returns: ::
+  A value that is derived from `r` in a way that is as uniformly distributed over the possible values of `T` as possible. `r` is assumed to have been produced by a `result()` invocation of a _hash algorithm_.
+
+Remarks: ::
+  When `R` is an array-like type, `get_integral_result` is allowed to assume that `r` has been produced by a high quality hash algorithm and that therefore its values are uniformly distributed over the entire domain of `R`.
+
+Example: ::
++
+```
+template<class T, class Hash> struct my_hash
+{
+    std::size_t operator()( std::string const& st ) const noexcept
+    {
+        Hash hash;
+        boost::hash2::hash_append( hash, {}, st );
+        return boost::hash2::get_integral_result<std::size_t>( hash.result() );
+    }
+};
+```
+
