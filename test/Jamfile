@@ -41,7 +41,6 @@ run detail_read.cpp ;
 run detail_write.cpp ;
 run detail_write_2.cpp ;
 run detail_rot.cpp ;
-run detail_reverse.cpp ;
 run detail_has_tag_invoke.cpp ;
 
 # hash_append
