@@ -7,6 +7,7 @@
 
 #include <boost/hash2/detail/read.hpp>
 #include <type_traits>
+#include <limits>
 #include <cstddef>
 
 namespace boost
@@ -29,7 +30,7 @@ template<class T, class R>
 }
 
 template<class T, class R>
-    typename std::enable_if<std::is_integral<R>::value && sizeof(R) == 4 && sizeof(T) == 8, T>::type
+    typename std::enable_if<std::is_integral<R>::value && (sizeof(R) < sizeof(T)), T>::type
     get_integral_result( R const & r )
 {
     static_assert( std::is_integral<T>::value, "T must be integral" );
@@ -39,7 +40,9 @@ template<class T, class R>
 
     typedef typename std::make_unsigned<T>::type U;
 
-    return static_cast<T>( ( static_cast<U>( r ) << 32 ) + r );
+    constexpr U m = std::numeric_limits<U>::max() / std::numeric_limits<R>::max();
+
+    return static_cast<T>( r * m );
 }
 
 template<class T, class R>
