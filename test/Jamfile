@@ -34,6 +34,7 @@ run has_constant_size.cpp ;
 
 run get_integral_result.cpp ;
 run get_integral_result_2.cpp ;
+run get_integral_result_3.cpp ;
 
 # digest
 
