@@ -11,7 +11,7 @@ template<class R> void test()
 {
     using boost::hash2::get_integral_result;
 
-    R r = {};
+    R r = R();
 
     get_integral_result<signed char>( r );
     get_integral_result<unsigned char>( r );
