@@ -3679,7 +3679,85 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
 <span class="k">namespace</span> <span class="n">hash2</span> <span class="p">{</span>
 
-<span class="k">class</span> <span class="nc">digest</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">digest</span>
+<span class="p">{</span>
+<span class="nl">private:</span> <span class="c1">// exposition only</span>
+
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">data_</span><span class="p">[</span> <span class="n">N</span> <span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="nl">public:</span>
+
+    <span class="k">using</span> <span class="n">value_type</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">reference</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">&amp;</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">const_reference</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">iterator</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">const_iterator</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">difference_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">ptrdiff_t</span><span class="p">;</span>
+
+    <span class="c1">// constructors</span>
+
+    <span class="k">constexpr</span> <span class="n">digest</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">digest</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">)[</span> <span class="n">N</span> <span class="p">]</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="c1">// copy</span>
+
+    <span class="k">constexpr</span> <span class="n">digest</span><span class="p">(</span> <span class="n">digest</span> <span class="k">const</span><span class="o">&amp;</span> <span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">digest</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span> <span class="n">digest</span> <span class="k">const</span><span class="o">&amp;</span> <span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+    <span class="c1">// iteration</span>
+
+    <span class="k">constexpr</span> <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="c1">// data, size</span>
+
+    <span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">data</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">size_type</span> <span class="n">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="c1">// element access</span>
+
+    <span class="k">constexpr</span> <span class="n">reference</span> <span class="k">operator</span><span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="p">);</span>
+    <span class="k">constexpr</span> <span class="n">const_reference</span> <span class="k">operator</span><span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">reference</span> <span class="n">front</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">const_reference</span> <span class="n">front</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">reference</span> <span class="n">back</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">constexpr</span> <span class="n">const_reference</span> <span class="n">back</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// comparisons</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">b</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">b</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+<span class="c1">// to_chars</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_chars</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">first</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">last</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">M</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">to_chars</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">,</span> <span class="kt">char</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">w</span><span class="p">)[</span> <span class="n">M</span> <span class="p">]</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+
+<span class="c1">// operator&lt;&lt;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
+
+<span class="c1">// to_string</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">to_string</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span>
 
 <span class="p">}</span> <span class="c1">// namespace hash2</span>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
@@ -3687,7 +3765,252 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 <div class="sect4">
 <h5 id="ref_digest_digest">digest</h5>
-
+<div class="paragraph">
+<p><code>digest&lt;N&gt;</code> is a <code>constexpr</code>-friendly class template similar to <code>std::array&lt;unsigned char, N&gt;</code>.
+It is used to store the resulting message digest of hash algorithms such as SHA2-256 or RIPEMD-160.</p>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_constructors">Constructors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">digest</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Zero-initializes <code>data_</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">digest</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">)[</span> <span class="n">N</span> <span class="p">]</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Initializes the elements of <code>data_</code> from the corresponding elements of <code>v</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_iteration">Iteration</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_ + N</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_accessors">Accessors</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">data</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="n">size_type</span> <span class="n">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>N</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_element_access">Element Access</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">reference</span> <span class="k">operator</span><span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="p">);</span>
+<span class="k">constexpr</span> <span class="n">const_reference</span> <span class="k">operator</span><span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="p">)</span> <span class="k">const</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>i &lt; size()</code>.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_[ i ]</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">reference</span> <span class="n">front</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="n">const_reference</span> <span class="n">front</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_[ 0 ]</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">reference</span> <span class="n">back</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="n">const_reference</span> <span class="n">back</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>data_[ N-1 ]</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_comparisons">Comparisons</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">b</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>true</code> when the elements of <code>a.data_</code> are equal to the corresponding elements of <code>b.data_</code>, <code>false</code> otherwise.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">b</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>!(a == b)</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect5">
+<h6 id="ref_digest_formatting">Formatting</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">char</span><span class="o">*</span> <span class="n">to_chars</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">first</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">last</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Writes the contents of <code>data_</code> as a hexadecimal string to the provided output range <code>[first, last)</code>.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>A pointer one past the end of the generated output, or <code>nullptr</code> if <code>[first, last)</code> is not large enough.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">M</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">to_chars</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">,</span> <span class="kt">char</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">w</span><span class="p">)[</span> <span class="n">M</span> <span class="p">]</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>M &gt;= N*2 + 1</code>.</p>
+</dd>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Writes the contents of <code>data_</code> as a hexadecimal string, then a null terminator, to the provided output buffer <code>w</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Writes the contents of <code>data_</code> as a hexadecimal string to <code>os</code>.</p>
+</dd>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p><code>os</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nf">to_string</span><span class="p">(</span> <span class="n">digest</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Returns: </dt>
+<dd>
+<p>A string containing the contents of <code>data_</code> in hexadecimal format.</p>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
