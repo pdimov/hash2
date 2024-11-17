@@ -15,8 +15,124 @@ namespace boost
 namespace hash2
 {
 
+namespace detail
+{
+
+// identity
+
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == sizeof(U), U>::type
+    get_result_multiplier()
+{
+    return 1;
+}
+
+// contraction
+
+// 2 -> 1
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 2 && sizeof(U) == 1, R>::type
+    get_result_multiplier()
+{
+    return 0xBF01;
+}
+
+// 4 -> 1
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 4 && sizeof(U) == 1, R>::type
+    get_result_multiplier()
+{
+    return 0x7F7F7F7Fu;
+}
+
+// 8 -> 1
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 8 && sizeof(U) == 1, R>::type
+    get_result_multiplier()
+{
+    return 0x7F7F7F7F7F7F7F7Full;
+}
+
+// 4 -> 2
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 4 && sizeof(U) == 2, R>::type
+    get_result_multiplier()
+{
+    return 0xBFFF0001u;
+}
+
+// 8 -> 2
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 8 && sizeof(U) == 2, R>::type
+    get_result_multiplier()
+{
+    return 0xBFFFBFFFBFFFBFFFull;
+}
+
+// 8 -> 4
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 8 && sizeof(U) == 4, R>::type
+    get_result_multiplier()
+{
+    return 0xBFFFFFFF00000001ull;
+}
+
+// expansion
+
+// 1 -> 2
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 1 && sizeof(U) == 2, U>::type
+    get_result_multiplier()
+{
+    return 0x7F7F;
+}
+
+// 1 -> 4
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 1 && sizeof(U) == 4, U>::type
+    get_result_multiplier()
+{
+    return 0xBFBFBFBFu;
+}
+
+// 1 -> 8
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 1 && sizeof(U) == 8, U>::type
+    get_result_multiplier()
+{
+    return 0xDFDFDFDFDFDFDFDFull;
+}
+
+// 2 -> 4
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 2 && sizeof(U) == 4, U>::type
+    get_result_multiplier()
+{
+    return 0x7FFF7FFFu;
+}
+
+// 2 -> 8
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 2 && sizeof(U) == 8, U>::type
+    get_result_multiplier()
+{
+    return 0x7FFF7FFF7FFF7FFFull;
+}
+
+// 4 -> 8
+template<class U, class R>
+    constexpr typename std::enable_if<sizeof(R) == 4 && sizeof(U) == 8, U>::type
+    get_result_multiplier()
+{
+    return 0x7FFFFFFF7FFFFFFFull;
+}
+
+} // namespace detail
+
+// contraction
+
 template<class T, class R>
-    typename std::enable_if<std::is_integral<R>::value && (sizeof(R) >= sizeof(T)), T>::type
+    typename std::enable_if<std::is_integral<R>::value && (sizeof(R) > sizeof(T)), T>::type
     get_integral_result( R const & r )
 {
     static_assert( std::is_integral<T>::value, "T must be integral" );
@@ -26,11 +142,15 @@ template<class T, class R>
 
     typedef typename std::make_unsigned<T>::type U;
 
-    return static_cast<T>( static_cast<U>( r ) );
+    constexpr auto m = detail::get_result_multiplier<U, R>();
+
+    return static_cast<T>( static_cast<U>( ( r * m ) >> ( std::numeric_limits<R>::digits - std::numeric_limits<U>::digits ) ) );
 }
 
+// identity or expansion
+
 template<class T, class R>
-    typename std::enable_if<std::is_integral<R>::value && (sizeof(R) < sizeof(T)), T>::type
+    typename std::enable_if<std::is_integral<R>::value && (sizeof(R) <= sizeof(T)), T>::type
     get_integral_result( R const & r )
 {
     static_assert( std::is_integral<T>::value, "T must be integral" );
@@ -40,10 +160,12 @@ template<class T, class R>
 
     typedef typename std::make_unsigned<T>::type U;
 
-    constexpr U m = std::numeric_limits<U>::max() / std::numeric_limits<R>::max();
+    constexpr auto m = detail::get_result_multiplier<U, R>();
 
-    return static_cast<T>( r * m );
+    return static_cast<T>( static_cast<U>( r * m ) );
 }
+
+// array-like R
 
 template<class T, class R>
     typename std::enable_if< !std::is_integral<R>::value, T >::type
