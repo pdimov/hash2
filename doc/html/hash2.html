@@ -834,7 +834,7 @@ pre.rouge {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="overview">Overview</h2>
+<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This library implements an extensible framework for implementing
@@ -893,7 +893,7 @@ and so will all user-defined types that support <code>hash_append</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="hashing_bytes">Hashing Byte Sequences</h2>
+<h2 id="hashing_bytes"><a class="anchor" href="#hashing_bytes"></a>Hashing Byte Sequences</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This library addresses two major use cases: hashing an untyped sequence
@@ -915,7 +915,7 @@ verification of independent implementations.)</p>
 of bytes, then passed to a <em>hash algorithm</em>.)</p>
 </div>
 <div class="sect2">
-<h3 id="hashing_bytes_hash_algorithm_requirements">Hash Algorithm Requirements</h3>
+<h3 id="hashing_bytes_hash_algorithm_requirements"><a class="anchor" href="#hashing_bytes_hash_algorithm_requirements"></a>Hash Algorithm Requirements</h3>
 <div class="paragraph">
 <p>A <em>hash algorithm</em> must have the following structure, and meet the
 following minimum requirements:</p>
@@ -942,7 +942,7 @@ following minimum requirements:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_result_type">result_type</h4>
+<h4 id="hashing_bytes_result_type"><a class="anchor" href="#hashing_bytes_result_type"></a>result_type</h4>
 <div class="paragraph">
 <p>The nested type <code>result_type</code> is the type of the produced hash value. It
 can be an unsigned integer type (that is not <code>bool</code>), typically
@@ -960,7 +960,7 @@ an integer hash value from any valid <code>result_type</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_block_size">block_size</h4>
+<h4 id="hashing_bytes_block_size"><a class="anchor" href="#hashing_bytes_block_size"></a>block_size</h4>
 <div class="paragraph">
 <p>Cryptographic hash functions provide a <code>block_size</code> value, which is their
 block size (e.g. 64 for MD5, 128 for SHA2-512) and is required in order
@@ -971,7 +971,7 @@ to implement the corresponding <a href="https://en.wikipedia.org/wiki/HMAC">HMAC
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_default_constructor">Default Constructor</h4>
+<h4 id="hashing_bytes_default_constructor"><a class="anchor" href="#hashing_bytes_default_constructor"></a>Default Constructor</h4>
 <div class="paragraph">
 <p>All <em>hash algorithms</em> must be default constructible. The default
 constructor initializes the internal state of the hash algorithm to its
@@ -983,7 +983,7 @@ the function <code>MD5_Init</code> of the reference implementation.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_constructor_taking_an_integer_seed">Constructor Taking an Integer Seed</h4>
+<h4 id="hashing_bytes_constructor_taking_an_integer_seed"><a class="anchor" href="#hashing_bytes_constructor_taking_an_integer_seed"></a>Constructor Taking an Integer Seed</h4>
 <div class="paragraph">
 <p>All <em>hash algorithms</em> must be constructible from a value of type
 <code>std::uint64_t</code>, which serves as a seed.</p>
@@ -1002,7 +1002,7 @@ preventing <a href="https://en.wikipedia.org/wiki/Collision_attack#Hash_flooding
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_constructor_taking_a_byte_sequence_seed">Constructor Taking a Byte Sequence Seed</h4>
+<h4 id="hashing_bytes_constructor_taking_a_byte_sequence_seed"><a class="anchor" href="#hashing_bytes_constructor_taking_a_byte_sequence_seed"></a>Constructor Taking a Byte Sequence Seed</h4>
 <div class="paragraph">
 <p>All <em>hash algorithms</em> can be constructed from a seed sequence of
 <code>unsigned char</code> values (this makes all hash algorithms
@@ -1022,7 +1022,7 @@ you should as a general rule prefer an established MAC algorithm, such as
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_copy_constructor_copy_assignment">Copy Constructor, Copy Assignment</h4>
+<h4 id="hashing_bytes_copy_constructor_copy_assignment"><a class="anchor" href="#hashing_bytes_copy_constructor_copy_assignment"></a>Copy Constructor, Copy Assignment</h4>
 <div class="paragraph">
 <p>Hash algorithms are copy constructible and copy assignable, providing the
 usual guarantees for these operations. That is, a copy is equivalent to the
@@ -1030,7 +1030,7 @@ original.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_update">update</h4>
+<h4 id="hashing_bytes_update"><a class="anchor" href="#hashing_bytes_update"></a>update</h4>
 <div class="paragraph">
 <p>The function <code>update</code> is the mechanism by which the input message is provided
 to the hash algorithm.</p>
@@ -1077,7 +1077,7 @@ not matter and does not affect the final hash value.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_result">result</h4>
+<h4 id="hashing_bytes_result"><a class="anchor" href="#hashing_bytes_result"></a>result</h4>
 <div class="paragraph">
 <p>After the entire input message has been provided via calls to <code>update</code>, the
 final hash value can be obtained by calling <code>result</code>.</p>
@@ -1117,7 +1117,7 @@ by the library:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="hashing_bytes_compile_time_hashing">Compile Time Hashing</h3>
+<h3 id="hashing_bytes_compile_time_hashing"><a class="anchor" href="#hashing_bytes_compile_time_hashing"></a>Compile Time Hashing</h3>
 <div class="paragraph">
 <p>Under C&#43;&#43;14, it&#8217;s possible to invoke some hash algorithms at compile time.
 These algorithms provide the following interface:</p>
@@ -1152,9 +1152,9 @@ before C&#43;&#43;26.)</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="hashing_bytes_provided_hash_algorithms">Provided Hash Algorithms</h3>
+<h3 id="hashing_bytes_provided_hash_algorithms"><a class="anchor" href="#hashing_bytes_provided_hash_algorithms"></a>Provided Hash Algorithms</h3>
 <div class="sect3">
-<h4 id="hashing_bytes_fnv_1a">FNV-1a</h4>
+<h4 id="hashing_bytes_fnv_1a"><a class="anchor" href="#hashing_bytes_fnv_1a"></a>FNV-1a</h4>
 <div class="paragraph">
 <p>The <a href="https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function">Fowler-Noll-Vo hash function</a>
 is provided as a representative of the class of hash functions that process
@@ -1168,7 +1168,7 @@ are short.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_xxhash">xxHash</h4>
+<h4 id="hashing_bytes_xxhash"><a class="anchor" href="#hashing_bytes_xxhash"></a>xxHash</h4>
 <div class="paragraph">
 <p><a href="https://xxhash.com/">xxHash</a> is a fast non-cryptographic hashing algorithm by Yann Collet.</p>
 </div>
@@ -1178,7 +1178,7 @@ makes it well suited for quick generation of file or data integrity checksums.</
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_siphash">SipHash</h4>
+<h4 id="hashing_bytes_siphash"><a class="anchor" href="#hashing_bytes_siphash"></a>SipHash</h4>
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/SipHash">SipHash</a> by Jean-Philippe Aumasson and Daniel J. Bernstein
 (<a href="https://eprint.iacr.org/2012/351">paper</a>) has been designed to thwart
@@ -1202,7 +1202,7 @@ and is used in Python, Perl, Ruby, Rust, and other languages.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_md5">MD5</h4>
+<h4 id="hashing_bytes_md5"><a class="anchor" href="#hashing_bytes_md5"></a>MD5</h4>
 <div class="paragraph">
 <p>Designed in 1991 by Ron Rivest, <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> used
 to be the best known and the most widely used <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash function</a>,
@@ -1222,7 +1222,7 @@ Do note that 128 bit digests are no longer considered cryptographic, because att
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_sha_1">SHA-1</h4>
+<h4 id="hashing_bytes_sha_1"><a class="anchor" href="#hashing_bytes_sha_1"></a>SHA-1</h4>
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a> is a cryptographic hash function that was designed by NSA and
 <a href="https://csrc.nist.gov/pubs/fips/180-1/final">published</a> in 1995 by <a href="https://en.wikipedia.org/wiki/NIST">NIST</a>
@@ -1236,7 +1236,7 @@ you require a digest of exactly 160 bits, RIPEMD-160 instead.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_sha_2">SHA-2</h4>
+<h4 id="hashing_bytes_sha_2"><a class="anchor" href="#hashing_bytes_sha_2"></a>SHA-2</h4>
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/SHA-2">SHA-2</a> is a family of cryptographic hash functions, also designed by NSA,
 <a href="https://csrc.nist.gov/pubs/fips/180-2/upd1/final">initially published</a> by NIST in 2002,
@@ -1262,7 +1262,7 @@ they are resistant to length extension attacks as they don&#8217;t expose all of
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_ripemd_160_ripemd_128">RIPEMD-160, RIPEMD-128</h4>
+<h4 id="hashing_bytes_ripemd_160_ripemd_128"><a class="anchor" href="#hashing_bytes_ripemd_160_ripemd_128"></a>RIPEMD-160, RIPEMD-128</h4>
 <div class="paragraph">
 <p>Designed in 1996, <a href="https://en.wikipedia.org/wiki/RIPEMD">RIPEMD-160</a> is a cryptographic hash function that was less well known than MD5 and SHA-1,
 but that has recently become popular because of its use in Bitcoin and other cryptocurrencies.</p>
@@ -1275,7 +1275,7 @@ but that has recently become popular because of its use in Bitcoin and other cry
 </div>
 </div>
 <div class="sect3">
-<h4 id="hashing_bytes_hmac">HMAC</h4>
+<h4 id="hashing_bytes_hmac"><a class="anchor" href="#hashing_bytes_hmac"></a>HMAC</h4>
 <div class="paragraph">
 <p><a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> (Hash-based Message Authentication Code) is an algorithm for deriving
 a <em>message authentication code</em> by using a cryptographic hash function. It&#8217;s described in <a href="https://datatracker.ietf.org/doc/html/rfc2104">RFC 2104</a>.</p>
@@ -1301,7 +1301,7 @@ algorithm <code>H</code>. <code>hmac&lt;H&gt;</code> satisfies the requirements 
 </div>
 </div>
 <div class="sect2">
-<h3 id="hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</h3>
+<h3 id="hashing_bytes_choosing_a_hash_algorithm"><a class="anchor" href="#hashing_bytes_choosing_a_hash_algorithm"></a>Choosing a Hash Algorithm</h3>
 <div class="paragraph">
 <p>&#8230;&#8203;</p>
 </div>
@@ -1309,7 +1309,7 @@ algorithm <code>H</code>. <code>hmac&lt;H&gt;</code> satisfies the requirements 
 </div>
 </div>
 <div class="sect1">
-<h2 id="hashing_objects">Hashing C&#43;&#43; Objects</h2>
+<h2 id="hashing_objects"><a class="anchor" href="#hashing_objects"></a>Hashing C&#43;&#43; Objects</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The traditional approach to hashing C&#43;&#43; objects is to make
@@ -1477,10 +1477,10 @@ but the hash values are endianness dependent.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Usage Examples</h2>
+<h2 id="examples"><a class="anchor" href="#examples"></a>Usage Examples</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="example_md5sum">md5sum</h3>
+<h3 id="example_md5sum"><a class="anchor" href="#example_md5sum"></a>md5sum</h3>
 <div class="paragraph">
 <p>A command line utility that prints the MD5 digests
 of a list of files passed as arguments.</p>
@@ -1560,7 +1560,7 @@ bf7d37451840af4e8873b65763315cbf *twitter.json</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example_hash2sum">hash2sum</h3>
+<h3 id="example_hash2sum"><a class="anchor" href="#example_hash2sum"></a>hash2sum</h3>
 <div class="paragraph">
 <p>A command line utility that prints the digests
 of a list of files, using a specified hash algorithm.</p>
@@ -1721,7 +1721,7 @@ b07e42587d10ec323a25fd8fc3eef2213fb0997beb7950350f4e8a4b *canada.json
 </div>
 </div>
 <div class="sect2">
-<h3 id="example_compile_time_hashing">Compile Time Hashing</h3>
+<h3 id="example_compile_time_hashing"><a class="anchor" href="#example_compile_time_hashing"></a>Compile Time Hashing</h3>
 <div class="paragraph">
 <p>This example demonstrates calculating the MD5 digest of a data array, embedded in the program source, at compile time. It requires C&#43;&#43;14.</p>
 </div>
@@ -1841,10 +1841,10 @@ use <code>hash_append_range</code> instead of calling <code>update</code>, as in
 </div>
 </div>
 <div class="sect1">
-<h2 id="implementation">Implementation Features</h2>
+<h2 id="implementation"><a class="anchor" href="#implementation"></a>Implementation Features</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="implementation_supported_compilers">Supported Compilers</h3>
+<h3 id="implementation_supported_compilers"><a class="anchor" href="#implementation_supported_compilers"></a>Supported Compilers</h3>
 <div class="paragraph">
 <p>The library requires C&#43;&#43;11. The following compilers:</p>
 </div>
@@ -1869,12 +1869,12 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="reference">Reference</h2>
+<h2 id="reference"><a class="anchor" href="#reference"></a>Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="ref_hash_algorithms">Hash Algorithms</h3>
+<h3 id="ref_hash_algorithms"><a class="anchor" href="#ref_hash_algorithms"></a>Hash Algorithms</h3>
 <div class="sect3">
-<h4 id="ref_fnv1a">&lt;boost/hash2/fnv1a.hpp&gt;</h4>
+<h4 id="ref_fnv1a"><a class="anchor" href="#ref_fnv1a"></a>&lt;boost/hash2/fnv1a.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -1891,7 +1891,7 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 <p>This header implements the <a href="https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function">FNV-1a algorithm</a>, in 32 and 64 bit variants.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_fnv1a_fnv1a_32">fnv1a_32</h5>
+<h5 id="ref_fnv1a_fnv1a_32"><a class="anchor" href="#ref_fnv1a_fnv1a_32"></a>fnv1a_32</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">fnv1a_32</span>
@@ -1916,7 +1916,7 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_constructors">Constructors</h6>
+<h6 id="ref_fnv1a_constructors"><a class="anchor" href="#ref_fnv1a_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_32</span><span class="p">();</span></code></pre>
@@ -1975,7 +1975,7 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_update">update</h6>
+<h6 id="ref_fnv1a_update"><a class="anchor" href="#ref_fnv1a_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -1992,7 +1992,7 @@ and <a href="https://ci.appveyor.com/project/pdimov/hash2/">Appveyor</a>.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_result">result</h6>
+<h6 id="ref_fnv1a_result"><a class="anchor" href="#ref_fnv1a_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2019,7 +2019,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_fnv1a_fnv1a_64">fnv1a_64</h5>
+<h5 id="ref_fnv1a_fnv1a_64"><a class="anchor" href="#ref_fnv1a_fnv1a_64"></a>fnv1a_64</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">fnv1a_64</span>
@@ -2044,7 +2044,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_constructors_2">Constructors</h6>
+<h6 id="ref_fnv1a_constructors_2"><a class="anchor" href="#ref_fnv1a_constructors_2"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">fnv1a_64</span><span class="p">();</span></code></pre>
@@ -2103,7 +2103,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_update_2">update</h6>
+<h6 id="ref_fnv1a_update_2"><a class="anchor" href="#ref_fnv1a_update_2"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2120,7 +2120,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_fnv1a_result_2">result</h6>
+<h6 id="ref_fnv1a_result_2"><a class="anchor" href="#ref_fnv1a_result_2"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2148,7 +2148,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_xxhash">&lt;boost/hash2/xxhash.hpp&gt;</h4>
+<h4 id="ref_xxhash"><a class="anchor" href="#ref_xxhash"></a>&lt;boost/hash2/xxhash.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -2165,7 +2165,7 @@ the output.</p>
 <p>This header implements the <a href="https://xxhash.com/">XXH32 and XXH64 algorithms</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_xxhash_xxhash_32">xxhash_32</h5>
+<h5 id="ref_xxhash_xxhash_32"><a class="anchor" href="#ref_xxhash_xxhash_32"></a>xxhash_32</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">xxhash_32</span>
@@ -2186,7 +2186,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_constructors">Constructors</h6>
+<h6 id="ref_xxhash_constructors"><a class="anchor" href="#ref_xxhash_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">xxhash_32</span><span class="p">();</span></code></pre>
@@ -2245,7 +2245,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_update">update</h6>
+<h6 id="ref_xxhash_update"><a class="anchor" href="#ref_xxhash_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2266,7 +2266,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_result">result</h6>
+<h6 id="ref_xxhash_result"><a class="anchor" href="#ref_xxhash_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2291,7 +2291,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_xxhash_xxhash_64">xxhash_64</h5>
+<h5 id="ref_xxhash_xxhash_64"><a class="anchor" href="#ref_xxhash_xxhash_64"></a>xxhash_64</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">xxhash_64</span>
@@ -2312,7 +2312,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_constructors_2">Constructors</h6>
+<h6 id="ref_xxhash_constructors_2"><a class="anchor" href="#ref_xxhash_constructors_2"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">xxhash_64</span><span class="p">();</span></code></pre>
@@ -2371,7 +2371,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_update_2">update</h6>
+<h6 id="ref_xxhash_update_2"><a class="anchor" href="#ref_xxhash_update_2"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2392,7 +2392,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_xxhash_result_2">result</h6>
+<h6 id="ref_xxhash_result_2"><a class="anchor" href="#ref_xxhash_result_2"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2418,7 +2418,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_siphash">&lt;boost/hash2/siphash.hpp&gt;</h4>
+<h4 id="ref_siphash"><a class="anchor" href="#ref_siphash"></a>&lt;boost/hash2/siphash.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -2435,7 +2435,7 @@ the output.</p>
 <p>This header implements the <a href="https://github.com/veorq/SipHash">SipHash and HalfSipHash algorithms</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_siphash_siphash_32">siphash_32</h5>
+<h5 id="ref_siphash_siphash_32"><a class="anchor" href="#ref_siphash_siphash_32"></a>siphash_32</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">siphash_32</span>
@@ -2456,7 +2456,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_constructors">Constructors</h6>
+<h6 id="ref_siphash_constructors"><a class="anchor" href="#ref_siphash_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">siphash_32</span><span class="p">();</span></code></pre>
@@ -2515,7 +2515,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_update">update</h6>
+<h6 id="ref_siphash_update"><a class="anchor" href="#ref_siphash_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2536,7 +2536,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_result">result</h6>
+<h6 id="ref_siphash_result"><a class="anchor" href="#ref_siphash_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2561,7 +2561,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_siphash_siphash_64">siphash_64</h5>
+<h5 id="ref_siphash_siphash_64"><a class="anchor" href="#ref_siphash_siphash_64"></a>siphash_64</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">siphash_64</span>
@@ -2582,7 +2582,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_constructors_2">Constructors</h6>
+<h6 id="ref_siphash_constructors_2"><a class="anchor" href="#ref_siphash_constructors_2"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">siphash_64</span><span class="p">();</span></code></pre>
@@ -2641,7 +2641,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_update_2">update</h6>
+<h6 id="ref_siphash_update_2"><a class="anchor" href="#ref_siphash_update_2"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2662,7 +2662,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_siphash_result_2">result</h6>
+<h6 id="ref_siphash_result_2"><a class="anchor" href="#ref_siphash_result_2"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2688,7 +2688,7 @@ the output.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_hmac">&lt;boost/hash2/hmac.hpp&gt;</h4>
+<h4 id="ref_hmac"><a class="anchor" href="#ref_hmac"></a>&lt;boost/hash2/hmac.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -2704,7 +2704,7 @@ the output.</p>
 <p>This header implements the <a href="https://tools.ietf.org/html/rfc2104">HMAC algorithm</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_hmac_hmac">hmac</h5>
+<h5 id="ref_hmac_hmac"><a class="anchor" href="#ref_hmac_hmac"></a>hmac</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hmac</span>
@@ -2734,7 +2734,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <p>For example, HMAC-SHA2-256 is implemented by <code>hmac&lt;sha2_256&gt;</code>.</p>
 </div>
 <div class="sect5">
-<h6 id="ref_hmac_constructors">Constructors</h6>
+<h6 id="ref_hmac_constructors"><a class="anchor" href="#ref_hmac_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">hmac</span><span class="p">();</span></code></pre>
@@ -2793,7 +2793,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_hmac_update">update</h6>
+<h6 id="ref_hmac_update"><a class="anchor" href="#ref_hmac_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2814,7 +2814,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_hmac_result">result</h6>
+<h6 id="ref_hmac_result"><a class="anchor" href="#ref_hmac_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2840,7 +2840,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_md5">&lt;boost/hash2/md5.hpp&gt;</h4>
+<h4 id="ref_md5"><a class="anchor" href="#ref_md5"></a>&lt;boost/hash2/md5.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
@@ -2861,7 +2861,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <p>This header implements the <a href="https://tools.ietf.org/html/rfc1321">MD5 algorithm</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_md5_md5_128">md5_128</h5>
+<h5 id="ref_md5_md5_128"><a class="anchor" href="#ref_md5_md5_128"></a>md5_128</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">md5_128</span>
@@ -2884,7 +2884,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_md5_constructors">Constructors</h6>
+<h6 id="ref_md5_constructors"><a class="anchor" href="#ref_md5_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">md5_128</span><span class="p">();</span></code></pre>
@@ -2943,7 +2943,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_md5_update">update</h6>
+<h6 id="ref_md5_update"><a class="anchor" href="#ref_md5_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -2964,7 +2964,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_md5_result">result</h6>
+<h6 id="ref_md5_result"><a class="anchor" href="#ref_md5_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -2990,7 +2990,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_sha1">&lt;boost/hash2/sha1.hpp&gt;</h4>
+<h4 id="ref_sha1"><a class="anchor" href="#ref_sha1"></a>&lt;boost/hash2/sha1.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
@@ -3011,7 +3011,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <p>This header implements the <a href="https://tools.ietf.org/html/rfc3174">SHA-1 algorithm</a>.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_sha1_sha1_160">sha1_160</h5>
+<h5 id="ref_sha1_sha1_160"><a class="anchor" href="#ref_sha1_sha1_160"></a>sha1_160</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha1_160</span>
@@ -3034,7 +3034,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha1_constructors">Constructors</h6>
+<h6 id="ref_sha1_constructors"><a class="anchor" href="#ref_sha1_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha1_160</span><span class="p">();</span></code></pre>
@@ -3093,7 +3093,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha1_update">update</h6>
+<h6 id="ref_sha1_update"><a class="anchor" href="#ref_sha1_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -3114,7 +3114,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha1_result">result</h6>
+<h6 id="ref_sha1_result"><a class="anchor" href="#ref_sha1_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -3140,7 +3140,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_sha2">&lt;boost/hash2/sha2.hpp&gt;</h4>
+<h4 id="ref_sha2"><a class="anchor" href="#ref_sha2"></a>&lt;boost/hash2/sha2.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
@@ -3171,7 +3171,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <p>This header implements the <a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">SHA-2</a> family of functions.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_256">sha2_256</h5>
+<h5 id="ref_sha2_sha2_256"><a class="anchor" href="#ref_sha2_sha2_256"></a>sha2_256</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha2_256</span>
@@ -3192,7 +3192,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_constructors">Constructors</h6>
+<h6 id="ref_sha2_constructors"><a class="anchor" href="#ref_sha2_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_256</span><span class="p">();</span></code></pre>
@@ -3251,7 +3251,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_update">update</h6>
+<h6 id="ref_sha2_update"><a class="anchor" href="#ref_sha2_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -3272,7 +3272,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_result">result</h6>
+<h6 id="ref_sha2_result"><a class="anchor" href="#ref_sha2_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -3297,7 +3297,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_224">sha2_224</h5>
+<h5 id="ref_sha2_sha2_224"><a class="anchor" href="#ref_sha2_sha2_224"></a>sha2_224</h5>
 <div class="paragraph">
 <p>The SHA-224 algorithm is identical to the SHA-256 algorithm described above.</p>
 </div>
@@ -3317,7 +3317,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_512">sha2_512</h5>
+<h5 id="ref_sha2_sha2_512"><a class="anchor" href="#ref_sha2_sha2_512"></a>sha2_512</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">sha2_512</span>
@@ -3338,7 +3338,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_constructors_2">Constructors</h6>
+<h6 id="ref_sha2_constructors_2"><a class="anchor" href="#ref_sha2_constructors_2"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">sha2_512</span><span class="p">();</span></code></pre>
@@ -3397,7 +3397,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_update_2">update</h6>
+<h6 id="ref_sha2_update_2"><a class="anchor" href="#ref_sha2_update_2"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -3418,7 +3418,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_sha2_result_2">result</h6>
+<h6 id="ref_sha2_result_2"><a class="anchor" href="#ref_sha2_result_2"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -3443,7 +3443,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_384">sha2_384</h5>
+<h5 id="ref_sha2_sha2_384"><a class="anchor" href="#ref_sha2_sha2_384"></a>sha2_384</h5>
 <div class="paragraph">
 <p>The SHA-384 algorithm is identical to the SHA-512 algorithm described above.</p>
 </div>
@@ -3463,7 +3463,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_512_224">sha2_512_224</h5>
+<h5 id="ref_sha2_sha2_512_224"><a class="anchor" href="#ref_sha2_sha2_512_224"></a>sha2_512_224</h5>
 <div class="paragraph">
 <p>The SHA-512/224 algorithm is identical to the SHA-512 algorithm described above.</p>
 </div>
@@ -3483,7 +3483,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_sha2_sha2_512_256">sha2_512_256</h5>
+<h5 id="ref_sha2_sha2_512_256"><a class="anchor" href="#ref_sha2_sha2_512_256"></a>sha2_512_256</h5>
 <div class="paragraph">
 <p>The SHA-512/256 algorithm is identical to the SHA-512 algorithm described above.</p>
 </div>
@@ -3504,7 +3504,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_ripemd">&lt;boost/hash2/ripemd.hpp&gt;</h4>
+<h4 id="ref_ripemd"><a class="anchor" href="#ref_ripemd"></a>&lt;boost/hash2/ripemd.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hmac.hpp&gt;</span><span class="cp">
@@ -3527,7 +3527,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 <p>This header implements the <a href="https://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/AB-9601.pdf">RIPEMD-160 and RIPEMD-128</a> algorithms.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_ripemd_ripemd_160">ripemd_160</h5>
+<h5 id="ref_ripemd_ripemd_160"><a class="anchor" href="#ref_ripemd_ripemd_160"></a>ripemd_160</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">class</span> <span class="nc">ripemd_160</span>
@@ -3548,7 +3548,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_ripemd_constructors">Constructors</h6>
+<h6 id="ref_ripemd_constructors"><a class="anchor" href="#ref_ripemd_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="nf">ripemd_160</span><span class="p">();</span></code></pre>
@@ -3607,7 +3607,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_ripemd_update">update</h6>
+<h6 id="ref_ripemd_update"><a class="anchor" href="#ref_ripemd_update"></a>update</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="kt">void</span> <span class="nf">update</span><span class="p">(</span> <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">);</span>
@@ -3628,7 +3628,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_ripemd_result">result</h6>
+<h6 id="ref_ripemd_result"><a class="anchor" href="#ref_ripemd_result"></a>result</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">result_type</span> <span class="nf">result</span><span class="p">();</span></code></pre>
@@ -3653,7 +3653,7 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_ripemd_ripemd_128">ripemd_128</h5>
+<h5 id="ref_ripemd_ripemd_128"><a class="anchor" href="#ref_ripemd_ripemd_128"></a>ripemd_128</h5>
 <div class="paragraph">
 <p>The RIPEMD-128 algorithm is identical to the RIPEMD-160 algorithm described above.</p>
 </div>
@@ -3672,9 +3672,9 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ref_utilities_and_traits">Utilities and Traits</h3>
+<h3 id="ref_utilities_and_traits"><a class="anchor" href="#ref_utilities_and_traits"></a>Utilities and Traits</h3>
 <div class="sect3">
-<h4 id="ref_digest">&lt;boost/hash2/digest.hpp&gt;</h4>
+<h4 id="ref_digest"><a class="anchor" href="#ref_digest"></a>&lt;boost/hash2/digest.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -3765,13 +3765,13 @@ and implements the corresponding <em>hash-based message authentication code</em>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_digest_digest">digest</h5>
+<h5 id="ref_digest_digest"><a class="anchor" href="#ref_digest_digest"></a>digest</h5>
 <div class="paragraph">
 <p><code>digest&lt;N&gt;</code> is a <code>constexpr</code>-friendly class template similar to <code>std::array&lt;unsigned char, N&gt;</code>.
 It is used to store the resulting message digest of hash algorithms such as SHA2-256 or RIPEMD-160.</p>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_constructors">Constructors</h6>
+<h6 id="ref_digest_constructors"><a class="anchor" href="#ref_digest_constructors"></a>Constructors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">digest</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span></code></pre>
@@ -3800,7 +3800,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_iteration">Iteration</h6>
+<h6 id="ref_digest_iteration"><a class="anchor" href="#ref_digest_iteration"></a>Iteration</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
@@ -3831,7 +3831,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_accessors">Accessors</h6>
+<h6 id="ref_digest_accessors"><a class="anchor" href="#ref_digest_accessors"></a>Accessors</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
@@ -3862,7 +3862,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_element_access">Element Access</h6>
+<h6 id="ref_digest_element_access"><a class="anchor" href="#ref_digest_element_access"></a>Element Access</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">constexpr</span> <span class="n">reference</span> <span class="k">operator</span><span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="p">);</span>
@@ -3911,7 +3911,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_comparisons">Comparisons</h6>
+<h6 id="ref_digest_comparisons"><a class="anchor" href="#ref_digest_comparisons"></a>Comparisons</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
@@ -3942,7 +3942,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect5">
-<h6 id="ref_digest_formatting">Formatting</h6>
+<h6 id="ref_digest_formatting"><a class="anchor" href="#ref_digest_formatting"></a>Formatting</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span><span class="p">&gt;</span>
@@ -4015,7 +4015,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_endian">&lt;boost/hash2/endian.hpp&gt;</h4>
+<h4 id="ref_endian"><a class="anchor" href="#ref_endian"></a>&lt;boost/hash2/endian.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4028,7 +4028,7 @@ It is used to store the resulting message digest of hash algorithms such as SHA2
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_endian_endian">endian</h5>
+<h5 id="ref_endian_endian"><a class="anchor" href="#ref_endian_endian"></a>endian</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">enum</span> <span class="k">class</span> <span class="nc">endian</span>
@@ -4055,7 +4055,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_flavor">&lt;boost/hash2/flavor.hpp&gt;</h4>
+<h4 id="ref_flavor"><a class="anchor" href="#ref_flavor"></a>&lt;boost/hash2/flavor.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/endian.hpp&gt;</span><span class="cp">
@@ -4071,21 +4071,77 @@ supported.</p>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="ref_flavor_default_flavor">default_flavor</h5>
-
+<div class="paragraph">
+<p>The header <code>boost/hash2/flavor.hpp</code> contains the predefined <em>flavor</em> types.</p>
+</div>
+<div class="paragraph">
+<p>(A <em>flavor</em> is passed as the second argument to <code>hash_append</code> in order to influence its behavior.)</p>
+</div>
+<div class="paragraph">
+<p>Flavor types have two members, a type <code>size_type</code> and a value <code>byte_order</code> of type <code>boost::hash2::endian</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>size_type</code> controls how the argument of <code>hash_append_size</code> is treated (it&#8217;s converted to <code>size_type</code> before hashing.)</p>
+</div>
+<div class="paragraph">
+<p><code>byte_order</code> controls the endianness that is used to hash scalar types.</p>
 </div>
 <div class="sect4">
-<h5 id="ref_flavor_little_endian_flavor">little_endian_flavor</h5>
-
+<h5 id="ref_flavor_default_flavor"><a class="anchor" href="#ref_flavor_default_flavor"></a>default_flavor</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">default_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">native</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>default_flavor</code> requests native, endian-dependent, hashing of scalar types.
+This makes the hash values dependent on the endianness of the current platform, but has the potential of being substantially faster if large arrays of scalar types are being passed to <code>hash_append</code>.</p>
+</div>
+<div class="paragraph">
+<p>There is rarely a need to use <code>default_flavor</code> explicitly, because it&#8217;s default when no flavor is given to <code>hash_append</code>, like so: <code>hash_append( h, {}, v );</code></p>
+</div>
 </div>
 <div class="sect4">
-<h5 id="ref_flavor_big_endian_flavor">big_endian_flavor</h5>
-
+<h5 id="ref_flavor_little_endian_flavor"><a class="anchor" href="#ref_flavor_little_endian_flavor"></a>little_endian_flavor</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">little_endian_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">little</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>little_endian_flavor</code> requests little endian hashing of scalar types.
+This makes the hash values independent of the endianness of the underlying platform.
+However, if the platform is big endian, <code>hash_append</code> will be slower because it will need to convert scalar types to little endian.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_flavor_big_endian_flavor"><a class="anchor" href="#ref_flavor_big_endian_flavor"></a>big_endian_flavor</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">big_endian_flavor</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">byte_order</span> <span class="o">=</span> <span class="n">endian</span><span class="o">::</span><span class="n">big</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>big_endian_flavor</code> requests big endian hashing of scalar types.
+This makes the hash values independent of the endianness of the underlying platform.
+However, if the platform is little endian, which is very likely, <code>hash_append</code> will be slower because it will need to convert scalar types to big endian.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_get_integral_result">&lt;boost/hash2/get_integral_result.hpp&gt;</h4>
+<h4 id="ref_get_integral_result"><a class="anchor" href="#ref_get_integral_result"></a>&lt;boost/hash2/get_integral_result.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4098,7 +4154,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_get_integral_result_get_integral_result">get_integral_result</h5>
+<h5 id="ref_get_integral_result_get_integral_result"><a class="anchor" href="#ref_get_integral_result_get_integral_result"></a>get_integral_result</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="n">T</span> <span class="n">get_integral_result</span><span class="p">(</span> <span class="n">R</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">r</span> <span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></code></pre>
@@ -4140,7 +4196,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_is_trivially_equality_comparable">&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</h4>
+<h4 id="ref_is_trivially_equality_comparable"><a class="anchor" href="#ref_is_trivially_equality_comparable"></a>&lt;boost/hash2/is_trivially_equality_comparable.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4153,7 +4209,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_is_trivially_equality_comparable_is_trivially_equality_comparable">is_trivially_equality_comparable</h5>
+<h5 id="ref_is_trivially_equality_comparable_is_trivially_equality_comparable"><a class="anchor" href="#ref_is_trivially_equality_comparable_is_trivially_equality_comparable"></a>is_trivially_equality_comparable</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_trivially_equality_comparable</span><span class="o">:</span>
@@ -4244,7 +4300,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_is_endian_independent">&lt;boost/hash2/is_endian_independent.hpp&gt;</h4>
+<h4 id="ref_is_endian_independent"><a class="anchor" href="#ref_is_endian_independent"></a>&lt;boost/hash2/is_endian_independent.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4257,7 +4313,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_is_endian_independent_is_endian_independent">is_endian_independent</h5>
+<h5 id="ref_is_endian_independent_is_endian_independent"><a class="anchor" href="#ref_is_endian_independent_is_endian_independent"></a>is_endian_independent</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_endian_independent</span><span class="o">:</span>
@@ -4307,7 +4363,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_is_contiguously_hashable">&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</h4>
+<h4 id="ref_is_contiguously_hashable"><a class="anchor" href="#ref_is_contiguously_hashable"></a>&lt;boost/hash2/is_contiguously_hashable.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/endian.hpp&gt;</span><span class="cp">
@@ -4324,7 +4380,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_is_contiguously_hashable_is_contiguously_hashable">is_contiguously_hashable</h5>
+<h5 id="ref_is_contiguously_hashable_is_contiguously_hashable"><a class="anchor" href="#ref_is_contiguously_hashable_is_contiguously_hashable"></a>is_contiguously_hashable</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">endian</span> <span class="n">E</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">is_contiguously_hashable</span><span class="o">:</span>
@@ -4355,7 +4411,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_has_constant_size">&lt;boost/hash2/has_constant_size.hpp&gt;</h4>
+<h4 id="ref_has_constant_size"><a class="anchor" href="#ref_has_constant_size"></a>&lt;boost/hash2/has_constant_size.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4368,7 +4424,7 @@ supported.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_has_constant_size_has_constant_size">has_constant_size</h5>
+<h5 id="ref_has_constant_size_has_constant_size"><a class="anchor" href="#ref_has_constant_size_has_constant_size"></a>has_constant_size</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">has_constant_size</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;:</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="cm">/*see below*/</span><span class="o">&gt;</span>
@@ -4405,11 +4461,11 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 </div>
 <div class="sect2">
-<h3 id="ref_hashing_cpp_objects">Hashing C&#43;&#43; Objects</h3>
+<h3 id="ref_hashing_cpp_objects"><a class="anchor" href="#ref_hashing_cpp_objects"></a>Hashing C&#43;&#43; Objects</h3>
 <div class="sect3">
-<h4 id="ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</h4>
+<h4 id="ref_hash_append_fwd"><a class="anchor" href="#ref_hash_append_fwd"></a>&lt;boost/hash2/hash_append_fwd.hpp&gt;</h4>
 <div class="sect4">
-<h5 id="ref_hash_append_fwd_synopsis">Synopsis</h5>
+<h5 id="ref_hash_append_fwd_synopsis"><a class="anchor" href="#ref_hash_append_fwd_synopsis"></a>Synopsis</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
@@ -4444,7 +4500,7 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_fwd_example">Example</h5>
+<h5 id="ref_hash_append_fwd_example"><a class="anchor" href="#ref_hash_append_fwd_example"></a>Example</h5>
 <div class="listingblock">
 <div class="title">X.hpp</div>
 <div class="content">
@@ -4494,7 +4550,7 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 </div>
 <div class="sect3">
-<h4 id="ref_hash_append">&lt;boost/hash2/hash_append.hpp&gt;</h4>
+<h4 id="ref_hash_append"><a class="anchor" href="#ref_hash_append"></a>&lt;boost/hash2/hash_append.hpp&gt;</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/flavor.hpp&gt;</span><span class="cp">
@@ -4524,27 +4580,27 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append">hash_append</h5>
+<h5 id="ref_hash_append_hash_append"><a class="anchor" href="#ref_hash_append_hash_append"></a>hash_append</h5>
 
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append_range">hash_append_range</h5>
+<h5 id="ref_hash_append_hash_append_range"><a class="anchor" href="#ref_hash_append_hash_append_range"></a>hash_append_range</h5>
 
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append_size">hash_append_size</h5>
+<h5 id="ref_hash_append_hash_append_size"><a class="anchor" href="#ref_hash_append_hash_append_size"></a>hash_append_size</h5>
 
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append_sized_range">hash_append_sized_range</h5>
+<h5 id="ref_hash_append_hash_append_sized_range"><a class="anchor" href="#ref_hash_append_hash_append_sized_range"></a>hash_append_sized_range</h5>
 
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append_unordered_range">hash_append_unordered_range</h5>
+<h5 id="ref_hash_append_hash_append_unordered_range"><a class="anchor" href="#ref_hash_append_hash_append_unordered_range"></a>hash_append_unordered_range</h5>
 
 </div>
 <div class="sect4">
-<h5 id="ref_hash_append_hash_append_tag">hash_append_tag</h5>
+<h5 id="ref_hash_append_hash_append_tag"><a class="anchor" href="#ref_hash_append_hash_append_tag"></a>hash_append_tag</h5>
 
 </div>
 </div>
@@ -4552,7 +4608,7 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 </div>
 <div class="sect1">
-<h2 id="copyright">Copyright and License</h2>
+<h2 id="copyright"><a class="anchor" href="#copyright"></a>Copyright and License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This documentation is copyright 2020, 2024 Peter Dimov and Christian Mazakas
@@ -4563,7 +4619,7 @@ and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boos
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-13 12:47:41 +0200
+Last updated 2024-11-18 20:08:39 +0200
 </div>
 </div>
 <style>
