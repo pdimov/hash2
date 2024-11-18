@@ -12,6 +12,7 @@ Peter Dimov
 :docinfo: private-footer
 :source-highlighter: rouge
 :source-language: c++
+:sectanchors:
 
 :leveloffset: +1
 
