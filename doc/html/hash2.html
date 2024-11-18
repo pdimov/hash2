@@ -4581,27 +4581,76 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append"><a class="anchor" href="#ref_hash_append_hash_append"></a>hash_append</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Appends the representation of <code>v</code> to the message stored in <code>h</code>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_range"><a class="anchor" href="#ref_hash_append_hash_append_range"></a>hash_append_range</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Appends the representations of the elements of the range <code>[first, last)</code> to the message stored in <code>h</code>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_size"><a class="anchor" href="#ref_hash_append_hash_append_size"></a>hash_append_size</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append_size</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Appends the representation of <code>v</code>, converted to <code>Flavor::size_type</code>, to the message stored in <code>h</code>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_sized_range"><a class="anchor" href="#ref_hash_append_hash_append_sized_range"></a>hash_append_sized_range</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append_sized_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Appends the representations of the elements of the range <code>[first, last)</code>, followed by the size of the range, to the message stored in <code>h</code>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_unordered_range"><a class="anchor" href="#ref_hash_append_hash_append_unordered_range"></a>hash_append_unordered_range</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span> <span class="o">=</span> <span class="n">default_flavor</span><span class="p">,</span> <span class="k">class</span> <span class="nc">It</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">hash_append_unordered_range</span><span class="p">(</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">It</span> <span class="n">first</span><span class="p">,</span> <span class="n">It</span> <span class="n">last</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constructs a value from the representations of the elements of the range <code>[first, last)</code>, in a way such that their order doesn&#8217;t affect the result, then appends that value, followed by the size of the range, to the message stored in <code>h</code>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_tag"><a class="anchor" href="#ref_hash_append_hash_append_tag"></a>hash_append_tag</h5>
-
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">hash_append_tag</span>
+<span class="p">{</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>hash_append_tag</code> is a tag type used as the first argument of a <code>tag_invoke</code> overload to identify the <code>hash_append</code> operation.</p>
+</div>
 </div>
 </div>
 </div>
