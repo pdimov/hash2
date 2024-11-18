@@ -35,3 +35,55 @@ struct hash_append_tag;
 } // namespace boost
 ```
 
+The header `boost/hash2/hash_append_fwd.hpp` declares the functions implemented in `boost/hash2/hash_append.hpp`.
+
+It can be used when code wishes to implement `hash_append` support for a user-defined type without physically depending on the implementation of `hash_append`.
+
+## Example
+
+.X.hpp
+[source]
+----
+#include <boost/hash2/hash_append_fwd.hpp>
+#include <vector>
+
+class X
+{
+private:
+
+    int a = -1;
+    std::vector<int> b{ 1, 2, 3 };
+
+    template<class Hash, class Flavor>
+    friend void tag_invoke(
+        boost::hash2::hash_append_tag const&, Hash& h, Flavor const& f, X const& v )
+    {
+        boost::hash2::hash_append( h, f, v.a );
+        boost::hash2::hash_append( h, f, v.b );
+    }
+
+public:
+
+    X() = default;
+};
+----
+
+.main.cpp
+[source]
+----
+#include "X.hpp"
+#include <boost/hash2/hash_append.hpp>
+#include <boost/hash2/md5.hpp>
+#include <iostream>
+
+int main()
+{
+    X x;
+
+    boost::hash2::md5_128 hash;
+    boost::hash2::hash_append( hash, {}, x );
+
+    std::cout << "MD5 digest of x: " << hash.result() << std::endl;
+}
+----
+
