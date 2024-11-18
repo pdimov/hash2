@@ -53,6 +53,19 @@ constexpr void hash_append_range( Hash& h, Flavor const& f, It first, It last );
 
 Appends the representations of the elements of the range `[first, last)` to the message stored in `h`.
 
+Requires: ::
+  `It` must be an _iterator_ type. `[first, last)` must be a valid _iterator range_.
+
+Effects: ::
+  * If `It` is `T*` and `is_contiguously_hashable<T, Flavor::byte_order>::value` is `true`, calls `h.update( first, (last - first) * sizeof(T) );`.
+  * Otherwise, for each iterator `i` in `[first, last)`, calls `hash_append(h, f, v);`, where `v` is `*i`, implicitly converted to `std::iterator_traits<It>::value_type const&`.
+
+Remarks: ::
++
+If `hash_append_range` is called in a constant expression, the contiguously hashable optimization is only applied for `unsigned char*` and `unsigned char const*`.
++
+`*i` is converted to a reference to the iterator `value_type` to handle the case when its `reference` is a proxy type, for example, when the iterator is `std::vector<bool>::iterator`.
+
 ## hash_append_size
 
 ```
