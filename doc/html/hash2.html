@@ -811,6 +811,7 @@ pre.rouge {
 <li><a href="#ref_hash_append_fwd">&lt;boost/hash2/hash_append_fwd.hpp&gt;</a>
 <ul class="sectlevel4">
 <li><a href="#ref_hash_append_fwd_synopsis">Synopsis</a></li>
+<li><a href="#ref_hash_append_fwd_example">Example</a></li>
 </ul>
 </li>
 <li><a href="#ref_hash_append">&lt;boost/hash2/hash_append.hpp&gt;</a>
@@ -4433,6 +4434,61 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 
 <span class="p">}</span> <span class="c1">// namespace hash2</span>
 <span class="p">}</span> <span class="c1">// namespace boost</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The header <code>boost/hash2/hash_append_fwd.hpp</code> declares the functions implemented in <code>boost/hash2/hash_append.hpp</code>.</p>
+</div>
+<div class="paragraph">
+<p>It can be used when code wishes to implement <code>hash_append</code> support for a user-defined type without physically depending on the implementation of <code>hash_append</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="ref_hash_append_fwd_example">Example</h5>
+<div class="listingblock">
+<div class="title">X.hpp</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hash_append_fwd.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">X</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">&gt;</span>
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">tag_invoke</span><span class="p">(</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_tag</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">a</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="nl">public:</span>
+
+    <span class="n">X</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">main.cpp</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">"X.hpp"</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/md5.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">X</span> <span class="n">x</span><span class="p">;</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">md5_128</span> <span class="n">hash</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">hash</span><span class="p">,</span> <span class="p">{},</span> <span class="n">x</span> <span class="p">);</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"MD5 digest of x: "</span> <span class="o">&lt;&lt;</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
