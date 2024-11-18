@@ -30,9 +30,16 @@ run is_trivially_equality_comparable.cpp ;
 run is_endian_independent.cpp ;
 run has_constant_size.cpp ;
 
-# helpers
+# get_integral_result
 
 run get_integral_result.cpp ;
+run get_integral_result_2.cpp ;
+run get_integral_result_3.cpp ;
+run get_integral_result_4.cpp ;
+run get_integral_result_5.cpp ;
+
+# digest
+
 run digest.cpp ;
 
 # detail
@@ -41,7 +48,6 @@ run detail_read.cpp ;
 run detail_write.cpp ;
 run detail_write_2.cpp ;
 run detail_rot.cpp ;
-run detail_reverse.cpp ;
 run detail_has_tag_invoke.cpp ;
 
 # hash_append

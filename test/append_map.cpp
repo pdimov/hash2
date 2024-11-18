@@ -71,10 +71,10 @@ int main()
     test< fnv1a_32, little_endian_flavor, std::multimap<int, int> >( 1082144933ul );
     test< fnv1a_64, little_endian_flavor, std::multimap<int, int> >( 12051529320333828229ull );
 
-    test< fnv1a_32, little_endian_flavor, std::unordered_map<int, int> >( 1094735330ul );
+    test< fnv1a_32, little_endian_flavor, std::unordered_map<int, int> >( 2445282413ul );
     test< fnv1a_64, little_endian_flavor, std::unordered_map<int, int> >( 2617313294186790738ull );
 
-    test< fnv1a_32, little_endian_flavor, std::unordered_multimap<int, int> >( 1094735330ul );
+    test< fnv1a_32, little_endian_flavor, std::unordered_multimap<int, int> >( 2445282413ul );
     test< fnv1a_64, little_endian_flavor, std::unordered_multimap<int, int> >( 2617313294186790738ull );
 
     return boost::report_errors();
