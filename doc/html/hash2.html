@@ -692,7 +692,20 @@ pre.rouge {
 <li><a href="#hashing_bytes_choosing_a_hash_algorithm">Choosing a Hash Algorithm</a></li>
 </ul>
 </li>
-<li><a href="#hashing_objects">Hashing C&#43;&#43; Objects</a></li>
+<li><a href="#hashing_objects">Hashing C&#43;&#43; Objects</a>
+<ul class="sectlevel2">
+<li><a href="#hashing_objects_contiguously_hashable_types">Contiguously Hashable Types</a></li>
+<li><a href="#hashing_objects_integral_types">Integral Types</a></li>
+<li><a href="#hashing_objects_floating_point_types">Floating Point Types</a></li>
+<li><a href="#hashing_objects_enumeration_types">Enumeration Types</a></li>
+<li><a href="#hashing_objects_pointers">Pointers</a></li>
+<li><a href="#hashing_objects_arrays">Arrays</a></li>
+<li><a href="#hashing_objects_ranges">Ranges</a></li>
+<li><a href="#hashing_objects_tuples">Tuples</a></li>
+<li><a href="#hashing_objects_described_classes">Described Classes</a></li>
+<li><a href="#hashing_objects_user_defined_types">User Defined Types</a></li>
+</ul>
+</li>
 <li><a href="#examples">Usage Examples</a>
 <ul class="sectlevel2">
 <li><a href="#example_md5sum">md5sum</a></li>
@@ -1473,6 +1486,391 @@ Using a fixed width type avoids this.</p>
 <p>The default one is used when <code>hash_append</code> is invoked without passing
 a flavor: <code>hash_append(h, {}, v);</code>. It results in higher performance,
 but the hash values are endianness dependent.</p>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_contiguously_hashable_types"><a class="anchor" href="#hashing_objects_contiguously_hashable_types"></a>Contiguously Hashable Types</h3>
+<div class="paragraph">
+<p>The first thing <code>hash_append(h, f, v)</code> does is to check whether the type is <em>contiguously hashable</em> under the requested byte order, by testing <code>is_contiguously_hashable&lt;T, Flavor::byte_order&gt;::value</code>.
+When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v))</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_integral_types"><a class="anchor" href="#hashing_objects_integral_types"></a>Integral Types</h3>
+<div class="paragraph">
+<p>When <code>T</code> is an integral type (<code>bool</code>, a signed or unsigned integer type like <code>int</code> or <code>unsigned long</code>, or a character type like <code>char8_t</code> or <code>char32_t</code>),
+<code>v</code> converted into its byte representation (an array of <code>unsigned char</code> and a size of <code>sizeof(T)</code>) under the requested byte order.</p>
+</div>
+<div class="paragraph">
+<p><code>hash_append</code> then calls <code>h.update(p, n)</code>, where <code>p</code> is the address of this representation, and <code>n</code> is its size.</p>
+</div>
+<div class="paragraph">
+<p>For example, the value <code>0x01020304</code> of type <code>std::uint32_t</code>, when <code>Flavor::byte_order</code> is <code>endian::little</code>, is converted into the array <code>{ 0x04, 0x03, 0x02, 0x01 }</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">v1</span> <span class="o">=</span> <span class="mh">0x01020304</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">little_endian_flavor</span><span class="p">(),</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">v2</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x01</span> <span class="p">};</span>
+    <span class="n">h2</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">v2</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_floating_point_types"><a class="anchor" href="#hashing_objects_floating_point_types"></a>Floating Point Types</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a floating point type (only <code>float</code> and <code>double</code> are supported at the moment),
+<code>v</code> is converted into an unsigned integer type of the same size using the equivalent of <code>std::bit_cast</code>, then <code>hash_append</code> is invoked with that converted value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">v1</span> <span class="o">=</span> <span class="mf">3.14</span><span class="n">f</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">v2</span> <span class="o">=</span> <span class="mh">0x4048f5c3</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, there&#8217;s a subtlety here. The requirements for a hash function <code>H</code> say that if <code>x == y</code>, then <code>H(x) == H(y)</code>. But <code>+0.0 == -0.0</code>, even though the bit representations of these two values differ.</p>
+</div>
+<div class="paragraph">
+<p>So, in order to meet the requirement, if <code>v</code> is negative zero, it&#8217;s first replaced with a positive zero of the same type, before <code>bit_cast</code> to an integer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="o">+</span><span class="mf">0.0</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">v2</span> <span class="o">=</span> <span class="mh">0x4048f5c3</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="o">-</span><span class="mf">0.0</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_enumeration_types"><a class="anchor" href="#hashing_objects_enumeration_types"></a>Enumeration Types</h3>
+<div class="paragraph">
+<p>When <code>T</code> is an enumeration type, <code>v</code> is converted to the underlying type of <code>T</code>, then the converted value is passed to <code>hash_append</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">enum</span> <span class="n">E</span><span class="o">:</span> <span class="kt">int</span>
+<span class="p">{</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="mi">123</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">v2</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_pointers"><a class="anchor" href="#hashing_objects_pointers"></a>Pointers</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a pointer type, it&#8217;s converted to <code>std::uintptr_t</code> using <code>reinterpret_cast</code>, and the converted value is passed to <code>hash_append</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="n">x1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="o">&amp;</span><span class="n">x1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uintptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x1</span><span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_arrays"><a class="anchor" href="#hashing_objects_arrays"></a>Arrays</h3>
+<div class="paragraph">
+<p>When <code>T</code> is an array type <code>U[N]</code>, the elements of <code>v</code> are passed to <code>hash_append</code> in sequence.</p>
+</div>
+<div class="paragraph">
+<p>This is accomplished by calling <code>hash_append_range(h, f, v + 0, v + N)</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">v1</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">};</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v1</span> <span class="o">+</span> <span class="mi">4</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h3</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_ranges"><a class="anchor" href="#hashing_objects_ranges"></a>Ranges</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a <em>range</em> (<code>boost::container_hash::is_range&lt;T&gt;::value</code> is <code>true</code>), its elements are passed to <code>hash_append</code> as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When <code>T</code> is an <em>unordered range</em> (<code>boost::container_hash::is_unordered_range&lt;T&gt;::value</code> is <code>true</code>), <code>hash_append</code> invokes <code>hash_append_unordered_range(h, f, v.begin(), v.end())</code>.
+<code>hash_append_unordered_range</code> derives a hash value from the range elements in such a way so that their order doesn&#8217;t affect the hash value.</p>
+</li>
+<li>
+<p>When <code>T</code> is a <em>contiguous range</em> (<code>boost::container_hash::is_contiguous_range&lt;T&gt;::valie</code> is <code>true</code>), <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.data(), v.data() + v.size())</code>,
+then, if <code>is_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, v.size())</code>.</p>
+</li>
+<li>
+<p>Otherwise, <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.begin(), v.end())</code>,
+then, if <code>is_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, m)</code>, where <code>m</code> is <code>std::distance(v.begin(), v.end())</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As a special case, in order to meet the requirement that a call to <code>hash_append</code> must always result in at least one call to <code>Hash::update</code>, for ranges of constant size 0, <code>hash_append(h, f, '\x00')</code> is called.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">};</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">};</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h3</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h4</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">v1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h4</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_tuples"><a class="anchor" href="#hashing_objects_tuples"></a>Tuples</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a tuple (<code>boost::container_hash::is_tuple_like&lt;T&gt;::value</code> is <code>true</code>), its elements as obtained by <code>get&lt;I&gt;(v)</code> for <code>I</code> in <code>[0, std::tuple_size&lt;T&gt;::value)</code> are passed to <code>hash_append</code>, in sequence.</p>
+</div>
+<div class="paragraph">
+<p>As a special case, in order to meet the requirement that a call to <code>hash_append</code> must always result in at least one call to <code>Hash::update</code>, for tuples of size 0, <code>hash_append(h, f, '\x00')</code> is called.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">};</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_described_classes"><a class="anchor" href="#hashing_objects_described_classes"></a>Described Classes</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a <em>described class</em> (<code>boost::container_hash::is_described_class&lt;T&gt;::value</code> is <code>true</code>), Boost.Describe primitives are used to enumerate its bases and members, and then,
+for each base class subobject <code>b</code> of <code>v</code>, <code>hash_append(h, f, b)</code> is called, then for each member subobject <code>m</code> of <code>v</code>, <code>hash_append(h, f, m)</code> is called.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">struct</span> <span class="nc">X</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BOOST_DESCRIBE_STRUCT</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+<span class="k">struct</span> <span class="nc">Y</span><span class="o">:</span> <span class="k">public</span> <span class="n">X</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BOOST_DESCRIBE_STRUCT</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h1</span><span class="p">;</span>
+    <span class="n">X</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span> <span class="mi">1</span> <span class="p">},</span> <span class="mi">2</span> <span class="p">};</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="p">);</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">a</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">b</span> <span class="p">);</span>
+
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As a special case, in order to meet the requirement that a call to <code>hash_append</code> must always result in at least one call to <code>Hash::update</code>, for classes without any bases or members, <code>hash_append(h, f, '\x00')</code> is called.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashing_objects_user_defined_types"><a class="anchor" href="#hashing_objects_user_defined_types"></a>User Defined Types</h3>
+<div class="paragraph">
+<p>When <code>T</code> is a user defined type that does not fall into one of the above categories, it needs to provide its own hashing support, by defining an appropriate <code>tag_invoke</code> overload.</p>
+</div>
+<div class="paragraph">
+<p>This <code>tag_invoke</code> overload needs to have the following form:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">tag_invoke</span><span class="p">(</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_tag</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>X</code> is the user-defined type.</p>
+</div>
+<div class="paragraph">
+<p>It can be defined as a separate free function in the namespace of <code>X</code>, but the recommended approach is to define it as an inline <code>friend</code> in the definition of <code>X</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hash_append_fwd.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">X</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+
+    <span class="c1">// not part of the salient state</span>
+    <span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">c</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+    <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x1</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x2</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x1</span><span class="p">.</span><span class="n">a</span> <span class="o">==</span> <span class="n">x2</span><span class="p">.</span><span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">x1</span><span class="p">.</span><span class="n">b</span> <span class="o">==</span> <span class="n">x2</span><span class="p">.</span><span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">&gt;</span>
+    <span class="k">friend</span> <span class="kt">void</span> <span class="n">tag_invoke</span><span class="p">(</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_tag</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span>
+        <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">a</span><span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">b</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This overload needs to meet the three requirements for a hash function. In practice, this means that the definitions of equality (<code>operator==</code>) and hashing (<code>tag_invoke</code>) must agree on what members need to be included.</p>
+</div>
+<div class="paragraph">
+<p>In the example above, the member <code>c</code> is not part of the object state, so it&#8217;s neither compared in <code>operator==</code>, nor included in the object <em>message</em> in <code>tag_invoke</code>.</p>
+</div>
+<div class="paragraph">
+<p>The particular implementation of <code>tag_invoke</code> is type-specific. In general, it needs to include all salient parts of the object&#8217;s value in the resultant <em>message</em>, but the exact way to do so is type-dependent.</p>
+</div>
+<div class="paragraph">
+<p>As another example, here&#8217;s how one might implement <code>tag_invoke</code> for an "inline string" type (a string that stores its characters, up to some maximum count, in the type itself):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hash_append_fwd.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">Str</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="n">size_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">data_</span><span class="p">[</span> <span class="n">N</span> <span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="nl">public:</span>
+
+    <span class="k">friend</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x1</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x2</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x1</span><span class="p">.</span><span class="n">size_</span> <span class="o">==</span> <span class="n">x2</span><span class="p">.</span><span class="n">size_</span> <span class="o">&amp;&amp;</span> <span class="n">std</span><span class="o">::</span><span class="n">equal</span><span class="p">(</span> <span class="n">x1</span><span class="p">.</span><span class="n">data_</span><span class="p">,</span> <span class="n">x1</span><span class="p">.</span><span class="n">data_</span> <span class="o">+</span> <span class="n">x1</span><span class="p">.</span><span class="n">size_</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="n">data_</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Flavor</span><span class="p">&gt;</span>
+    <span class="k">friend</span> <span class="k">constexpr</span> <span class="kt">void</span> <span class="n">tag_invoke</span><span class="p">(</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_tag</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">,</span>
+        <span class="n">Hash</span><span class="o">&amp;</span> <span class="n">h</span><span class="p">,</span> <span class="n">Flavor</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">data_</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">data_</span> <span class="o">+</span> <span class="n">v</span><span class="p">.</span><span class="n">size_</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">size_</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This example is illustrative; in practice, the above type will likely provide <code>begin()</code>, <code>end()</code>, <code>data()</code>, and <code>size()</code> member functions, which will make it a <em>contiguous range</em> and the built-in support will do the right thing.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -4603,10 +5001,10 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 <p>If <code>std::is_integral&lt;T&gt;::value</code> is <code>true</code>, obtains a byte representation of <code>v</code> in the byte order requested by <code>Flavor::byte_order</code>, then calls <code>h.update(p, n)</code> where <code>p</code> is the address of that representation and <code>n</code> is <code>sizeof(v)</code>;</p>
 </li>
 <li>
-<p>If <code>std::is_pointer&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, reinterpret_cast&lt;std::uintptr_t&gt;(v))</code>;</p>
+<p>If <code>std::is_floating_point&lt;T&gt;::value</code> is true, first replaces <code>v</code> with positive zero if it&#8217;s negative zero, then calls <code>hash_append(h, f, std::bit_cast&lt;U&gt;(v))</code>, where <code>U</code> is an unsigned integer type with the same size as <code>T</code>;</p>
 </li>
 <li>
-<p>If <code>std::is_floating_point&lt;T&gt;::value</code> is true, first replaces <code>v</code> with positive zero if it&#8217;s negative zero, then calls <code>hash_append(h, f, std::bit_cast&lt;U&gt;(v))</code>, where <code>U</code> is an unsigned integer type with the same size as <code>T</code>;</p>
+<p>If <code>std::is_pointer&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, reinterpret_cast&lt;std::uintptr_t&gt;(v))</code>;</p>
 </li>
 <li>
 <p>If <code>T</code> is <code>std::nullptr_t</code>, calls <code>hash_append(h, f, static_cast&lt;void*&gt;(v))</code>;</p>
@@ -4819,7 +5217,7 @@ and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boos
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-18 21:24:22 +0200
+Last updated 2024-11-19 07:19:28 +0200
 </div>
 </div>
 <style>
