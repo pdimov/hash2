@@ -320,11 +320,17 @@ template<class Hash, class Flavor, class T>
 
 // tuple-likes
 
-template<class Hash, class Flavor, class T, std::size_t... J> BOOST_CXX14_CONSTEXPR void hash_append_tuple( Hash& h, Flavor const& f, T const& v, boost::mp11::integer_sequence<std::size_t, J...> )
+template<class Hash, class Flavor, class T, std::size_t... J> BOOST_CXX14_CONSTEXPR void hash_append_tuple( Hash& h, Flavor const& f, T const& v, mp11::integer_sequence<std::size_t, J...> )
 {
     using std::get;
-    int a[] = { 0, ((void)hash2::hash_append( h, f, get<J>(v) ), 0)... };
+    int a[] = { ((void)hash2::hash_append( h, f, get<J>(v) ), 0)... };
     (void)a;
+}
+
+template<class Hash, class Flavor, class T> BOOST_CXX14_CONSTEXPR void hash_append_tuple( Hash& h, Flavor const& f, T const& /*v*/, mp11::integer_sequence<std::size_t> )
+{
+    // A hash_append call must always result in a call to Hash::update
+    hash2::hash_append( h, f, '\x00' );
 }
 
 template<class Hash, class Flavor, class T>
@@ -332,8 +338,8 @@ template<class Hash, class Flavor, class T>
     typename std::enable_if< !container_hash::is_range<T>::value && container_hash::is_tuple_like<T>::value, void >::type
     do_hash_append( Hash& h, Flavor const& f, T const& v )
 {
-    typedef boost::mp11::make_index_sequence<std::tuple_size<T>::value> seq;
-    detail::hash_append_tuple( h, f, v, seq() );
+    using Seq = mp11::make_index_sequence<std::tuple_size<T>::value>;
+    detail::hash_append_tuple( h, f, v, Seq() );
 }
 
 // described classes
