@@ -4615,7 +4615,7 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 <p>If <code>T</code> is an array type <code>U[N]</code>, calls <code>hash_append_range(h, f, v + 0, v + N)</code>;</p>
 </li>
 <li>
-<p>If <code>tag_invoke(hash_append_tag(), h, f, v)</code> is a valid expression, calls <code>tag_invoke(hash_append_tag(), h, f, v)</code>;</p>
+<p>If a suitable overload of <code>tag_invoke</code> exists for <code>T</code>, calls (unqualified) <code>tag_invoke(hash_append_tag(), h, f, v)</code>;</p>
 </li>
 <li>
 <p>If <code>std::is_enum&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, w)</code>, where <code>w</code> is <code>v</code> converted to the underlying type of <code>T</code>;</p>
