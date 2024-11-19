@@ -65,6 +65,18 @@ template<class Hash, class Flavor> BOOST_CXX14_CONSTEXPR void hash_append_range_
     h.update( first, last - first );
 }
 
+#if defined(BOOST_NO_CXX14_CONSTEXPR)
+
+template<class Hash, class Flavor, class T>
+    typename std::enable_if<
+        is_contiguously_hashable<T, Flavor::byte_order>::value, void >::type
+    hash_append_range_( Hash& h, Flavor const& /*f*/, T* first, T* last )
+{
+    h.update( first, (last - first) * sizeof(T) );
+}
+
+#else
+
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
     typename std::enable_if<
@@ -83,6 +95,8 @@ template<class Hash, class Flavor, class T>
         }
     }
 }
+
+#endif
 
 } // namespace detail
 
