@@ -51,7 +51,7 @@ Effects: ::
 * If `std::is_floating_point<T>::value` is true, first replaces `v` with positive zero if it's negative zero, then calls `hash_append(h, f, std::bit_cast<U>(v))`, where `U` is an unsigned integer type with the same size as `T`;
 * If `T` is `std::nullptr_t`, calls `hash_append(h, f, static_cast<void*>(v))`;
 * If `T` is an array type `U[N]`, calls `hash_append_range(h, f, v + 0, v + N)`;
-* If `tag_invoke(hash_append_tag(), h, f, v)` is a valid expression, calls `tag_invoke(hash_append_tag(), h, f, v)`;
+* If a suitable overload of `tag_invoke` exists for `T`, calls (unqualified) `tag_invoke(hash_append_tag(), h, f, v)`;
 * If `std::is_enum<T>::value` is `true`, calls `hash_append(h, f, w)`, where `w` is `v` converted to the underlying type of `T`;
 * If `boost::container_hash::is_unordered_range<T>::value` is `true`, calls `hash_append_unordered_range(h, f, v.begin(), v.end())`;
 * If `boost::container_hash::is_contiguous_range<T>::value` is `true` and
