@@ -115,3 +115,322 @@ The default one is used when `hash_append` is invoked without passing
 a flavor: `hash_append(h, {}, v);`. It results in higher performance,
 but the hash values are endianness dependent.
 
+## Contiguously Hashable Types
+
+The first thing `hash_append(h, f, v)` does is to check whether the type is _contiguously hashable_ under the requested byte order, by testing `is_contiguously_hashable<T, Flavor::byte_order>::value`.
+When that's `true`, it invokes `h.update(&v, sizeof(v))`.
+
+## Integral Types
+
+When `T` is an integral type (`bool`, a signed or unsigned integer type like `int` or `unsigned long`, or a character type like `char8_t` or `char32_t`),
+`v` converted into its byte representation (an array of `unsigned char` and a size of `sizeof(T)`) under the requested byte order.
+
+`hash_append` then calls `h.update(p, n)`, where `p` is the address of this representation, and `n` is its size.
+
+For example, the value `0x01020304` of type `std::uint32_t`, when `Flavor::byte_order` is `endian::little`, is converted into the array `{ 0x04, 0x03, 0x02, 0x01 }`.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    std::uint32_t v1 = 0x01020304;
+    boost::hash2::hash_append( h1, boost::hash2::little_endian_flavor(), v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    unsigned char v2[] = { 0x04, 0x03, 0x02, 0x01 };
+    h2.update( v2, sizeof(v2) );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+## Floating Point Types
+
+When `T` is a floating point type (only `float` and `double` are supported at the moment),
+`v` is converted into an unsigned integer type of the same size using the equivalent of `std::bit_cast`, then `hash_append` is invoked with that converted value.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    float v1 = 3.14f;
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    std::uint32_t v2 = 0x4048f5c3;
+    boost::hash2::hash_append( h2, {}, v2 );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+However, there's a subtlety here. The requirements for a hash function `H` say that if `x == y`, then `H(x) == H(y)`. But `+0.0 == -0.0`, even though the bit representations of these two values differ.
+
+So, in order to meet the requirement, if `v` is negative zero, it's first replaced with a positive zero of the same type, before `bit_cast` to an integer.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    boost::hash2::hash_append( h1, {}, +0.0 );
+
+    boost::hash2::fnv1a_32 h2;
+    std::uint32_t v2 = 0x4048f5c3;
+    boost::hash2::hash_append( h2, {}, -0.0 );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+## Enumeration Types
+
+When `T` is an enumeration type, `v` is converted to the underlying type of `T`, then the converted value is passed to `hash_append`.
+
+```
+enum E: int
+{
+    v1 = 123
+};
+
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    int v2 = 123;
+    boost::hash2::hash_append( h2, {}, v2 );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+## Pointers
+
+When `T` is a pointer type, it's converted to `std::uintptr_t` using `reinterpret_cast`, and the converted value is passed to `hash_append`.
+
+```
+int x1 = 0;
+
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    boost::hash2::hash_append( h1, {}, &x1 );
+
+    boost::hash2::fnv1a_32 h2;
+    boost::hash2::hash_append( h2, {}, reinterpret_cast<std::uintptr_t>(&x1) );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+## Arrays
+
+When `T` is an array type `U[N]`, the elements of `v` are passed to `hash_append` in sequence.
+
+This is accomplished by calling `hash_append_range(h, f, v + 0, v + N)`.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    int v1[4] = { 1, 2, 3, 4 };
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    boost::hash2::hash_append_range( h2, {}, v1 + 0, v1 + 4 );
+
+    assert( h1.result() == h2.result();
+
+    boost::hash2::fnv1a_32 h3;
+    boost::hash2::hash_append( h3, {}, v1[0] );
+    boost::hash2::hash_append( h3, {}, v1[1] );
+    boost::hash2::hash_append( h3, {}, v1[2] );
+    boost::hash2::hash_append( h3, {}, v1[3] );
+
+    assert( h1.result() == h3.result();
+}
+```
+
+## Ranges
+
+When `T` is a _range_ (`boost::container_hash::is_range<T>::value` is `true`), its elements are passed to `hash_append` as follows:
+
+* When `T` is an _unordered range_ (`boost::container_hash::is_unordered_range<T>::value` is `true`), `hash_append` invokes `hash_append_unordered_range(h, f, v.begin(), v.end())`.
+  `hash_append_unordered_range` derives a hash value from the range elements in such a way so that their order doesn't affect the hash value.
+* When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::valie` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
+  then, if `is_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, v.size())`.
+* Otherwise, `hash_append` first invokes `hash_append_range(h, f, v.begin(), v.end())`,
+  then, if `is_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, m)`, where `m` is `std::distance(v.begin(), v.end())`.
+
+As a special case, in order to meet the requirement that a call to `hash_append` must always result in at least one call to `Hash::update`, for ranges of constant size 0, `hash_append(h, f, '\x00')` is called.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    std::vector<int> v1 = { 1, 2, 3, 4 };
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    std::list<int> v2 = { 1, 2, 3, 4 };
+    boost::hash2::hash_append( h2, {}, v2 );
+
+    assert( h1.result() == h2.result();
+
+    boost::hash2::fnv1a_32 h3;
+    boost::hash2::hash_append_range( h3, {}, v1.data(), v1.data() + v1.size() );
+    boost::hash2::hash_append_size( h3, {}, v1.size() );
+
+    assert( h1.result() == h3.result();
+
+    boost::hash2::fnv1a_32 h4;
+    boost::hash2::hash_append_range( h4, {}, v1.begin(), v1.end() );
+    boost::hash2::hash_append_size( h4, {}, std::distance(v1.begin(), v1.end()) );
+
+    assert( h2.result() == h4.result();
+}
+```
+
+## Tuples
+
+When `T` is a tuple (`boost::container_hash::is_tuple_like<T>::value` is `true`), its elements as obtained by `get<I>(v)` for `I` in `[0, std::tuple_size<T>::value)` are passed to `hash_append`, in sequence.
+
+As a special case, in order to meet the requirement that a call to `hash_append` must always result in at least one call to `Hash::update`, for tuples of size 0, `hash_append(h, f, '\x00')` is called.
+
+```
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    std::tuple<int, int, int> v1 = { 1, 2, 3 };
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    boost::hash2::hash_append( h2, {}, get<0>(v1) );
+    boost::hash2::hash_append( h2, {}, get<1>(v1) );
+    boost::hash2::hash_append( h2, {}, get<2>(v1) );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+## Described Classes
+
+When `T` is a _described class_ (`boost::container_hash::is_described_class<T>::value` is `true`), Boost.Describe primitives are used to enumerate its bases and members, and then,
+for each base class subobject `b` of `v`, `hash_append(h, f, b)` is called, then for each member subobject `m` of `v`, `hash_append(h, f, m)` is called.
+
+```
+struct X
+{
+    int a;
+};
+
+BOOST_DESCRIBE_STRUCT(X, (), (a))
+
+struct Y: public X
+{
+    int b;
+};
+
+BOOST_DESCRIBE_STRUCT(Y, (X), (b))
+
+int main()
+{
+    boost::hash2::fnv1a_32 h1;
+    X v1 = { { 1 }, 2 };
+    boost::hash2::hash_append( h1, {}, v1 );
+
+    boost::hash2::fnv1a_32 h2;
+    boost::hash2::hash_append( h2, {}, v1.a );
+    boost::hash2::hash_append( h2, {}, v1.b );
+
+    assert( h1.result() == h2.result();
+}
+```
+
+As a special case, in order to meet the requirement that a call to `hash_append` must always result in at least one call to `Hash::update`, for classes without any bases or members, `hash_append(h, f, '\x00')` is called.
+
+## User Defined Types
+
+When `T` is a user defined type that does not fall into one of the above categories, it needs to provide its own hashing support, by defining an appropriate `tag_invoke` overload.
+
+This `tag_invoke` overload needs to have the following form:
+
+```
+template<class Hash, class Flavor>
+void tag_invoke( boost::hash2::hash_append_tag const&, Hash& h, Flavor const& f, X const& v );
+```
+
+where `X` is the user-defined type.
+
+It can be defined as a separate free function in the namespace of `X`, but the recommended approach is to define it as an inline `friend` in the definition of `X`:
+
+```
+#include <boost/hash2/hash_append_fwd.hpp>
+
+class X
+{
+private:
+
+    std::string a;
+    int b;
+
+    // not part of the salient state
+    void const* c;
+
+public:
+
+    friend bool operator==( X const& x1, X const& x2 )
+    {
+        return x1.a == x2.a && x1.b == x2.b;
+    }
+
+    template<class Hash, class Flavor>
+    friend void tag_invoke( boost::hash2::hash_append_tag const&,
+        Hash& h, Flavor const& f, X const& v )
+    {
+        boost::hash2::hash_append(h, f, v.a);
+        boost::hash2::hash_append(h, f, v.b);
+    }
+};
+```
+
+This overload needs to meet the three requirements for a hash function. In practice, this means that the definitions of equality (`operator==`) and hashing (`tag_invoke`) must agree on what members need to be included.
+
+In the example above, the member `c` is not part of the object state, so it's neither compared in `operator==`, nor included in the object _message_ in `tag_invoke`.
+
+The particular implementation of `tag_invoke` is type-specific. In general, it needs to include all salient parts of the object's value in the resultant _message_, but the exact way to do so is type-dependent.
+
+As another example, here's how one might implement `tag_invoke` for an "inline string" type (a string that stores its characters, up to some maximum count, in the type itself):
+
+```
+#include <boost/hash2/hash_append_fwd.hpp>
+
+class Str
+{
+private:
+
+    static constexpr N = 32;
+
+    std::uint8_t size_ = 0;
+    char data_[ N ] = {};
+
+public:
+
+    friend constexpr bool operator==( X const& x1, X const& x2 )
+    {
+        return x1.size_ == x2.size_ && std::equal( x1.data_, x1.data_ + x1.size_, x2.data_ );
+    }
+
+    template<class Hash, class Flavor>
+    friend constexpr void tag_invoke( boost::hash2::hash_append_tag const&,
+        Hash& h, Flavor const& f, X const& v )
+    {
+        boost::hash2::hash_append_range( h, f, v.data_, v.data_ + v.size_ );
+        boost::hash2::hash_append_size( h, f, v.size_ );
+    }
+};
+```
+
+NOTE: This example is illustrative; in practice, the above type will likely provide `begin()`, `end()`, `data()`, and `size()` member functions, which will make it a _contiguous range_ and the built-in support will do the right thing.
+
