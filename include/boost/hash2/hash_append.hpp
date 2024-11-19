@@ -164,6 +164,13 @@ template<class Hash, class Flavor = default_flavor, class It> BOOST_CXX14_CONSTE
 
 // do_hash_append
 
+struct hash_append_tag
+{
+};
+
+namespace detail
+{
+
 // integral types
 
 template<class Hash, class Flavor, class T>
@@ -313,17 +320,12 @@ template<class Hash, class Flavor, class T>
 
 // tuple-likes
 
-namespace detail
-{
-
 template<class Hash, class Flavor, class T, std::size_t... J> BOOST_CXX14_CONSTEXPR void hash_append_tuple( Hash& h, Flavor const& f, T const& v, boost::mp11::integer_sequence<std::size_t, J...> )
 {
     using std::get;
     int a[] = { 0, ((void)hash2::hash_append( h, f, get<J>(v) ), 0)... };
     (void)a;
 }
-
-} // namespace detail
 
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
@@ -387,10 +389,6 @@ template<class Hash, class Flavor, class T>
 
 // classes with tag_invoke
 
-struct hash_append_tag
-{
-};
-
 template<class Hash, class Flavor, class T>
     BOOST_CXX14_CONSTEXPR
     typename std::enable_if< detail::has_tag_invoke<T>::value, void >::type
@@ -398,6 +396,8 @@ template<class Hash, class Flavor, class T>
 {
     tag_invoke( hash_append_tag(), h, f, v );
 }
+
+} // namespace detail
 
 // hash_append
 
@@ -410,7 +410,7 @@ BOOST_CXX14_CONSTEXPR void hash_append( Hash& h, Flavor const& f, T const& v )
     }
     else
     {
-        do_hash_append( h, f, v );
+        detail::do_hash_append( h, f, v );
     }
 }
 
