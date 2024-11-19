@@ -47,8 +47,8 @@ Appends the representation of `v` to the message stored in `h`.
 Effects: ::
 * If `is_contiguously_hashable<T, Flavor::byte_order>::value` is `true`, calls `h.update(&v, sizeof(v))`;
 * If `std::is_integral<T>::value` is `true`, obtains a byte representation of `v` in the byte order requested by `Flavor::byte_order`, then calls `h.update(p, n)` where `p` is the address of that representation and `n` is `sizeof(v)`;
-* If `std::is_pointer<T>::value` is `true`, calls `hash_append(h, f, reinterpret_cast<std::uintptr_t>(v))`;
 * If `std::is_floating_point<T>::value` is true, first replaces `v` with positive zero if it's negative zero, then calls `hash_append(h, f, std::bit_cast<U>(v))`, where `U` is an unsigned integer type with the same size as `T`;
+* If `std::is_pointer<T>::value` is `true`, calls `hash_append(h, f, reinterpret_cast<std::uintptr_t>(v))`;
 * If `T` is `std::nullptr_t`, calls `hash_append(h, f, static_cast<void*>(v))`;
 * If `T` is an array type `U[N]`, calls `hash_append_range(h, f, v + 0, v + N)`;
 * If a suitable overload of `tag_invoke` exists for `T`, calls (unqualified) `tag_invoke(hash_append_tag(), h, f, v)`;
