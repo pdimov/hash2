@@ -4590,6 +4590,84 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 <div class="paragraph">
 <p>Appends the representation of <code>v</code> to the message stored in <code>h</code>.</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>If <code>is_contiguously_hashable&lt;T, Flavor::byte_order&gt;::value</code> is <code>true</code>, calls <code>h.update(&amp;v, sizeof(v))</code>;</p>
+</li>
+<li>
+<p>If <code>std::is_integral&lt;T&gt;::value</code> is <code>true</code>, obtains a byte representation of <code>v</code> in the byte order requested by <code>Flavor::byte_order</code>, then calls <code>h.update(p, n)</code> where <code>p</code> is the address of that representation and <code>n</code> is <code>sizeof(v)</code>;</p>
+</li>
+<li>
+<p>If <code>std::is_pointer&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, reinterpret_cast&lt;std::uintptr_t&gt;(v))</code>;</p>
+</li>
+<li>
+<p>If <code>std::is_floating_point&lt;T&gt;::value</code> is true, first replaces <code>v</code> with positive zero if it&#8217;s negative zero, then calls <code>hash_append(h, f, std::bit_cast&lt;U&gt;(v))</code>, where <code>U</code> is an unsigned integer type with the same size as <code>T</code>;</p>
+</li>
+<li>
+<p>If <code>T</code> is <code>std::nullptr_t</code>, calls <code>hash_append(h, f, static_cast&lt;void*&gt;(v))</code>;</p>
+</li>
+<li>
+<p>If <code>T</code> is an array type <code>U[N]</code>, calls <code>hash_append_range(h, f, v + 0, v + N)</code>;</p>
+</li>
+<li>
+<p>If <code>tag_invoke(hash_append_tag(), h, f, v)</code> is a valid expression, calls <code>tag_invoke(hash_append_tag(), h, f, v)</code>;</p>
+</li>
+<li>
+<p>If <code>std::is_enum&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, w)</code>, where <code>w</code> is <code>v</code> converted to the underlying type of <code>T</code>;</p>
+</li>
+<li>
+<p>If <code>boost::container_hash::is_unordered_range&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append_unordered_range(h, f, v.begin(), v.end())</code>;</p>
+</li>
+<li>
+<p>If <code>boost::container_hash::is_contiguous_range&lt;T&gt;::value</code> is <code>true</code> and</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>has_constant_size&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append_range(h, f, v.data(), v.data() + v.size())</code>;</p>
+</li>
+<li>
+<p><code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, calls <code>hash_append_sized_range(h, f, v.data(), v.data() + v.size())</code>;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>If <code>boost::container_hash::is_range&lt;T&gt;::value</code> is <code>true</code> and</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>has_constant_size&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append_range(h, f, v.begin(), v.end())</code>;</p>
+</li>
+<li>
+<p><code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, calls <code>hash_append_sized_range(h, f, v.begin(), v.end())</code>;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>If <code>boost::container_hash::is_tuple_like&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, w)</code> for each tuple element <code>w</code>;</p>
+</li>
+<li>
+<p>If <code>boost::container_hash::is_described_class&lt;T&gt;::value</code> is <code>true</code>, calls <code>hash_append(h, f, b)</code> for each base class subobject <code>b</code> of <code>v</code>, then <code>hash_append(h, f, m)</code> for each member subobject <code>m</code> of <code>v</code>;</p>
+</li>
+<li>
+<p>Otherwise, the result is a compile-time error.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>In case the above description would result in no calls being made (e.g. for a range of constant size zero, or a described <code>struct</code> with no bases and members),
+a call to <code>hash_append(h, f, '\x00')</code> is made to satisfy the requirement that <code>hash_append</code> always results in at least one call to <code>Hash::update</code>.</p>
+</dd>
+</dl>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_range"><a class="anchor" href="#ref_hash_append_hash_append_range"></a>hash_append_range</h5>
@@ -4601,6 +4679,31 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 <div class="paragraph">
 <p>Appends the representations of the elements of the range <code>[first, last)</code> to the message stored in <code>h</code>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>It</code> must be an <em>iterator</em> type. <code>[first, last)</code> must be a valid <em>iterator range</em>.</p>
+</dd>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>If <code>It</code> is <code>T*</code> and <code>is_contiguously_hashable&lt;T, Flavor::byte_order&gt;::value</code> is <code>true</code>, calls <code>h.update(first, (last - first) * sizeof(T));</code>.</p>
+</li>
+<li>
+<p>Otherwise, for each element <code>v</code> in the range denoted by <code>[first, last)</code>, calls <code>hash_append(h, f, v);</code>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Remarks: </dt>
+<dd>
+<p>If <code>hash_append_range</code> is called in a constant expression, the contiguously hashable optimization is only applied for <code>unsigned char*</code> and <code>unsigned char const*</code>.</p>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect4">
@@ -4614,6 +4717,18 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 <div class="paragraph">
 <p>Appends the representation of <code>v</code>, converted to <code>Flavor::size_type</code>, to the message stored in <code>h</code>.</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>T</code> must be an integral type.</p>
+</dd>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Equivalent to <code>hash_append(h, f, static_cast&lt;typename Flavor::size_type&gt;(v));</code></p>
+</dd>
+</dl>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_sized_range"><a class="anchor" href="#ref_hash_append_hash_append_sized_range"></a>hash_append_sized_range</h5>
@@ -4626,6 +4741,18 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 <div class="paragraph">
 <p>Appends the representations of the elements of the range <code>[first, last)</code>, followed by the size of the range, to the message stored in <code>h</code>.</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>It</code> must be an <em>iterator</em> type. <code>[first, last)</code> must be a valid <em>iterator range</em>.</p>
+</dd>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<p>Equivalent to <code>hash_append_range(h, f, first, last); hash_append(h, f, m);</code>, where <code>m</code> is <code>std::distance(first, last)</code>.</p>
+</dd>
+</dl>
+</div>
 </div>
 <div class="sect4">
 <h5 id="ref_hash_append_hash_append_unordered_range"><a class="anchor" href="#ref_hash_append_hash_append_unordered_range"></a>hash_append_unordered_range</h5>
@@ -4637,6 +4764,30 @@ This allows <code>hash_append</code> to not include the size in the <em>message<
 </div>
 <div class="paragraph">
 <p>Constructs a value from the representations of the elements of the range <code>[first, last)</code>, in a way such that their order doesn&#8217;t affect the result, then appends that value, followed by the size of the range, to the message stored in <code>h</code>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Requires: </dt>
+<dd>
+<p><code>It</code> must be an <em>iterator</em> type. <code>[first, last)</code> must be a valid <em>iterator range</em>.</p>
+</dd>
+<dt class="hdlist1">Effects: </dt>
+<dd>
+<div class="paragraph">
+<p>For each element <code>v</code> in the range denoted by <code>[first, last)</code>, obtains a hash value <code>r</code> by doing</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">Hash</span> <span class="nf">h2</span><span class="p">(</span><span class="n">h</span><span class="p">);</span>
+<span class="n">hash_append</span><span class="p">(</span><span class="n">h2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">r</span> <span class="o">=</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and then combines the so obtained <code>r</code> values in a way that is not sensitive to their order, producing a combined value <code>q</code>. Calls <code>hash_append(h, f, q)</code>, followed by <code>hash_append(h, f, m)</code>, where <code>m</code> is <code>std::distance(first, last)</code>.</p>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect4">
@@ -4668,7 +4819,7 @@ and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boos
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-18 20:08:39 +0200
+Last updated 2024-11-18 21:24:22 +0200
 </div>
 </div>
 <style>
