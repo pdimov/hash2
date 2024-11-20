@@ -212,7 +212,7 @@ before {cpp}26.)
 
 The https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function[Fowler-Noll-Vo hash function]
 is provided as a representative of the class of hash functions that process
-their output one byte at a time. The 32 or 64 bit state is updated for each
+their input one byte at a time. The 32 or 64 bit state is updated for each
 input character `ch` by using the operation `state = (state ^ ch) * fnv_prime`.
 
 FNV-1a is non-cryptographic, relatively weak compared to state of the art
