@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
@@ -45,6 +46,8 @@ private:
     }
 
 public:
+
+    using is_avalanching = std::true_type;
 
     hasher(): h_()
     {
