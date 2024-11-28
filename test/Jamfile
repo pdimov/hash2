@@ -167,3 +167,4 @@ link ../example/compile_time.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<buil
 link ../example/compile_time_2.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<build>no <toolset>gcc-5:<build>no ;
 link ../example/hash_without_seed.cpp ;
 link ../example/hash_with_uint64_seed.cpp ;
+link ../example/hash_with_byte_seed.cpp ;
