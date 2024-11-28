@@ -148,3 +148,18 @@ include::../../example/hash_with_any_seed.cpp[lines=11..-1]
 ----
 
 This variation of `hash<T, H>` is universal; it can be used without a seed, with an unsigned integer seed, and with a byte sequence seed.
+
+NOTE: In real code, you might want to omit the default constructor, to avoid the possibility of accidentally using an unseeded hash algorithm.
+
+There's one final modification we could do to `hash`. In the examples above, we unconditionally use the 64 bit variant of SipHash, even though we only need a result of type `std::size_t` because that's what `std::hash` mandates.
+
+It would be better for performance if we used `siphash_32` when `std::size_t` is 32 bit, and `siphash_64` when it's 64 bit.
+
+For that, we can make `hash` take two hash algorithms, one 32 bit and one 64 bit, and have it pick the appropriate one automatically:
+
+[source]
+----
+include::../../example/hash_32_64.cpp[lines=15..-1]
+----
+
+To keep the case where we only pass one hash algorithm working, we default the second template parameter to the first one, so that if only one hash algorithm is passed, it will always be used.

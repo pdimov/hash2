@@ -11,3 +11,4 @@ exe hash_without_seed : hash_without_seed.cpp ;
 exe hash_with_uint64_seed : hash_with_uint64_seed.cpp ;
 exe hash_with_byte_seed : hash_with_byte_seed.cpp ;
 exe hash_with_any_seed : hash_with_any_seed.cpp ;
+exe hash_32_64 : hash_32_64.cpp ;

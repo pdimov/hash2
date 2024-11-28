@@ -169,3 +169,4 @@ link ../example/hash_without_seed.cpp ;
 link ../example/hash_with_uint64_seed.cpp ;
 link ../example/hash_with_byte_seed.cpp ;
 link ../example/hash_with_any_seed.cpp ;
+link ../example/hash_32_64.cpp ;

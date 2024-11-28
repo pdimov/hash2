@@ -3,16 +3,26 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/hash2/siphash.hpp>
+#include <boost/hash2/md5.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/unordered/unordered_flat_map.hpp>
+#include <boost/core/type_name.hpp>
+#include <type_traits>
 #include <string>
+#include <iostream>
 
-template<class T, class H> class hash
+template<class T, class H1, class H2 = H1> class hash
 {
+public:
+
+    using hash_type = typename std::conditional<
+        sizeof(typename H1::result_type) == sizeof(std::size_t), H1, H2
+    >::type;
+
 private:
 
-    H h_;
+    hash_type h_;
 
 public:
 
@@ -30,7 +40,7 @@ public:
 
     std::size_t operator()( T const& v ) const
     {
-        H h( h_ );
+        hash_type h( h_ );
         boost::hash2::hash_append( h, {}, v );
         return boost::hash2::get_integral_result<std::size_t>( h.result() );
     }
@@ -38,9 +48,12 @@ public:
 
 int main()
 {
-    using hasher = hash<std::string, boost::hash2::siphash_64>;
-
     {
+        using hasher = hash<std::string, boost::hash2::siphash_32, boost::hash2::siphash_64>;
+
+        std::cout << boost::core::type_name<hasher>() << " uses "
+            << boost::core::type_name<hasher::hash_type>() << std::endl;
+
         boost::unordered_flat_map<std::string, int, hasher> map;
 
         map[ "foo" ] = 1;
@@ -48,22 +61,12 @@ int main()
     }
 
     {
-        std::uint64_t seed = 0x0102030405060708ull;
+        using hasher = hash<std::string, boost::hash2::md5_128>;
 
-        boost::unordered_flat_map<std::string, int, hasher> map( 0, hasher( seed ) );
+        std::cout << boost::core::type_name<hasher>() << " uses "
+            << boost::core::type_name<hasher::hash_type>() << std::endl;
 
-        map[ "foo" ] = 1;
-        map[ "bar" ] = 2;
-    }
-
-    {
-        unsigned char const seed[ 16 ] =
-        {
-            0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-            0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10
-        };
-
-        boost::unordered_flat_map<std::string, int, hasher> map( 0, hasher(seed, sizeof(seed)) );
+        boost::unordered_flat_map<std::string, int, hasher> map;
 
         map[ "foo" ] = 1;
         map[ "bar" ] = 2;
