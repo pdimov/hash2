@@ -7,3 +7,4 @@ exe md5sum : md5sum.cpp ;
 exe hash2sum : hash2sum.cpp ;
 exe compile_time : compile_time.cpp ;
 exe compile_time_2 : compile_time_2.cpp ;
+exe hash_without_seed : hash_without_seed.cpp ;

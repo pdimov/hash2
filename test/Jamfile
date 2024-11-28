@@ -165,3 +165,4 @@ link ../example/md5sum.cpp ;
 link ../example/hash2sum.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<build>no ;
 link ../example/compile_time.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<build>no ;
 link ../example/compile_time_2.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<build>no <toolset>gcc-5:<build>no ;
+link ../example/hash_without_seed.cpp ;
