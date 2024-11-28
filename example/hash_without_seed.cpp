@@ -2,7 +2,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/hash2/siphash.hpp>
+#include <boost/hash2/fnv1a.hpp>
 #include <boost/hash2/hash_append.hpp>
 #include <boost/hash2/get_integral_result.hpp>
 #include <boost/unordered/unordered_flat_map.hpp>
@@ -22,7 +22,7 @@ public:
 
 int main()
 {
-    using hasher = hash<std::string, boost::hash2::siphash_64>;
+    using hasher = hash<std::string, boost::hash2::fnv1a_64>;
 
     boost::unordered_flat_map<std::string, int, hasher> map;
 
