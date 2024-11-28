@@ -168,3 +168,4 @@ link ../example/compile_time_2.cpp : <cxxstd>11:<build>no <toolset>msvc-14.0:<bu
 link ../example/hash_without_seed.cpp ;
 link ../example/hash_with_uint64_seed.cpp ;
 link ../example/hash_with_byte_seed.cpp ;
+link ../example/hash_with_any_seed.cpp ;
