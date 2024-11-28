@@ -711,6 +711,7 @@ pre.rouge {
 <li><a href="#example_md5sum">md5sum</a></li>
 <li><a href="#example_hash2sum">hash2sum</a></li>
 <li><a href="#example_compile_time_hashing">Compile Time Hashing</a></li>
+<li><a href="#example_use_with_unordered_containers">Use with Unordered Containers</a></li>
 </ul>
 </li>
 <li><a href="#implementation">Implementation Features</a>
@@ -2234,6 +2235,325 @@ use <code>hash_append_range</code> instead of calling <code>update</code>, as in
     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"License authentication code: "</span> <span class="o">&lt;&lt;</span> <span class="n">license_mac</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span></code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example_use_with_unordered_containers"><a class="anchor" href="#example_use_with_unordered_containers"></a>Use with Unordered Containers</h3>
+<div class="paragraph">
+<p>To use one of our <em>hash algorithms</em> (such as <code>fnv1a_64</code>) with an unordered container (such as <code>boost::unordered_flat_map</code>), we need
+to create an adaptor class that exposes an interface compatible with <code>std::hash&lt;T&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>To do that, in the <code>operator()(T const&amp; v)</code> member function of our adaptor, we need to create an instance <code>h</code> of the <em>hash algorithm</em>,
+use <code>hash_append(h, {}, v)</code> to send <code>v</code> to it, and then extract the result using <code>h.result()</code> and return it as <code>std::size_t</code>.</p>
+</div>
+<div class="paragraph">
+<p>The minimal working example below illustrates this approach.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">H</span> <span class="n">h</span><span class="p">;</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">h</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_64</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+
+    <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since <code>hash&lt;T, H&gt;</code> is templated not just on the key type <code>T</code>, but on the hash algorithm type <code>H</code>, we can easily switch from <code>fnv1a_64</code>
+to another hash algorithm, for example <code>siphash_64</code>, by only changing the line</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++">    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_64</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++">    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_64</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will work, but SipHash is not intended to be used without an initial random seed, and we don&#8217;t pass any. To rectify this, let&#8217;s
+modify <code>hash&lt;T, H&gt;</code> to have a constructor taking a seed of type <code>uint64_t</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed_</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+    <span class="k">explicit</span> <span class="n">hash</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">)</span><span class="o">:</span> <span class="n">seed_</span><span class="p">(</span> <span class="n">seed</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">H</span> <span class="n">h</span><span class="p">(</span> <span class="n">seed_</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">h</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="o">=</span> <span class="mh">0x0102030405060708ull</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_64</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hasher</span><span class="p">(</span> <span class="n">seed</span> <span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In real code, the seed will not be a hardcoded constant; ideally, every unordered container instance will have its own random and unpredictable seed.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since all <em>hash algorithms</em> that conform to our library requirements are constructible with an initial seed of type <code>uint64_t</code>, the above will work with any of them.</p>
+</div>
+<div class="paragraph">
+<p>This is good enough for any practical purposes, but in principle, SipHash64 takes a 16 byte seed per specification, and we only (effectively) pass 8 bytes.
+We could modify our <code>hash</code> yet again and this time use a constructor taking a sequence of bytes as the seed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="n">H</span> <span class="n">h_</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+    <span class="n">hash</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">)</span><span class="o">:</span> <span class="n">h_</span><span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">H</span> <span class="n">h</span><span class="p">(</span> <span class="n">h_</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">h</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="n">seed</span><span class="p">[</span> <span class="mi">16</span> <span class="p">]</span> <span class="o">=</span>
+    <span class="p">{</span>
+        <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x07</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span>
+        <span class="mh">0x09</span><span class="p">,</span> <span class="mh">0x0A</span><span class="p">,</span> <span class="mh">0x0B</span><span class="p">,</span> <span class="mh">0x0C</span><span class="p">,</span> <span class="mh">0x0D</span><span class="p">,</span> <span class="mh">0x0E</span><span class="p">,</span> <span class="mh">0x0F</span><span class="p">,</span> <span class="mh">0x10</span>
+    <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_64</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hasher</span><span class="p">(</span> <span class="n">seed</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As before, construction from a byte sequence is a required part of the <em>hash algorithm</em> interface, so the above will work with any of them.</p>
+</div>
+<div class="paragraph">
+<p>To avoid the need to store the initial seed as we did in the <code>uint64_t</code> case&#8201;&#8212;&#8201;which would require an allocation because <code>n</code> can be arbitrary, necessitating the use of <code>std::vector&lt;unsigned char&gt;</code>&#8201;&#8212;&#8201;we construct an instance <code>h_</code> of the hash algorithm, passing it the seed, to capture the initial seeded state, and then
+copy this seeded instance in <code>operator()</code>.</p>
+</div>
+<div class="paragraph">
+<p>But once we&#8217;ve done that, we might notice that we can construct this initial instance <code>h_</code> using any of the three supported constructors, not just the one taking a byte sequence:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+
+    <span class="n">H</span> <span class="n">h_</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+    <span class="n">hash</span><span class="p">()</span><span class="o">:</span> <span class="n">h_</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">explicit</span> <span class="n">hash</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">)</span><span class="o">:</span> <span class="n">h_</span><span class="p">(</span> <span class="n">seed</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">hash</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">)</span><span class="o">:</span> <span class="n">h_</span><span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">H</span> <span class="n">h</span><span class="p">(</span> <span class="n">h_</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">h</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_64</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="p">{</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+
+        <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="o">=</span> <span class="mh">0x0102030405060708ull</span><span class="p">;</span>
+
+        <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hasher</span><span class="p">(</span> <span class="n">seed</span> <span class="p">)</span> <span class="p">);</span>
+
+        <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span> <span class="n">seed</span><span class="p">[</span> <span class="mi">16</span> <span class="p">]</span> <span class="o">=</span>
+        <span class="p">{</span>
+            <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x07</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span>
+            <span class="mh">0x09</span><span class="p">,</span> <span class="mh">0x0A</span><span class="p">,</span> <span class="mh">0x0B</span><span class="p">,</span> <span class="mh">0x0C</span><span class="p">,</span> <span class="mh">0x0D</span><span class="p">,</span> <span class="mh">0x0E</span><span class="p">,</span> <span class="mh">0x0F</span><span class="p">,</span> <span class="mh">0x10</span>
+        <span class="p">};</span>
+
+        <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hasher</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span> <span class="p">);</span>
+
+        <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This variation of <code>hash&lt;T, H&gt;</code> is universal; it can be used without a seed, with an unsigned integer seed, and with a byte sequence seed.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In real code, you might want to omit the default constructor, to avoid the possibility of accidentally using an unseeded hash algorithm.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There&#8217;s one final modification we could do to <code>hash</code>. In the examples above, we unconditionally use the 64 bit variant of SipHash, even though we only need a result of type <code>std::size_t</code> because that&#8217;s what <code>std::hash</code> mandates.</p>
+</div>
+<div class="paragraph">
+<p>It would be better for performance if we used <code>siphash_32</code> when <code>std::size_t</code> is 32 bit, and <code>siphash_64</code> when it&#8217;s 64 bit.</p>
+</div>
+<div class="paragraph">
+<p>For that, we can make <code>hash</code> take two hash algorithms, one 32 bit and one 64 bit, and have it pick the appropriate one automatically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H2</span> <span class="o">=</span> <span class="n">H1</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+
+    <span class="k">using</span> <span class="n">hash_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span>
+        <span class="k">sizeof</span><span class="p">(</span><span class="k">typename</span> <span class="n">H1</span><span class="o">::</span><span class="n">result_type</span><span class="p">)</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">),</span> <span class="n">H1</span><span class="p">,</span> <span class="n">H2</span>
+    <span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+<span class="nl">private:</span>
+
+    <span class="n">hash_type</span> <span class="n">h_</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+
+    <span class="n">hash</span><span class="p">()</span><span class="o">:</span> <span class="n">h_</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">explicit</span> <span class="n">hash</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">seed</span> <span class="p">)</span><span class="o">:</span> <span class="n">h_</span><span class="p">(</span> <span class="n">seed</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">hash</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="k">const</span><span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">n</span> <span class="p">)</span><span class="o">:</span> <span class="n">h_</span><span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">n</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="k">operator</span><span class="p">()(</span> <span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">v</span> <span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">hash_type</span> <span class="n">h</span><span class="p">(</span> <span class="n">h_</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v</span> <span class="p">);</span>
+        <span class="k">return</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">get_integral_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">h</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_32</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">siphash_64</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">boost</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">type_name</span><span class="o">&lt;</span><span class="n">hasher</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" uses "</span>
+            <span class="o">&lt;&lt;</span> <span class="n">boost</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">type_name</span><span class="o">&lt;</span><span class="n">hasher</span><span class="o">::</span><span class="n">hash_type</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+        <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+
+        <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">hasher</span> <span class="o">=</span> <span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">md5_128</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">boost</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">type_name</span><span class="o">&lt;</span><span class="n">hasher</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">" uses "</span>
+            <span class="o">&lt;&lt;</span> <span class="n">boost</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">type_name</span><span class="o">&lt;</span><span class="n">hasher</span><span class="o">::</span><span class="n">hash_type</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+        <span class="n">boost</span><span class="o">::</span><span class="n">unordered_flat_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">hasher</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">;</span>
+
+        <span class="n">map</span><span class="p">[</span> <span class="s">"foo"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">map</span><span class="p">[</span> <span class="s">"bar"</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To keep the case where we only pass one hash algorithm working, we default the second template parameter to the first one, so that if only one hash algorithm is passed, it will always be used.</p>
 </div>
 </div>
 </div>
@@ -5217,7 +5537,7 @@ and is distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boos
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-19 07:19:28 +0200
+Last updated 2024-11-28 14:18:27 +0200
 </div>
 </div>
 <style>
