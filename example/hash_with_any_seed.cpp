@@ -38,10 +38,10 @@ public:
 
 int main()
 {
-    using hash_type = hash<std::string, boost::hash2::siphash_64>;
+    using hasher = hash<std::string, boost::hash2::siphash_64>;
 
     {
-        boost::unordered_flat_map<std::string, int, hash_type> map;
+        boost::unordered_flat_map<std::string, int, hasher> map;
 
         map[ "foo" ] = 1;
         map[ "bar" ] = 2;
@@ -50,7 +50,7 @@ int main()
     {
         std::uint64_t seed = 0x0102030405060708ull;
 
-        boost::unordered_flat_map<std::string, int, hash_type> map( 0, hash_type( seed ) );
+        boost::unordered_flat_map<std::string, int, hasher> map( 0, hasher( seed ) );
 
         map[ "foo" ] = 1;
         map[ "bar" ] = 2;
@@ -63,7 +63,7 @@ int main()
             0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10
         };
 
-        boost::unordered_flat_map<std::string, int, hash_type> map( 0, hash_type( seed, sizeof(seed) ) );
+        boost::unordered_flat_map<std::string, int, hasher> map( 0, hasher( seed, sizeof(seed) ) );
 
         map[ "foo" ] = 1;
         map[ "bar" ] = 2;

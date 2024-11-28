@@ -32,8 +32,9 @@ int main()
 {
     std::uint64_t seed = 0x0102030405060708ull;
 
-    using hash_type = hash<std::string, boost::hash2::siphash_64>;
-    boost::unordered_flat_map<std::string, int, hash_type> map( 0, hash_type( seed ) );
+    using hasher = hash<std::string, boost::hash2::siphash_64>;
+
+    boost::unordered_flat_map<std::string, int, hasher> map( 0, hasher( seed ) );
 
     map[ "foo" ] = 1;
     map[ "bar" ] = 2;

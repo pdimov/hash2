@@ -22,7 +22,9 @@ public:
 
 int main()
 {
-    boost::unordered_flat_map<std::string, int, hash<std::string, boost::hash2::siphash_64>> map;
+    using hasher = hash<std::string, boost::hash2::siphash_64>;
+
+    boost::unordered_flat_map<std::string, int, hasher> map;
 
     map[ "foo" ] = 1;
     map[ "bar" ] = 2;
