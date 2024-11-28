@@ -31,8 +31,8 @@ The following popular hashing algorithms are provided:
 * https://tools.ietf.org/html/rfc1321[MD5]
 * https://tools.ietf.org/html/rfc3174[SHA-1]
 * https://tools.ietf.org/html/rfc6234[SHA-2]
-* https://tools.ietf.org/html/rfc2104[HMAC-MD5, HMAC-SHA1, HMAC-SHA2]
-* https://homes.esat.kuleuven.be/%7Ebosselae/ripemd160.html[RIPEMD-160 and HMAC-RIPEMD-160]
+* https://homes.esat.kuleuven.be/%7Ebosselae/ripemd160.html[RIPEMD-160, RIPEMD-128]
+* https://tools.ietf.org/html/rfc2104[HMAC]
 
 but it's also possible for users to write their own; as long as the
 hash algorithm conforms to the concept, `hash_append` will work with it,

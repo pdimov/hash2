@@ -13,8 +13,8 @@ It also contains implementations of several popular hashing algorithms:
 * [MD5](https://tools.ietf.org/html/rfc1321)
 * [SHA-1](https://tools.ietf.org/html/rfc3174)
 * [SHA-2](https://tools.ietf.org/html/rfc6234)
-* [HMAC-MD5, HMAC-SHA1, HMAC-SHA2](https://tools.ietf.org/html/rfc2104)
-* [RIPEMD-160 and HMAC-RIPEMD-160](https://homes.esat.kuleuven.be/%7Ebosselae/ripemd160.html)
+* [RIPEMD-160, RIPEMD-128](https://homes.esat.kuleuven.be/%7Ebosselae/ripemd160.html)
+* [HMAC](https://tools.ietf.org/html/rfc2104)
 
 The hashing algorithms conform to the following concept:
 
@@ -37,6 +37,8 @@ struct HashAlgorithm
 };
 ```
 
+See [the documentation](https://pdimov.github.io/hash2/) for more information.
+
 ## Supported compilers
 
 The library requires C++11. The following compilers:
@@ -46,14 +48,6 @@ The library requires C++11. The following compilers:
 * Visual Studio 2015 and above
 
 are being tested on [Github Actions](https://github.com/pdimov/hash2/actions/) and [Appveyor](https://ci.appveyor.com/project/pdimov/hash2/).
-
-## Documentation
-
-[Work in progress](https://pdimov.github.io/hash2/).
-
-## Planned Additions
-
-* A `std::hash`-compatible adaptor
 
 ## License
 
