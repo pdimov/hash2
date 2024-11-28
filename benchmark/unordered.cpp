@@ -1,4 +1,4 @@
-// Copyright 2017-2019 Peter Dimov.
+// Copyright 2017-2019, 2024 Peter Dimov.
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -23,52 +23,85 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <type_traits>
 
-#define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
+namespace detail
+{
 
-template<class T, class H> class hasher
+template<class Hash, class T> inline void compute_hash_value_impl( Hash& h, T const& v, std::false_type )
+{
+    boost::hash2::hash_append( h, {}, v );
+}
+
+template<class Hash, class T> inline void compute_hash_value_impl( Hash& h, T const& v, std::true_type )
+{
+    boost::hash2::hash_append_range( h, {}, v.data(), v.data() + v.size() );
+}
+
+template<class Hash, class T> inline std::size_t compute_hash_value( Hash& h, T const& v )
+{
+    detail::compute_hash_value_impl( h, v, boost::container_hash::is_contiguous_range<T>() );
+    return boost::hash2::get_integral_result<std::size_t>( h.result() );
+}
+
+} // namespace detail
+
+template<class T, class H> class hash_without_seed
+{
+public:
+
+    using is_avalanching = std::true_type;
+
+    std::size_t operator()( T const& v ) const
+    {
+        H h;
+        return detail::compute_hash_value( h, v );
+    }
+};
+
+template<class T, class H> class hash_with_uint64_seed
+{
+private:
+
+    std::uint64_t seed_;
+
+public:
+
+    using is_avalanching = std::true_type;
+
+    explicit hash_with_uint64_seed( std::uint64_t seed ): seed_( seed )
+    {
+    }
+
+    std::size_t operator()( T const& v ) const
+    {
+        H h( seed_ );
+        return detail::compute_hash_value( h, v );
+    }
+};
+
+template<class T, class H> class hash_with_byte_seed
 {
 private:
 
     H h_;
 
-private:
-
-    template<class = void> static void hash_append_impl( H& h, T const& v, std::false_type )
-    {
-        boost::hash2::hash_append( h, {}, v );
-    }
-
-    template<class = void> static void hash_append_impl( H& h, T const& v, std::true_type )
-    {
-        boost::hash2::hash_append_range( h, {}, v.data(), v.data() + v.size() );
-    }
-
 public:
 
-    hasher(): h_()
-    {
-    }
+    using is_avalanching = std::true_type;
 
-    explicit hasher( std::uint64_t seed ): h_( seed )
-    {
-    }
-
-    hasher( unsigned char const* seed, std::size_t n ): h_( seed, n )
+    hash_with_byte_seed( unsigned char const* seed, std::size_t n ): h_( seed, n )
     {
     }
 
     std::size_t operator()( T const& v ) const
     {
         H h( h_ );
-
-        hash_append_impl( h, v, boost::container_hash::is_contiguous_range<T>() );
-
-        return boost::hash2::get_integral_result<std::size_t>( h.result() );
+        return detail::compute_hash_value( h, v );
     }
 };
 
-template<class V, class S> void test4( int N, V const& v, char const * hash, S s )
+template<class V, class S> BOOST_NOINLINE void test4( int N, V const& v, char const * hash, S s )
 {
     typedef std::chrono::steady_clock clock_type;
 
@@ -95,19 +128,43 @@ template<class V, class S> void test4( int N, V const& v, char const * hash, S s
 
     std::size_t n = s.bucket_count();
 
-    std::printf( "%s: n=%zu, q=%zu, %lld + %lld ms\n", hash, n, q, ms1, ms2 );
-}
-
-template<class K, class H, class V> void test3( int N, V const& v, std::size_t seed )
-{
-    using hasher = ::hasher<K, H>;
-    boost::unordered_flat_set<K, hasher> s( 0, hasher( seed ) );
-    test4( N, v, boost::core::type_name<H>().c_str(), s );
+    std::printf( "%s: n=%zu, q=%zu, %lld + %lld = %lld ms\n", hash, n, q, ms1, ms2, ms1 + ms2 );
 }
 
 template<class K, class H, class V> void test2( int N, V const& v )
 {
-    test3< K, H >( N, v, 0x9e3779b9 );
+    {
+        std::string name = boost::core::type_name<H>() + " without seed";
+
+        using hash = hash_without_seed<K, H>;
+        boost::unordered_flat_set<K, hash> s( 0, hash() );
+
+        test4( N, v, name.c_str(), s );
+    }
+
+    {
+        constexpr std::uint64_t seed = 0x0102030405060708ull;
+
+        std::string name = boost::core::type_name<H>() + " with uint64 seed";
+
+        using hash = hash_with_uint64_seed<K, H>;
+        boost::unordered_flat_set<K, hash> s( 0, hash( seed ) );
+
+        test4( N, v, name.c_str(), s );
+    }
+
+    {
+        static constexpr unsigned char seed[ 16 ] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10 };
+
+        std::string name = boost::core::type_name<H>() + " with byte seed";
+
+        using hash = hash_with_byte_seed<K, H>;
+        boost::unordered_flat_set<K, hash> s( 0, hash( seed, sizeof(seed) ) );
+
+        test4( N, v, name.c_str(), s );
+    }
+
+    std::puts( "" );
 }
 
 int main()
@@ -144,7 +201,7 @@ int main()
 
     {
         boost::unordered_flat_set<K> s;
-        test4( N, v, "default", s );
+        test4( N, v, "default boost::hash without seed", s );
         std::puts( "" );
     }
 
@@ -155,6 +212,4 @@ int main()
     test2<K, boost::hash2::siphash_32>( N, v );
     test2<K, boost::hash2::siphash_64>( N, v );
     test2<K, boost::hash2::md5_128>( N, v );
-
-    std::puts( "" );
 }
