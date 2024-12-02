@@ -46,7 +46,7 @@ install:
   - git submodule update --init libs/config
   - git submodule update --init tools/boostdep
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\hash2\
-  - python tools/boostdep/depinst/depinst.py -I benchmark hash2
+  - python tools/boostdep/depinst/depinst.py -I benchmark -I example hash2
   - cmd /c bootstrap
   - b2 -d0 headers
 

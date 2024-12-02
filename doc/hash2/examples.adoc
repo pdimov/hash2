@@ -163,3 +163,19 @@ include::../../example/hash_32_64.cpp[lines=15..-1]
 ----
 
 To keep the case where we only pass one hash algorithm working, we default the second template parameter to the first one, so that if only one hash algorithm is passed, it will always be used.
+
+## Result Extension
+
+Some of our hash algorithms, such as `xxhash_64` and `siphash_64`, have more than 64 bits of internal state, but only produce a 64 bit result.
+
+If we're using one of these algorithms to produce file or content checksums, do not tolerate collisions, and operate on a large number of files or items (many millions), it might be better to use a 128 bit digest instead.
+
+Since the algorithms maintain more than 64 bits of state, we can call `result()` twice and obtain a meaningful 128 bit result.
+
+The following example demonstrates how. It defines an algorithm `xxhash_128` which is implemented by wrapping `xxhash_64` and redefining its `result_type` and `result` members appropriately:
+
+[source]
+----
+include::../../example/xxh128_from_xxh64.cpp[lines=5..-1]
+----
+
