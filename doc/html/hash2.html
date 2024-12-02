@@ -1452,7 +1452,7 @@ to <code>v</code>.</p>
 <p>C arrays;</p>
 </li>
 <li>
-<p>Containers and ranges (types that provide <code>begin()</code> and <code>end()</code>;</p>
+<p>Containers and ranges (types that provide <code>begin()</code> and <code>end()</code>);</p>
 </li>
 <li>
 <p>Unordered containers and ranges;</p>
@@ -1609,7 +1609,6 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="p">{},</span> <span class="o">+</span><span class="mf">0.0</span> <span class="p">);</span>
 
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">v2</span> <span class="o">=</span> <span class="mh">0x4048f5c3</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="o">-</span><span class="mf">0.0</span> <span class="p">);</span>
 
     <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
@@ -1710,11 +1709,11 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
 </li>
 <li>
 <p>When <code>T</code> is a <em>contiguous range</em> (<code>boost::container_hash::is_contiguous_range&lt;T&gt;::valie</code> is <code>true</code>), <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.data(), v.data() + v.size())</code>,
-then, if <code>is_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, v.size())</code>.</p>
+then, if <code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, v.size())</code>.</p>
 </li>
 <li>
 <p>Otherwise, <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.begin(), v.end())</code>,
-then, if <code>is_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, m)</code>, where <code>m</code> is <code>std::distance(v.begin(), v.end())</code>.</p>
+then, if <code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, m)</code>, where <code>m</code> is <code>std::distance(v.begin(), v.end())</code>.</p>
 </li>
 </ul>
 </div>
@@ -1742,8 +1741,8 @@ then, if <code>is_constant_size&lt;T&gt;::value</code> is <code>false</code>, it
     <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
 
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h4</span><span class="p">;</span>
-    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">);</span>
-    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">v1</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v2</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">);</span>
+    <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">v2</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v2</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">);</span>
 
     <span class="n">assert</span><span class="p">(</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h4</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
 <span class="p">}</span></code></pre>
