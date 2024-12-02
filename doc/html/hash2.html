@@ -1318,7 +1318,55 @@ algorithm <code>H</code>. <code>hmac&lt;H&gt;</code> satisfies the requirements 
 <div class="sect2">
 <h3 id="hashing_bytes_choosing_a_hash_algorithm"><a class="anchor" href="#hashing_bytes_choosing_a_hash_algorithm"></a>Choosing a Hash Algorithm</h3>
 <div class="paragraph">
-<p>&#8230;&#8203;</p>
+<p>If your use case requires cryptographic strength, use SHA2-512/256 (or SHA2-256 in 32 bit code) for digests, and the corresponding HMAC for message authentication codes.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Digests of fewer than 256 bits in length are no longer recommended when cryptographic security is required or desired.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For computing file or content checksums, when speed is of the essence and externally induced collisions aren&#8217;t a concern, use xxHash-64.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+xxHash-32 will be faster in 32 bit code, but since it only produces a 32 bit result, collisions will become an issue when the number of items reaches tens of thousands, which is usually unacceptable.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For a large number of items (many millions), 64 bits may not be enough; in that case, use either MD5, or xxHash-64, <a href="#example_result_extension">extended to 128 bits</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though MD5 is no longer cryptographically secure, it can still be used when cryptographic strength is not a requirement.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For hash tables, use SipHash by default, <a href="#example_use_with_unordered_containers">with a random (unpredictable from the outside) seed</a> that varies per connection or per container. Avoid using a fixed processwide seed. Never use SipHash without a seed.</p>
+</div>
+<div class="paragraph">
+<p>For hash tables with very short keys (3-4-5 bytes), unexposed to external input, you can use FNV-1a, although the default hash function of e.g. <code>boost::unordered_flat_map</code> will typically perform better.</p>
 </div>
 </div>
 </div>
