@@ -55,7 +55,7 @@ to `v`.
 * Enumeration types;
 * Pointer types (object and function, but not pointer to member types);
 * C arrays;
-* Containers and ranges (types that provide `begin()` and `end()`;
+* Containers and ranges (types that provide `begin()` and `end()`);
 * Unordered containers and ranges;
 * Constant size containers (`std::array`, `boost::array`);
 * Tuple-like types (`std::pair`, `std::tuple`);
@@ -175,7 +175,6 @@ int main()
     boost::hash2::hash_append( h1, {}, +0.0 );
 
     boost::hash2::fnv1a_32 h2;
-    std::uint32_t v2 = 0x4048f5c3;
     boost::hash2::hash_append( h2, {}, -0.0 );
 
     assert( h1.result() == h2.result();
@@ -259,9 +258,9 @@ When `T` is a _range_ (`boost::container_hash::is_range<T>::value` is `true`), i
 * When `T` is an _unordered range_ (`boost::container_hash::is_unordered_range<T>::value` is `true`), `hash_append` invokes `hash_append_unordered_range(h, f, v.begin(), v.end())`.
   `hash_append_unordered_range` derives a hash value from the range elements in such a way so that their order doesn't affect the hash value.
 * When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::valie` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
-  then, if `is_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, v.size())`.
+  then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, v.size())`.
 * Otherwise, `hash_append` first invokes `hash_append_range(h, f, v.begin(), v.end())`,
-  then, if `is_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, m)`, where `m` is `std::distance(v.begin(), v.end())`.
+  then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, m)`, where `m` is `std::distance(v.begin(), v.end())`.
 
 As a special case, in order to meet the requirement that a call to `hash_append` must always result in at least one call to `Hash::update`, for ranges of constant size 0, `hash_append(h, f, '\x00')` is called.
 
@@ -285,8 +284,8 @@ int main()
     assert( h1.result() == h3.result();
 
     boost::hash2::fnv1a_32 h4;
-    boost::hash2::hash_append_range( h4, {}, v1.begin(), v1.end() );
-    boost::hash2::hash_append_size( h4, {}, std::distance(v1.begin(), v1.end()) );
+    boost::hash2::hash_append_range( h4, {}, v2.begin(), v2.end() );
+    boost::hash2::hash_append_size( h4, {}, std::distance(v2.begin(), v2.end()) );
 
     assert( h2.result() == h4.result();
 }
