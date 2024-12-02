@@ -712,6 +712,7 @@ pre.rouge {
 <li><a href="#example_hash2sum">hash2sum</a></li>
 <li><a href="#example_compile_time_hashing">Compile Time Hashing</a></li>
 <li><a href="#example_use_with_unordered_containers">Use with Unordered Containers</a></li>
+<li><a href="#example_result_extension">Result Extension</a></li>
 </ul>
 </li>
 <li><a href="#implementation">Implementation Features</a>
@@ -2554,6 +2555,64 @@ In real code, you might want to omit the default constructor, to avoid the possi
 </div>
 <div class="paragraph">
 <p>To keep the case where we only pass one hash algorithm working, we default the second template parameter to the first one, so that if only one hash algorithm is passed, it will always be used.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="example_result_extension"><a class="anchor" href="#example_result_extension"></a>Result Extension</h3>
+<div class="paragraph">
+<p>Some of our hash algorithms, such as <code>xxhash_64</code> and <code>siphash_64</code>, have more than 64 bits of internal state, but only produce a 64 bit result.</p>
+</div>
+<div class="paragraph">
+<p>If we&#8217;re using one of these algorithms to produce file or content checksums, do not tolerate collisions, and operate on a large number of files or items (many millions), it might be better to use a 128 bit digest instead.</p>
+</div>
+<div class="paragraph">
+<p>Since the algorithms maintain more than 64 bits of state, we can call <code>result()</code> twice and obtain a meaningful 128 bit result.</p>
+</div>
+<div class="paragraph">
+<p>The following example demonstrates how. It defines an algorithm <code>xxhash_128</code> which is implemented by wrapping <code>xxhash_64</code> and redefining its <code>result_type</code> and <code>result</code> members appropriately:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/xxhash.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/digest.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/endian/conversion.hpp&gt;</span><span class="cp">
+</span>
+<span class="k">class</span> <span class="nc">xxhash_128</span><span class="o">:</span> <span class="k">private</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">xxhash_64</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+
+    <span class="k">using</span> <span class="n">result_type</span> <span class="o">=</span> <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">digest</span><span class="o">&lt;</span><span class="mi">16</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">xxhash_64</span><span class="o">::</span><span class="n">xxhash_64</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">xxhash_64</span><span class="o">::</span><span class="n">update</span><span class="p">;</span>
+
+    <span class="n">result_type</span> <span class="n">result</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">r1</span> <span class="o">=</span> <span class="n">xxhash_64</span><span class="o">::</span><span class="n">result</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span> <span class="n">r2</span> <span class="o">=</span> <span class="n">xxhash_64</span><span class="o">::</span><span class="n">result</span><span class="p">();</span>
+
+        <span class="n">result_type</span> <span class="n">r</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="n">boost</span><span class="o">::</span><span class="n">endian</span><span class="o">::</span><span class="n">store_little_u64</span><span class="p">(</span> <span class="n">r</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r1</span> <span class="p">);</span>
+        <span class="n">boost</span><span class="o">::</span><span class="n">endian</span><span class="o">::</span><span class="n">store_little_u64</span><span class="p">(</span> <span class="n">r</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="mi">8</span><span class="p">,</span> <span class="n">r2</span> <span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">tv</span><span class="p">(</span> <span class="s">"The quick brown fox jumps over the lazy dog"</span> <span class="p">);</span>
+
+    <span class="n">xxhash_128</span> <span class="n">hash</span><span class="p">(</span> <span class="mi">43</span> <span class="p">);</span>
+    <span class="n">hash</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">tv</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">tv</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="p">);</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hash</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
