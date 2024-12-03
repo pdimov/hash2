@@ -23,8 +23,77 @@ target_link_libraries(boost_hash2
 
 target_compile_features(boost_hash2 INTERFACE cxx_std_11)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+
+  include(CTest) # defines BUILD_TESTING
+  include(FetchContent)
+
+  FetchContent_Declare(boostorg_cmake GIT_REPOSITORY https://github.com/boostorg/cmake GIT_TAG master)
+  FetchContent_MakeAvailable(boostorg_cmake)
+  FetchContent_GetProperties(boostorg_cmake)
+  list(APPEND CMAKE_MODULE_PATH ${boostorg_cmake_SOURCE_DIR}/include)
+
+endif()
+
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
 
   add_subdirectory(test)
+
+endif()
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+
+  set(deps
+
+  # hash2
+
+  assert
+  config
+  container_hash
+  describe
+  mp11
+
+  # tests
+
+  array
+  core
+  utility
+
+  # benchmark
+
+  unordered
+
+  # example
+
+  endian
+
+  # secondaries
+
+  static_assert
+  throw_exception
+  io
+  preprocessor
+  type_traits
+  predef
+  )
+
+  set(BUILD_TESTING OFF) # Hide cache variable
+
+  list(LENGTH deps n)
+  set(i 0)
+
+  foreach(dep IN LISTS deps)
+
+    math(EXPR i "${i}+1")
+    message(STATUS "Fetching boostorg/${dep} [${i}/${n}]")
+    FetchContent_Declare(boostorg_${dep} GIT_REPOSITORY https://github.com/boostorg/${dep} GIT_TAG master EXCLUDE_FROM_ALL)
+    FetchContent_MakeAvailable(boostorg_${dep})
+
+  endforeach()
+
+  unset(BUILD_TESTING)
+
+  add_subdirectory(benchmark)
+  add_subdirectory(example)
 
 endif()
