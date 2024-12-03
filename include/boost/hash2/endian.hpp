@@ -5,10 +5,23 @@
 #ifndef BOOST_HASH2_ENDIAN_HPP_INCLUDED
 #define BOOST_HASH2_ENDIAN_HPP_INCLUDED
 
+#if __cplusplus >= 202002
+# include <version>
+# ifdef __cpp_lib_endian
+#  include <bit>
+# endif
+#endif
+
 namespace boost
 {
 namespace hash2
 {
+
+#ifdef __cpp_lib_endian
+
+using endian = std::endian;
+
+#else
 
 #if defined(_MSC_VER)
 
@@ -29,6 +42,8 @@ enum class endian
     big = __ORDER_BIG_ENDIAN__,
     native = __BYTE_ORDER__
 };
+
+#endif
 
 #endif
 
