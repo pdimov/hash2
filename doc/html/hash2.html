@@ -1568,7 +1568,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">v2</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x01</span> <span class="p">};</span>
     <span class="n">h2</span><span class="p">.</span><span class="n">update</span><span class="p">(</span> <span class="n">v2</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1591,7 +1591,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span> <span class="n">v2</span> <span class="o">=</span> <span class="mh">0x4048f5c3</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1611,7 +1611,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="o">-</span><span class="mf">0.0</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1637,7 +1637,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="kt">int</span> <span class="n">v2</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1659,7 +1659,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uintptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x1</span><span class="p">)</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1683,7 +1683,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h2</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v1</span> <span class="o">+</span> <span class="mi">4</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h3</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
@@ -1691,7 +1691,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">);</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1708,7 +1708,7 @@ When that&#8217;s <code>true</code>, it invokes <code>h.update(&amp;v, sizeof(v)
 <code>hash_append_unordered_range</code> derives a hash value from the range elements in such a way so that their order doesn&#8217;t affect the hash value.</p>
 </li>
 <li>
-<p>When <code>T</code> is a <em>contiguous range</em> (<code>boost::container_hash::is_contiguous_range&lt;T&gt;::valie</code> is <code>true</code>), <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.data(), v.data() + v.size())</code>,
+<p>When <code>T</code> is a <em>contiguous range</em> (<code>boost::container_hash::is_contiguous_range&lt;T&gt;::value</code> is <code>true</code>), <code>hash_append</code> first invokes <code>hash_append_range(h, f, v.data(), v.data() + v.size())</code>,
 then, if <code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, it invokes <code>hash_append_size(h, f, v.size())</code>.</p>
 </li>
 <li>
@@ -1732,19 +1732,19 @@ then, if <code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, i
     <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">};</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h3</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">v1</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="p">);</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h3</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h3</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">fnv1a_32</span> <span class="n">h4</span><span class="p">;</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_range</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v2</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v2</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="p">);</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append_size</span><span class="p">(</span> <span class="n">h4</span><span class="p">,</span> <span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">v2</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v2</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h4</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h4</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1770,7 +1770,7 @@ then, if <code>has_constant_size&lt;T&gt;::value</code> is <code>false</code>, i
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">);</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">get</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1807,7 +1807,7 @@ for each base class subobject <code>b</code> of <code>v</code>, <code>hash_appen
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">a</span> <span class="p">);</span>
     <span class="n">boost</span><span class="o">::</span><span class="n">hash2</span><span class="o">::</span><span class="n">hash_append</span><span class="p">(</span> <span class="n">h2</span><span class="p">,</span> <span class="p">{},</span> <span class="n">v1</span><span class="p">.</span><span class="n">b</span> <span class="p">);</span>
 
-    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">();</span>
+    <span class="n">assert</span><span class="p">(</span> <span class="n">h1</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="o">==</span> <span class="n">h2</span><span class="p">.</span><span class="n">result</span><span class="p">()</span> <span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -1838,6 +1838,7 @@ for each base class subobject <code>b</code> of <code>v</code>, <code>hash_appen
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hash_append_fwd.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
 </span>
 <span class="k">class</span> <span class="nc">X</span>
 <span class="p">{</span>
@@ -1881,19 +1882,21 @@ for each base class subobject <code>b</code> of <code>v</code>, <code>hash_appen
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/hash_append_fwd.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp">
 </span>
 <span class="k">class</span> <span class="nc">Str</span>
 <span class="p">{</span>
 <span class="nl">private:</span>
 
-    <span class="k">static</span> <span class="k">constexpr</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span>
 
     <span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="n">size_</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">char</span> <span class="n">data_</span><span class="p">[</span> <span class="n">N</span> <span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
 
 <span class="nl">public:</span>
 
-    <span class="k">friend</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x1</span><span class="p">,</span> <span class="n">X</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x2</span> <span class="p">)</span>
+    <span class="k">friend</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span> <span class="n">Str</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x1</span><span class="p">,</span> <span class="n">Str</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">x2</span> <span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">x1</span><span class="p">.</span><span class="n">size_</span> <span class="o">==</span> <span class="n">x2</span><span class="p">.</span><span class="n">size_</span> <span class="o">&amp;&amp;</span> <span class="n">std</span><span class="o">::</span><span class="n">equal</span><span class="p">(</span> <span class="n">x1</span><span class="p">.</span><span class="n">data_</span><span class="p">,</span> <span class="n">x1</span><span class="p">.</span><span class="n">data_</span> <span class="o">+</span> <span class="n">x1</span><span class="p">.</span><span class="n">size_</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="n">data_</span> <span class="p">);</span>
     <span class="p">}</span>
@@ -2300,7 +2303,13 @@ use <code>hash_append(h, {}, v)</code> to send <code>v</code> to it, and then ex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/fnv1a.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/get_integral_result.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/unordered/unordered_flat_map.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
 <span class="p">{</span>
 <span class="nl">public:</span>
 
@@ -2346,7 +2355,13 @@ modify <code>hash&lt;T, H&gt;</code> to have a constructor taking a seed of type
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/siphash.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/get_integral_result.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/unordered/unordered_flat_map.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
 <span class="p">{</span>
 <span class="nl">private:</span>
 
@@ -2400,7 +2415,13 @@ We could modify our <code>hash</code> yet again and this time use a constructor 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/siphash.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/get_integral_result.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/unordered/unordered_flat_map.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
 <span class="p">{</span>
 <span class="nl">private:</span>
 
@@ -2449,7 +2470,13 @@ copy this seeded instance in <code>operator()</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/siphash.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/get_integral_result.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/unordered/unordered_flat_map.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
 <span class="p">{</span>
 <span class="nl">private:</span>
 
@@ -2538,7 +2565,17 @@ In real code, you might want to omit the default constructor, to avoid the possi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H2</span> <span class="o">=</span> <span class="n">H1</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;boost/hash2/siphash.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/md5.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/hash_append.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/hash2/get_integral_result.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/unordered/unordered_flat_map.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;boost/core/type_name.hpp&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">H2</span> <span class="o">=</span> <span class="n">H1</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">hash</span>
 <span class="p">{</span>
 <span class="nl">public:</span>
 
