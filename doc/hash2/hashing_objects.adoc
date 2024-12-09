@@ -140,7 +140,7 @@ int main()
     unsigned char v2[] = { 0x04, 0x03, 0x02, 0x01 };
     h2.update( v2, sizeof(v2) );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -160,7 +160,7 @@ int main()
     std::uint32_t v2 = 0x4048f5c3;
     boost::hash2::hash_append( h2, {}, v2 );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -177,7 +177,7 @@ int main()
     boost::hash2::fnv1a_32 h2;
     boost::hash2::hash_append( h2, {}, -0.0 );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -200,7 +200,7 @@ int main()
     int v2 = 123;
     boost::hash2::hash_append( h2, {}, v2 );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -219,7 +219,7 @@ int main()
     boost::hash2::fnv1a_32 h2;
     boost::hash2::hash_append( h2, {}, reinterpret_cast<std::uintptr_t>(&x1) );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -239,7 +239,7 @@ int main()
     boost::hash2::fnv1a_32 h2;
     boost::hash2::hash_append_range( h2, {}, v1 + 0, v1 + 4 );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 
     boost::hash2::fnv1a_32 h3;
     boost::hash2::hash_append( h3, {}, v1[0] );
@@ -247,7 +247,7 @@ int main()
     boost::hash2::hash_append( h3, {}, v1[2] );
     boost::hash2::hash_append( h3, {}, v1[3] );
 
-    assert( h1.result() == h3.result();
+    assert( h1.result() == h3.result() );
 }
 ```
 
@@ -257,7 +257,7 @@ When `T` is a _range_ (`boost::container_hash::is_range<T>::value` is `true`), i
 
 * When `T` is an _unordered range_ (`boost::container_hash::is_unordered_range<T>::value` is `true`), `hash_append` invokes `hash_append_unordered_range(h, f, v.begin(), v.end())`.
   `hash_append_unordered_range` derives a hash value from the range elements in such a way so that their order doesn't affect the hash value.
-* When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::valie` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
+* When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::value` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
   then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, v.size())`.
 * Otherwise, `hash_append` first invokes `hash_append_range(h, f, v.begin(), v.end())`,
   then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, m)`, where `m` is `std::distance(v.begin(), v.end())`.
@@ -275,19 +275,19 @@ int main()
     std::list<int> v2 = { 1, 2, 3, 4 };
     boost::hash2::hash_append( h2, {}, v2 );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 
     boost::hash2::fnv1a_32 h3;
     boost::hash2::hash_append_range( h3, {}, v1.data(), v1.data() + v1.size() );
     boost::hash2::hash_append_size( h3, {}, v1.size() );
 
-    assert( h1.result() == h3.result();
+    assert( h1.result() == h3.result() );
 
     boost::hash2::fnv1a_32 h4;
     boost::hash2::hash_append_range( h4, {}, v2.begin(), v2.end() );
     boost::hash2::hash_append_size( h4, {}, std::distance(v2.begin(), v2.end()) );
 
-    assert( h2.result() == h4.result();
+    assert( h2.result() == h4.result() );
 }
 ```
 
@@ -309,7 +309,7 @@ int main()
     boost::hash2::hash_append( h2, {}, get<1>(v1) );
     boost::hash2::hash_append( h2, {}, get<2>(v1) );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -343,7 +343,7 @@ int main()
     boost::hash2::hash_append( h2, {}, v1.a );
     boost::hash2::hash_append( h2, {}, v1.b );
 
-    assert( h1.result() == h2.result();
+    assert( h1.result() == h2.result() );
 }
 ```
 
@@ -366,6 +366,7 @@ It can be defined as a separate free function in the namespace of `X`, but the r
 
 ```
 #include <boost/hash2/hash_append_fwd.hpp>
+#include <string>
 
 class X
 {
@@ -404,19 +405,21 @@ As another example, here's how one might implement `tag_invoke` for an "inline s
 
 ```
 #include <boost/hash2/hash_append_fwd.hpp>
+#include <algorithm>
+#include <cstdint>
 
 class Str
 {
 private:
 
-    static constexpr N = 32;
+    static constexpr std::size_t N = 32;
 
     std::uint8_t size_ = 0;
     char data_[ N ] = {};
 
 public:
 
-    friend constexpr bool operator==( X const& x1, X const& x2 )
+    friend constexpr bool operator==( Str const& x1, Str const& x2 )
     {
         return x1.size_ == x2.size_ && std::equal( x1.data_, x1.data_ + x1.size_, x2.data_ );
     }

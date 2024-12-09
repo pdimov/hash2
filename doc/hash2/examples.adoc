@@ -97,7 +97,7 @@ The minimal working example below illustrates this approach.
 
 [source]
 ----
-include::../../example/hash_without_seed.cpp[lines=11..-1]
+include::../../example/hash_without_seed.cpp[lines=5..-1]
 ----
 
 Since `hash<T, H>` is templated not just on the key type `T`, but on the hash algorithm type `H`, we can easily switch from `fnv1a_64`
@@ -118,7 +118,7 @@ modify `hash<T, H>` to have a constructor taking a seed of type `uint64_t`:
 
 [source]
 ----
-include::../../example/hash_with_uint64_seed.cpp[lines=11..-1]
+include::../../example/hash_with_uint64_seed.cpp[lines=5..-1]
 ----
 
 NOTE: In real code, the seed will not be a hardcoded constant; ideally, every unordered container instance will have its own random and unpredictable seed.
@@ -130,7 +130,7 @@ We could modify our `hash` yet again and this time use a constructor taking a se
 
 [source]
 ----
-include::../../example/hash_with_byte_seed.cpp[lines=11..-1]
+include::../../example/hash_with_byte_seed.cpp[lines=5..-1]
 ----
 
 As before, construction from a byte sequence is a required part of the _hash algorithm_ interface, so the above will work with any of them.
@@ -144,7 +144,7 @@ But once we've done that, we might notice that we can construct this initial ins
 
 [source]
 ----
-include::../../example/hash_with_any_seed.cpp[lines=11..-1]
+include::../../example/hash_with_any_seed.cpp[lines=5..-1]
 ----
 
 This variation of `hash<T, H>` is universal; it can be used without a seed, with an unsigned integer seed, and with a byte sequence seed.
@@ -159,7 +159,7 @@ For that, we can make `hash` take two hash algorithms, one 32 bit and one 64 bit
 
 [source]
 ----
-include::../../example/hash_32_64.cpp[lines=15..-1]
+include::../../example/hash_32_64.cpp[lines=5..-1]
 ----
 
 To keep the case where we only pass one hash algorithm working, we default the second template parameter to the first one, so that if only one hash algorithm is passed, it will always be used.
