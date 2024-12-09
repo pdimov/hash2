@@ -409,7 +409,7 @@ class Str
 {
 private:
 
-    static constexpr N = 32;
+    static constexpr unsigned int N = 32;
 
     std::uint8_t size_ = 0;
     char data_[ N ] = {};
