@@ -366,6 +366,7 @@ It can be defined as a separate free function in the namespace of `X`, but the r
 
 ```
 #include <boost/hash2/hash_append_fwd.hpp>
+#include <string>
 
 class X
 {
@@ -404,19 +405,21 @@ As another example, here's how one might implement `tag_invoke` for an "inline s
 
 ```
 #include <boost/hash2/hash_append_fwd.hpp>
+#include <algorithm>
+#include <cstdint>
 
 class Str
 {
 private:
 
-    static constexpr unsigned int N = 32;
+    static constexpr std::size_t N = 32;
 
     std::uint8_t size_ = 0;
     char data_[ N ] = {};
 
 public:
 
-    friend constexpr bool operator==( X const& x1, X const& x2 )
+    friend constexpr bool operator==( Str const& x1, Str const& x2 )
     {
         return x1.size_ == x2.size_ && std::equal( x1.data_, x1.data_ + x1.size_, x2.data_ );
     }
