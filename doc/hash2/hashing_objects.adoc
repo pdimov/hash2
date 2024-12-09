@@ -257,7 +257,7 @@ When `T` is a _range_ (`boost::container_hash::is_range<T>::value` is `true`), i
 
 * When `T` is an _unordered range_ (`boost::container_hash::is_unordered_range<T>::value` is `true`), `hash_append` invokes `hash_append_unordered_range(h, f, v.begin(), v.end())`.
   `hash_append_unordered_range` derives a hash value from the range elements in such a way so that their order doesn't affect the hash value.
-* When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::valie` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
+* When `T` is a _contiguous range_ (`boost::container_hash::is_contiguous_range<T>::value` is `true`), `hash_append` first invokes `hash_append_range(h, f, v.data(), v.data() + v.size())`,
   then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, v.size())`.
 * Otherwise, `hash_append` first invokes `hash_append_range(h, f, v.begin(), v.end())`,
   then, if `has_constant_size<T>::value` is `false`, it invokes `hash_append_size(h, f, m)`, where `m` is `std::distance(v.begin(), v.end())`.
