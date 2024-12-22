@@ -17,11 +17,11 @@ set(deps
 assert
 config
 container_hash
+describe
 mp11
 
 # Secondary dependencies
 
-describe
 )
 
 foreach(dep IN LISTS deps)
